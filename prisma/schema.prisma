@@ -12,17 +12,140 @@ enum Role {
   MEMBER
 }
 
-model User {
-  id       String @id @default(uuid())
-  name     String
-  email    String @unique
-  document String @unique
-  phone    String @unique
-  password String
-  role     Role   @default(MEMBER)
+enum UnitType {
+  UF
+  MUNICIPALITY
+}
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum EmploymentType {
+  CLT
+  PJ
+  OTHERS
+}
+
+model User {
+  id             String       @id @default(uuid())
+  name           String
+  email          String       @unique
+  document       String       @unique
+  phone          String       @unique
+  password       String
+  role           Role         @default(MEMBER)
+
+  municipality   Municipality? @relation("UserMunicipality")
+
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 
   @@map("users")
+}
+
+model Municipality {
+  id                     String                @id @default(uuid())
+  name                   String
+  guardInitialDate       DateTime
+  guardCount             Int
+  trafficInitialDate     DateTime
+  trafficCount           Int
+  federativeUnit         String
+  unitType               UnitType
+
+  userId                 String                @unique
+  user                   User                  @relation("UserMunicipality", fields: [userId], references: [id])
+
+  allocationDepartments  AllocationDepartment[]
+  maintenanceContracts   MaintenanceContract[]
+  qualifiedStaff         QualifiedStaff[]
+  projectPartnerships    ProjectPartnership[]
+  managements            Management[]
+
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @updatedAt
+
+  @@map("municipalities")
+}
+
+model AllocationDepartment {
+  id               String        @id @default(uuid())
+  description      String
+  address          String
+
+  municipalityId   String
+  municipality     Municipality  @relation(fields: [municipalityId], references: [id])
+
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+}
+
+model MaintenanceContract {
+  id               String        @id @default(uuid())
+  description      String
+  attachment       String
+
+  municipalityId   String
+  municipality     Municipality  @relation(fields: [municipalityId], references: [id])
+
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+}
+
+model QualifiedStaff {
+  id               String         @id @default(uuid())
+  name             String
+  sector           String
+  education        String
+  experience       String
+  employmentType   EmploymentType
+  document         String
+  isResponsible    Boolean
+
+  municipalityId   String
+  municipality     Municipality   @relation(fields: [municipalityId], references: [id])
+
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+}
+
+model ProjectPartnership {
+  id               String        @id @default(uuid())
+  term             String
+  agency           String
+  objective        String
+  status           String
+
+  municipalityId   String
+  municipality     Municipality  @relation(fields: [municipalityId], references: [id])
+
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+}
+
+model Management {
+  id                      String   @id @default(uuid())
+  initialDate             DateTime
+  endDate                 DateTime
+
+  managerName             String
+  managerCpf              String
+  managerEmail            String
+  managerAddress          String
+  managerPhone            String
+
+  adminManagerName        String
+  adminManagerCpf         String
+  adminManagerEmail       String
+  adminManagerAddress     String
+  adminManagerPhone       String
+
+  legislationName         String
+  legislationCpf          String
+  legislationEmail        String
+  legislationAddress      String
+  legislationPhone        String
+
+  municipalityId          String
+  municipality            Municipality  @relation(fields: [municipalityId], references: [id])
+
+  createdAt               DateTime      @default(now())
+  updatedAt               DateTime      @updatedAt
 }
