@@ -24,128 +24,171 @@ enum EmploymentType {
 }
 
 model User {
-  id             String       @id @default(uuid())
-  name           String
-  email          String       @unique
-  document       String       @unique
-  phone          String       @unique
-  password       String
-  role           Role         @default(MEMBER)
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  document String @unique
+  phone    String @unique
+  password String
+  role     Role   @default(MEMBER)
 
-  municipality   Municipality? @relation("UserMunicipality")
+  municipality Municipality? @relation("UserMunicipality")
 
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 
   @@map("users")
 }
 
 model Municipality {
-  id                     String                @id @default(uuid())
-  name                   String
-  guardInitialDate       DateTime
-  guardCount             Int
-  trafficInitialDate     DateTime
-  trafficCount           Int
-  federativeUnit         String
-  unitType               UnitType
+  id                 String   @id @default(uuid())
+  name               String
+  guardInitialDate   DateTime
+  guardCount         Int
+  trafficInitialDate DateTime
+  trafficCount       Int
+  federativeUnit     String
+  unitType           UnitType
 
-  userId                 String                @unique
-  user                   User                  @relation("UserMunicipality", fields: [userId], references: [id])
+  userId String @unique
+  user   User   @relation("UserMunicipality", fields: [userId], references: [id])
 
-  allocationDepartments  AllocationDepartment[]
-  maintenanceContracts   MaintenanceContract[]
-  qualifiedStaff         QualifiedStaff[]
-  projectPartnerships    ProjectPartnership[]
-  managements            Management[]
+  allocationDepartments AllocationDepartment[]
+  maintenanceContracts  MaintenanceContract[]
+  qualifiedStaff        QualifiedStaff[]
+  projectPartnerships   ProjectPartnership[]
+  managements           Management[]
 
-  createdAt              DateTime              @default(now())
-  updatedAt              DateTime              @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 
   @@map("municipalities")
 }
 
 model AllocationDepartment {
-  id               String        @id @default(uuid())
-  description      String
-  address          String
+  id          String @id @default(uuid())
+  description String
+  address     String
 
-  municipalityId   String
-  municipality     Municipality  @relation(fields: [municipalityId], references: [id])
+  municipalityId String
+  municipality   Municipality @relation(fields: [municipalityId], references: [id])
 
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model MaintenanceContract {
-  id               String        @id @default(uuid())
-  description      String
-  attachment       String
+  id          String @id @default(uuid())
+  description String
+  attachment  String
 
-  municipalityId   String
-  municipality     Municipality  @relation(fields: [municipalityId], references: [id])
+  municipalityId String
+  municipality   Municipality @relation(fields: [municipalityId], references: [id])
 
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model QualifiedStaff {
-  id               String         @id @default(uuid())
-  name             String
-  sector           String
-  education        String
-  experience       String
-  employmentType   EmploymentType
-  document         String
-  isResponsible    Boolean
+  id             String         @id @default(uuid())
+  name           String
+  sector         String
+  education      String
+  experience     String
+  employmentType EmploymentType
+  document       String
+  isResponsible  Boolean
 
-  municipalityId   String
-  municipality     Municipality   @relation(fields: [municipalityId], references: [id])
+  municipalityId String
+  municipality   Municipality @relation(fields: [municipalityId], references: [id])
 
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model ProjectPartnership {
-  id               String        @id @default(uuid())
-  term             String
-  agency           String
-  objective        String
-  status           String
+  id        String @id @default(uuid())
+  term      String
+  agency    String
+  objective String
+  status    String
 
-  municipalityId   String
-  municipality     Municipality  @relation(fields: [municipalityId], references: [id])
+  municipalityId String
+  municipality   Municipality @relation(fields: [municipalityId], references: [id])
 
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Management {
-  id                      String   @id @default(uuid())
-  initialDate             DateTime
-  endDate                 DateTime
+  id          String   @id @default(uuid())
+  initialDate DateTime
+  endDate     DateTime
 
-  managerName             String
-  managerCpf              String
-  managerEmail            String
-  managerAddress          String
-  managerPhone            String
+  managerName    String
+  managerCpf     String
+  managerEmail   String
+  managerAddress String
+  managerPhone   String
 
-  adminManagerName        String
-  adminManagerCpf         String
-  adminManagerEmail       String
-  adminManagerAddress     String
-  adminManagerPhone       String
+  adminManagerName    String
+  adminManagerCpf     String
+  adminManagerEmail   String
+  adminManagerAddress String
+  adminManagerPhone   String
 
-  legislationName         String
-  legislationCpf          String
-  legislationEmail        String
-  legislationAddress      String
-  legislationPhone        String
+  legislationName    String
+  legislationCpf     String
+  legislationEmail   String
+  legislationAddress String
+  legislationPhone   String
 
-  municipalityId          String
-  municipality            Municipality  @relation(fields: [municipalityId], references: [id])
+  municipalityId String
+  municipality   Municipality @relation(fields: [municipalityId], references: [id])
 
-  createdAt               DateTime      @default(now())
-  updatedAt               DateTime      @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Opportunity {
+  id                    String   @id @default(uuid()) @map("id")
+  title                 String
+  description           String
+  availableValue        Decimal
+  minValue              Decimal
+  maxValue              Decimal
+  initialDeadline       DateTime
+  finalDeadline         DateTime
+  requiresCounterpart   Boolean
+  counterpartPercentage Decimal
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  OpportunityMandatoryDocument OpportunityMandatoryDocument[]
+}
+
+model MandatoryDocument {
+  id            String @id @default(uuid())
+  opportunityId String
+  code          Int
+  name          String
+  description   String
+  model         String
+
+  updatedAt DateTime  @updatedAt
+  createdAt DateTime? @default(now())
+
+  OpportunityMandatoryDocument OpportunityMandatoryDocument[]
+}
+
+model OpportunityMandatoryDocument {
+  id                  String   @id @default(uuid())
+  mandatoryDocumentId String
+  opportunityId       String
+  updatedAt           DateTime @updatedAt
+  createdAt           DateTime @default(now())
+
+  mandatoryDocument MandatoryDocument @relation(fields: [mandatoryDocumentId], references: [id])
+  opportunity       Opportunity       @relation(fields: [opportunityId], references: [id])
 }
