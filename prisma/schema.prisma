@@ -152,7 +152,7 @@ model Management {
 
 model Opportunity {
   id                    String   @id @default(uuid()) @map("id")
-  title                 String
+  title                 String   @unique
   description           String
   availableValue        Decimal
   minValue              Decimal

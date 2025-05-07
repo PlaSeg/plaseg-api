@@ -1,6 +1,6 @@
 import { Opportunity } from "../entities/opportunity";
 
-export interface OportunitiesRepository {
+export interface OpportunitiesRepository {
 	findMany(): Promise<Opportunity[] | null>;
 	findByTitle(title: string): Promise<Opportunity | null>;
 	findById(id: string): Promise<Opportunity | null>;

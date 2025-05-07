@@ -1,7 +1,7 @@
 import { CustomError } from "../../core/errors/custom-error";
 import { Either, left, right } from "../../core/types/either";
 import { Opportunity } from "../entities/opportunity";
-import { OportunitiesRepository } from "../repositories/opportunities-repositories";
+import { OpportunitiesRepository } from "../repositories/opportunities-repositories";
 
 type CreateOpportunityUseCaseRequest = {
 	title: string;
@@ -15,10 +15,13 @@ type CreateOpportunityUseCaseRequest = {
 	counterpartPercentage: number;
 };
 
-type CreateOpportunityUseCaseResponse = Either<CustomError, null>;
+type CreateOpportunityUseCaseResponse = Either<
+	CustomError,
+	{ opportunity: Opportunity }
+>;
 
 export class CreateOpportunityUseCase {
-	constructor(private opportunityRepository: OportunitiesRepository) {}
+	constructor(private opportunityRepository: OpportunitiesRepository) {}
 
 	async execute(
 		data: CreateOpportunityUseCaseRequest
@@ -36,6 +39,8 @@ export class CreateOpportunityUseCase {
 
 		await this.opportunityRepository.create(opportunity);
 
-		return right(null);
+		return right({
+			opportunity,
+		});
 	}
 }
