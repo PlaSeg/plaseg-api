@@ -24,17 +24,17 @@ export class CreateOpportunityUseCase {
 	constructor(private opportunityRepository: OpportunitiesRepository) {}
 
 	async execute(
-		data: CreateOpportunityUseCaseRequest
+		request: CreateOpportunityUseCaseRequest
 	): Promise<CreateOpportunityUseCaseResponse> {
 		const doesOpportunityAlreadyExist =
-			await this.opportunityRepository.findByTitle(data.title);
+			await this.opportunityRepository.findByTitle(request.title);
 
 		if (doesOpportunityAlreadyExist) {
 			return left(new CustomError(409, "Título já cadastrado"));
 		}
 
 		const opportunity = Opportunity.create({
-			...data,
+			...request,
 		});
 
 		await this.opportunityRepository.create(opportunity);
