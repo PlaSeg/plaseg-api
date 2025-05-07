@@ -169,25 +169,25 @@ model Opportunity {
 }
 
 model MandatoryDocument {
-  id            String @id @default(uuid())
-  opportunityId String
-  code          Int
-  name          String
-  description   String
-  model         String
+  id          String @id @default(uuid())
+  code        Int    @default(autoincrement())
+  name        String
+  description String
+  model       String
 
-  updatedAt DateTime  @updatedAt
-  createdAt DateTime? @default(now())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 
   OpportunityMandatoryDocument OpportunityMandatoryDocument[]
 }
 
 model OpportunityMandatoryDocument {
-  id                  String   @id @default(uuid())
+  id                  String @id @default(uuid())
   mandatoryDocumentId String
   opportunityId       String
-  updatedAt           DateTime @updatedAt
-  createdAt           DateTime @default(now())
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 
   mandatoryDocument MandatoryDocument @relation(fields: [mandatoryDocumentId], references: [id])
   opportunity       Opportunity       @relation(fields: [opportunityId], references: [id])

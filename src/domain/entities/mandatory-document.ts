@@ -3,25 +3,30 @@ import { UniqueEntityID } from "../../core/entities/unique-entity-id";
 import { Optional } from "../../core/types/optional";
 import { getCurrentDate } from "../../core/utils/get-current-date";
 
-export interface MaintenanceContractProps {
+export interface MandatoryDocumentProps {
+	code: number;
+	name: string;
 	description: string;
-	attachment: string;
-	municipalityId: string;
+	model: string;
 	createdAt: Date;
 	updatedAt?: Date | null;
 }
 
-export class MaintenanceContract extends Entity<MaintenanceContractProps> {
+export class MandatoryDocument extends Entity<MandatoryDocumentProps> {
+	get code() {
+		return this.props.code;
+	}
+
+	get name() {
+		return this.props.name;
+	}
+
 	get description() {
 		return this.props.description;
 	}
 
-	get attachment() {
-		return this.props.attachment;
-	}
-
-	get municipalityId() {
-		return this.props.municipalityId;
+	get model() {
+		return this.props.model;
 	}
 
 	get createdAt() {
@@ -33,18 +38,19 @@ export class MaintenanceContract extends Entity<MaintenanceContractProps> {
 	}
 
 	static create(
-		props: Optional<MaintenanceContractProps, "createdAt">,
+		props: Optional<MandatoryDocumentProps, "code" | "createdAt">,
 		id?: UniqueEntityID
 	) {
-		const maintenanceContract = new MaintenanceContract(
+		const mandatoryDocument = new MandatoryDocument(
 			{
 				...props,
 				createdAt: props.createdAt ?? getCurrentDate(),
 				updatedAt: null,
+				code: props.code ?? 0,
 			},
 			id
 		);
 
-		return maintenanceContract;
+		return mandatoryDocument;
 	}
 }
