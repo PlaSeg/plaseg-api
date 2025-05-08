@@ -12,7 +12,7 @@ import fastifyJwt from "@fastify/jwt";
 import { errorHandler } from "./error-handler";
 import { authRoutes } from "./controllers/auth/auth.routes";
 import { opportunitiesRoutes } from "./controllers/opportunities/opportunities.routes";
-
+import { getOpportunityById } from "./controllers/opportunities/get-opportunity-by-id.controller";
 const version = "1.0.0 - Release 1";
 
 export function buildApp(app = fastify().withTypeProvider<ZodTypeProvider>()) {
@@ -48,6 +48,7 @@ export function buildApp(app = fastify().withTypeProvider<ZodTypeProvider>()) {
 	});
 	app.register(authRoutes);
 	app.register(opportunitiesRoutes);
+	app.register(getOpportunityById);
 
 	return app;
 }
