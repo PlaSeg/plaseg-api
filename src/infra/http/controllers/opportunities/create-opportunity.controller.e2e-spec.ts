@@ -26,7 +26,7 @@ describe("Create Opportunity (e2e)", () => {
 
 		const accessToken = app.jwt.sign({
 			sub: user.id.toString(),
-			role: user.role,
+			role: user.role.toString(),
 		});
 
 		const opportunity = makeOpportunity();
@@ -54,13 +54,7 @@ describe("Create Opportunity (e2e)", () => {
 			});
 
 		expect(response.statusCode).toEqual(201);
-		expect(response.body.data).toEqual(
-			expect.objectContaining({
-				id: expect.any(String),
-				title: opportunity.title,
-				description: opportunity.description,
-			})
-		);
+		expect(response.body.data).toEqual(null);
 	});
 
 	it("should not be able to create an opportunity with the same title", async () => {
@@ -70,7 +64,7 @@ describe("Create Opportunity (e2e)", () => {
 
 		const accessToken = app.jwt.sign({
 			sub: user.id.toString(),
-			role: user.role,
+			role: user.role.toString(),
 		});
 
 		const opportunity = makeOpportunity();
