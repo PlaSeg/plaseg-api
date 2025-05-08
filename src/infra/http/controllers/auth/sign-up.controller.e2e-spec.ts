@@ -1,9 +1,9 @@
 import request from "supertest";
 import { describe, expect, it, beforeAll, afterAll } from "vitest";
 import { prisma } from "../../../database/prisma/prisma";
-import { hash } from "bcrypt";
 import fastify, { FastifyInstance } from "fastify";
 import { buildApp } from "../../app";
+import { hash } from "bcrypt";
 
 describe("Register (e2e)", () => {
 	let app: FastifyInstance;
@@ -42,18 +42,18 @@ describe("Register (e2e)", () => {
 		await prisma.user.create({
 			data: {
 				name: "Acme",
-				email: "acme@gmail.com",
+				email: "john@gmail.com",
 				password: await hash("00000000", 6),
-				phone: "86988889999",
-				document: "11111111111",
+				phone: "86977779999",
+				document: "00000000000",
 			},
 		});
 
 		const response = await request(app.server).post("/auth/sign-up").send({
 			name: "Acme",
-			email: "acme@gmail.com",
-			phone: "86988889999",
-			document: "11111111111",
+			email: "john@gmail.com",
+			phone: "86977779999",
+			document: "00000000000",
 			password: "00000000",
 		});
 

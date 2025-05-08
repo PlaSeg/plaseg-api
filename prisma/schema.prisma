@@ -9,7 +9,7 @@ datasource db {
 
 enum Role {
   ADMIN
-  MEMBER
+  MUNICIPALITY
 }
 
 enum UnitType {
@@ -30,7 +30,7 @@ model User {
   document String @unique
   phone    String @unique
   password String
-  role     Role   @default(MEMBER)
+  role     Role   @default(MUNICIPALITY)
 
   municipality Municipality? @relation("UserMunicipality")
 

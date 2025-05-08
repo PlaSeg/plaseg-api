@@ -85,7 +85,6 @@ describe("Create Opportunity Use Case", () => {
 			],
 		});
 
-		// Try to create opportunity with same title
 		const result = await sut.execute({
 			title: opportunityData.title,
 			description: "Different description",

@@ -12,7 +12,7 @@ export function makeOpportunity(override: Partial<OpportunityProps> = {}) {
 		minValue: 100,
 		maxValue: 5000,
 		initialDeadline: new Date(),
-		finalDeadline: new Date(),
+		finalDeadline: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 7),
 		requiresCounterpart: true,
 		counterpartPercentage: 10,
 		requiredDocuments: [makeRequiredDocument()],

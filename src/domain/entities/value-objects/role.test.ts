@@ -12,8 +12,8 @@ describe("Role Value Object", () => {
 
 		it("should create member role", () => {
 			const role = Role.member();
-			expect(role.getValue()).toBe(DomainRole.MEMBER);
-			expect(role.toString()).toBe("MEMBER");
+			expect(role.getValue()).toBe(DomainRole.MUNICIPALITY);
+			expect(role.toString()).toBe("MUNICIPALITY");
 		});
 	});
 
@@ -23,7 +23,7 @@ describe("Role Value Object", () => {
 			const memberRole = Role.member();
 
 			expect(adminRole.getValue()).toBe(DomainRole.ADMIN);
-			expect(memberRole.getValue()).toBe(DomainRole.MEMBER);
+			expect(memberRole.getValue()).toBe(DomainRole.MUNICIPALITY);
 		});
 	});
 
@@ -35,7 +35,7 @@ describe("Role Value Object", () => {
 
 		it("should convert member role to Prisma role", () => {
 			const role = Role.member();
-			expect(role.toPrisma()).toBe(PrismaRole.MEMBER);
+			expect(role.toPrisma()).toBe(PrismaRole.MUNICIPALITY);
 		});
 
 		it("should throw error for invalid role", () => {
@@ -52,7 +52,7 @@ describe("Role Value Object", () => {
 			const memberRole = Role.member();
 
 			expect(adminRole.toString()).toBe("ADMIN");
-			expect(memberRole.toString()).toBe("MEMBER");
+			expect(memberRole.toString()).toBe("MUNICIPALITY");
 		});
 	});
 });
