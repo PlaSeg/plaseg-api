@@ -2,26 +2,25 @@ import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { makeCreateOpportunityUseCase } from "../../../database/prisma/use-cases/make-create-opportunity-use-case";
 import { errorResponseSchema, successResponseSchema } from "../../schemas/http";
-import {
-	createOpportunityRequestBodySchema,
-	opportunityResponseSchema,
-} from "../../schemas/opportunity";
+import { createOpportunityRequestBodySchema } from "../../schemas/opportunity";
+import { verifyUserRole } from "../../middleware/verify-user-role";
+import { z } from "zod";
 
 export async function createOpportunity(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().post(
 		"/opportunities",
 		{
+			onRequest: [verifyUserRole("ADMIN")],
 			schema: {
 				tags: ["Opportunities"],
 				operationId: "createOpportunity",
 				summary: "Create a new opportunity",
+				security: [{ bearerAuth: [] }],
 				body: createOpportunityRequestBodySchema.describe(
 					"Create opportunity request body"
 				),
 				response: {
-					201: successResponseSchema(opportunityResponseSchema).describe(
-						"Created"
-					),
+					201: successResponseSchema(z.null()).describe("Created"),
 					400: errorResponseSchema.describe("Bad Request"),
 					409: errorResponseSchema.describe("Conflict"),
 				},
@@ -45,7 +44,7 @@ export async function createOpportunity(app: FastifyInstance) {
 			return reply.status(201).send({
 				success: true,
 				errors: null,
-				data: result.value.opportunity,
+				data: null,
 			});
 		}
 	);

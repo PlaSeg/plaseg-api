@@ -77,7 +77,7 @@ export const opportunityResponseSchema = z.object({
 	updatedAt: z.coerce.date().nullable().optional(),
 	requiredDocuments: z.array(
 		z.object({
-			id: z.any(),
+			id: z.string().uuid(),
 			name: z.string(),
 			description: z.string(),
 			model: z.string(),
@@ -86,3 +86,7 @@ export const opportunityResponseSchema = z.object({
 		})
 	),
 });
+
+export const getOpportunitiesResponseSchema = z
+	.array(opportunityResponseSchema)
+	.nullable();
