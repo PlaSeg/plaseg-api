@@ -56,9 +56,7 @@ export class Opportunity extends Entity<OpportunityProps> {
 		return this.props.counterpartPercentage;
 	}
 
-	get requiredDocuments() {
-		return this.props.requiredDocuments;
-	}
+
 
 	get createdAt() {
 		return this.props.createdAt;
@@ -66,6 +64,14 @@ export class Opportunity extends Entity<OpportunityProps> {
 
 	get updatedAt() {
 		return this.props.updatedAt;
+	}
+
+	get requiredDocuments() {
+		return this.props.requiredDocuments;
+	}
+
+	set requiredDocuments(requiredDocuments: RequiredDocument[]) {
+		this.props.requiredDocuments = requiredDocuments;
 	}
 
 	addRequiredDocument(requiredDocument: RequiredDocument) {

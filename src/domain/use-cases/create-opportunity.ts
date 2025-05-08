@@ -25,7 +25,30 @@ type CreateOpportunityUseCaseRequest = {
 
 type CreateOpportunityUseCaseResponse = Either<
 	CustomError,
-	{ opportunity: Opportunity }
+	{
+		opportunity: {
+			id: string;
+			title: string;
+			description: string;
+			availableValue: number;
+			minValue: number;
+			maxValue: number;
+			initialDeadline: Date;
+			finalDeadline: Date;
+			requiresCounterpart: boolean;
+			counterpartPercentage: number;
+			createdAt: Date;
+			updatedAt: Date | null;
+			requiredDocuments: {
+				id: string;
+				name: string;
+				description: string;
+				model: string;
+				createdAt: Date;
+				updatedAt: Date | null;
+			}[];
+		};
+	}
 >;
 
 export class CreateOpportunityUseCase {
@@ -57,7 +80,28 @@ export class CreateOpportunityUseCase {
 		await this.opportunityRepository.create(opportunity);
 
 		return right({
-			opportunity,
+			opportunity: {
+				id: opportunity.id.toString(),
+				title: opportunity.title,
+				description: opportunity.description,
+				availableValue: opportunity.availableValue,
+				minValue: opportunity.minValue,
+				maxValue: opportunity.maxValue,
+				initialDeadline: opportunity.initialDeadline,
+				finalDeadline: opportunity.finalDeadline,
+				requiresCounterpart: opportunity.requiresCounterpart,
+				counterpartPercentage: opportunity.counterpartPercentage,
+				requiredDocuments: opportunity.requiredDocuments.map((doc) => ({
+					id: doc.id.toString(),
+					name: doc.name,
+					description: doc.description,
+					model: doc.model,
+					createdAt: doc.createdAt,
+					updatedAt: doc.updatedAt ?? null,
+				})),
+				createdAt: opportunity.createdAt,
+				updatedAt: opportunity.updatedAt ?? null,
+			},
 		});
 	}
 }
