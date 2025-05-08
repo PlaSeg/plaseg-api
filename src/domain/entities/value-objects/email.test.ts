@@ -24,9 +24,9 @@ describe("Email Value Object", () => {
 
 	describe("isValid", () => {
 		it("should return true for valid email formats", () => {
-			expect(Email.isValid("test@example.com")).toBe(true);
-			expect(Email.isValid("user.name@domain.com")).toBe(true);
-			expect(Email.isValid("user+tag@example.com")).toBe(true);
+			expect(Email.isValid("test@example.com")).toBeTruthy();
+			expect(Email.isValid("user.name@domain.com")).toBeTruthy();
+			expect(Email.isValid("user+tag@example.com")).toBeTruthy();
 		});
 
 		it("should return false for invalid email formats", () => {

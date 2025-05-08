@@ -3,8 +3,7 @@ import { UniqueEntityID } from "../../core/entities/unique-entity-id";
 import { Optional } from "../../core/types/optional";
 import { getCurrentDate } from "../../core/utils/get-current-date";
 
-export interface MandatoryDocumentProps {
-	code: number;
+export interface RequiredDocumentProps {
 	name: string;
 	description: string;
 	model: string;
@@ -12,11 +11,7 @@ export interface MandatoryDocumentProps {
 	updatedAt?: Date | null;
 }
 
-export class MandatoryDocument extends Entity<MandatoryDocumentProps> {
-	get code() {
-		return this.props.code;
-	}
-
+export class RequiredDocument extends Entity<RequiredDocumentProps> {
 	get name() {
 		return this.props.name;
 	}
@@ -38,19 +33,18 @@ export class MandatoryDocument extends Entity<MandatoryDocumentProps> {
 	}
 
 	static create(
-		props: Optional<MandatoryDocumentProps, "code" | "createdAt">,
+		props: Optional<RequiredDocumentProps, "createdAt">,
 		id?: UniqueEntityID
 	) {
-		const mandatoryDocument = new MandatoryDocument(
+		const requiredDocument = new RequiredDocument(
 			{
 				...props,
 				createdAt: props.createdAt ?? getCurrentDate(),
 				updatedAt: null,
-				code: props.code ?? 0,
 			},
 			id
 		);
 
-		return mandatoryDocument;
+		return requiredDocument;
 	}
 }

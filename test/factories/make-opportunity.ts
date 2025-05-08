@@ -2,6 +2,7 @@ import {
 	Opportunity,
 	OpportunityProps,
 } from "../../src/domain/entities/opportunity";
+import { makeRequiredDocument } from "./make-required-document";
 
 export function makeOpportunity(override: Partial<OpportunityProps> = {}) {
 	const opportunity = Opportunity.create({
@@ -14,6 +15,7 @@ export function makeOpportunity(override: Partial<OpportunityProps> = {}) {
 		finalDeadline: new Date(),
 		requiresCounterpart: true,
 		counterpartPercentage: 10,
+		requiredDocuments: [makeRequiredDocument()],
 		...override,
 	});
 

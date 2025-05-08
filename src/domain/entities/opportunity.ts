@@ -2,6 +2,7 @@ import { Entity } from "../../core/entities/entity";
 import { UniqueEntityID } from "../../core/entities/unique-entity-id";
 import { Optional } from "../../core/types/optional";
 import { getCurrentDate } from "../../core/utils/get-current-date";
+import { RequiredDocument } from "./required-document";
 
 export interface OpportunityProps {
 	title: string;
@@ -13,6 +14,7 @@ export interface OpportunityProps {
 	finalDeadline: Date;
 	requiresCounterpart: boolean;
 	counterpartPercentage: number;
+	requiredDocuments: RequiredDocument[];
 	createdAt: Date;
 	updatedAt?: Date | null;
 }
@@ -54,6 +56,10 @@ export class Opportunity extends Entity<OpportunityProps> {
 		return this.props.counterpartPercentage;
 	}
 
+	get requiredDocuments() {
+		return this.props.requiredDocuments;
+	}
+
 	get createdAt() {
 		return this.props.createdAt;
 	}
@@ -62,8 +68,12 @@ export class Opportunity extends Entity<OpportunityProps> {
 		return this.props.updatedAt;
 	}
 
+	addRequiredDocument(requiredDocument: RequiredDocument) {
+		this.props.requiredDocuments.push(requiredDocument);
+	}
+
 	static create(
-		props: Optional<OpportunityProps, "createdAt">,
+		props: Optional<OpportunityProps, "createdAt" | "requiredDocuments">,
 		id?: UniqueEntityID
 	) {
 		const opportunity = new Opportunity(
@@ -71,6 +81,7 @@ export class Opportunity extends Entity<OpportunityProps> {
 				...props,
 				createdAt: props.createdAt ?? getCurrentDate(),
 				updatedAt: null,
+				requiredDocuments: props.requiredDocuments ?? [],
 			},
 			id
 		);

@@ -1,6 +1,7 @@
 import { InMemoryOpportunitiesRepository } from "../../../test/repositories/in-memory-opportunities-repository";
 import { CreateOpportunityUseCase } from "./create-opportunity";
 import { makeOpportunity } from "../../../test/factories/make-opportunity";
+import { makeRequiredDocument } from "../../../test/factories/make-required-document";
 
 let inMemoryOpportunitiesRepository: InMemoryOpportunitiesRepository;
 let sut: CreateOpportunityUseCase;
@@ -11,8 +12,10 @@ describe("Create Opportunity Use Case", () => {
 		sut = new CreateOpportunityUseCase(inMemoryOpportunitiesRepository);
 	});
 
-	it("should be able to create a new opportunity", async () => {
+	it("should be able to create an opportunity", async () => {
 		const opportunityData = makeOpportunity();
+		const requiredDocument = makeRequiredDocument();
+
 		const result = await sut.execute({
 			title: opportunityData.title,
 			description: opportunityData.description,
@@ -23,6 +26,13 @@ describe("Create Opportunity Use Case", () => {
 			finalDeadline: opportunityData.finalDeadline,
 			requiresCounterpart: opportunityData.requiresCounterpart,
 			counterpartPercentage: opportunityData.counterpartPercentage,
+			requiredDocuments: [
+				{
+					name: requiredDocument.name,
+					description: requiredDocument.description,
+					model: requiredDocument.model,
+				},
+			],
 		});
 
 		expect(result.isRight()).toBeTruthy();

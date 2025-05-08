@@ -44,7 +44,7 @@ describe("CustomError", () => {
 	it("should inherit from Error prototype", () => {
 		const error = new CustomError(401, "Unauthorized");
 
-		expect(error instanceof Error).toBe(true);
+		expect(error instanceof Error).toBeTruthy();
 		expect(error.stack).toBeDefined();
 	});
 });
