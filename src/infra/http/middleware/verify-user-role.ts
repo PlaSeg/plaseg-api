@@ -2,9 +2,19 @@ import { FastifyReply, FastifyRequest } from "fastify";
 
 export function verifyUserRole(roleToVerify: "ADMIN" | "MUNICIPALITY") {
 	return async (request: FastifyRequest, reply: FastifyReply) => {
-		const { role } = request.user;
+		try {
+			await request.jwtVerify();
 
-		if (role !== roleToVerify) {
+			const role = request.user.role;
+
+			if (role !== roleToVerify) {
+				return reply.status(401).send({
+					success: false,
+					errors: ["Não autorizado"],
+					data: null,
+				});
+			}
+		} catch (err) {
 			return reply.status(401).send({
 				success: false,
 				errors: ["Não autorizado"],
