@@ -15,6 +15,7 @@ import { errorHandler } from "./error-handler";
 import { authRoutes } from "./controllers/auth/auth.routes";
 import { createMunicipality } from "./controllers/municipality/create-municipality.controller";
 import { createQualifiedStaff } from "./controllers/municipality/create-qualified-staff.controller";
+import { createProjectPartnership } from "./controllers/municipality/create-project-partnership.controller";
 
 const version = "1.0.0 - Release 1";
 
@@ -52,6 +53,7 @@ export function buildApp(app = fastify().withTypeProvider<ZodTypeProvider>()) {
 	app.register(authRoutes);
 	app.register(createMunicipality);
 	app.register(createQualifiedStaff);
+	app.register(createProjectPartnership);
 
 	return app;
 }
