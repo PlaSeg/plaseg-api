@@ -35,8 +35,7 @@ export class CreateAllocationDepartmentUseCase {
 		}
 
 		const allocationDepartment = AllocationDepartment.create({
-			description: data.description,
-			address: data.address,
+			...data,
 			municipalityId: municipality.id.toString(),
 		});
 
