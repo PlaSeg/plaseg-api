@@ -29,7 +29,7 @@ describe("Get Profile Use Case", () => {
 			expect(inMemoryUsersRepository.items[0].name).toEqual(
 				result.value.user.name
 			);
-			expect(inMemoryUsersRepository.items[0].email).toEqual(
+			expect(inMemoryUsersRepository.items[0].email.toString()).toEqual(
 				result.value.user.email
 			);
 			expect(inMemoryUsersRepository.items[0].role).toEqual(

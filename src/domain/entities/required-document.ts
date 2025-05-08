@@ -3,32 +3,40 @@ import { UniqueEntityID } from "../../core/entities/unique-entity-id";
 import { Optional } from "../../core/types/optional";
 import { getCurrentDate } from "../../core/utils/get-current-date";
 
-export interface AllocationDepartmentProps {
+export interface RequiredDocumentProps {
+	name: string;
 	description: string;
-	address: string;
-	municipalityId: string;
+	model: string;
 	createdAt: Date;
 	updatedAt?: Date | null;
 }
 
-export class AllocationDepartment extends Entity<AllocationDepartmentProps> {
+export class RequiredDocument extends Entity<RequiredDocumentProps> {
+	get name() {
+		return this.props.name;
+	}
+
 	get description() {
 		return this.props.description;
 	}
 
-	get address() {
-		return this.props.address;
+	get model() {
+		return this.props.model;
 	}
 
-	get municipalityId() {
-		return this.props.municipalityId;
+	get createdAt() {
+		return this.props.createdAt;
+	}
+
+	get updatedAt() {
+		return this.props.updatedAt;
 	}
 
 	static create(
-		props: Optional<AllocationDepartmentProps, "createdAt">,
+		props: Optional<RequiredDocumentProps, "createdAt">,
 		id?: UniqueEntityID
 	) {
-		const allocationDepartment = new AllocationDepartment(
+		const requiredDocument = new RequiredDocument(
 			{
 				...props,
 				createdAt: props.createdAt ?? getCurrentDate(),
@@ -37,6 +45,6 @@ export class AllocationDepartment extends Entity<AllocationDepartmentProps> {
 			id
 		);
 
-		return allocationDepartment;
+		return requiredDocument;
 	}
 }

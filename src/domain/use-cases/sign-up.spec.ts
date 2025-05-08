@@ -4,6 +4,7 @@ import { FakeHasher } from "../../../test/cryptography/fake-hasher";
 import { SignUpUseCase } from "./sign-up";
 import { makeUser } from "../../../test/factories/make-user";
 import { Email } from "../entities/value-objects/email";
+import { CustomError } from "../../core/errors/custom-error";
 
 let inMemoryUsersRepository: InMemoryUsersRepository;
 let fakeHasher: FakeHasher;
@@ -81,8 +82,9 @@ describe("Sign Up Use Case", () => {
 
 		expect(result.isLeft()).toBeTruthy();
 		if (result.isLeft()) {
-			expect(result.value.statusCode).toEqual(409);
-			expect(result.value.message).toEqual("Documento já cadastrado");
+			expect(result.value).toEqual(
+				new CustomError(409, ["Documento já cadastrado"])
+			);
 		}
 		expect(inMemoryUsersRepository.items).toHaveLength(1);
 	});

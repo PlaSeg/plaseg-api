@@ -4,47 +4,47 @@ import { Optional } from "../../core/types/optional";
 import { getCurrentDate } from "../../core/utils/get-current-date";
 
 export interface MaintenanceContractProps {
-    description: string;
-    attachment: string;
-    municipalityId: string;
-    createdAt: Date;
-    updatedAt?: Date | null;
+	description: string;
+	attachment: string;
+	municipalityId: string;
+	createdAt: Date;
+	updatedAt?: Date | null;
 }
 
 export class MaintenanceContract extends Entity<MaintenanceContractProps> {
-    get description() {
-        return this.props.description;
-    }
+	get description() {
+		return this.props.description;
+	}
 
-    get attachment() {
-        return this.props.attachment;
-    }
+	get attachment() {
+		return this.props.attachment;
+	}
 
-    get municipalityId() {
-        return this.props.municipalityId;
-    }
+	get municipalityId() {
+		return this.props.municipalityId;
+	}
 
-    get createdAt() {
-        return this.props.createdAt;
-    }
+	get createdAt() {
+		return this.props.createdAt;
+	}
 
-    get updatedAt() {
-        return this.props.updatedAt;
-    }
+	get updatedAt() {
+		return this.props.updatedAt;
+	}
 
-    static create(
-        props: Optional<MaintenanceContractProps, "createdAt">,
-        id?: UniqueEntityID
-    ) {
-        const maintenanceContract = new MaintenanceContract(
-            {
-                ...props,
-                createdAt: props.createdAt ?? getCurrentDate(),
-                updatedAt: null
-            },
-            id
-        );
+	static create(
+		props: Optional<MaintenanceContractProps, "createdAt">,
+		id?: UniqueEntityID
+	) {
+		const maintenanceContract = new MaintenanceContract(
+			{
+				...props,
+				createdAt: props.createdAt ?? getCurrentDate(),
+				updatedAt: null,
+			},
+			id
+		);
 
-        return maintenanceContract;
-    }
+		return maintenanceContract;
+	}
 }

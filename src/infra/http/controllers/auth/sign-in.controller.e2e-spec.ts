@@ -48,7 +48,7 @@ describe("Sign In (e2e)", () => {
 
 	it("should not be able to sign in with an invalid email", async () => {
 		const response = await request(app.server).post("/auth/sign-in").send({
-			email: "acme@gmail.com",
+			email: "invalid@gmail.com",
 			password: "00000000",
 		});
 

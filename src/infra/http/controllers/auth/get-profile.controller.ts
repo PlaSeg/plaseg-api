@@ -10,7 +10,7 @@ export async function getProfile(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().get(
 		"/users/profile",
 		{
-			onRequest: [verifyJwt, verifyUserRole("MEMBER")],
+			onRequest: [verifyJwt, verifyUserRole("MUNICIPALITY")],
 			schema: {
 				tags: ["Users"],
 				operationId: "getProfile",
@@ -46,7 +46,6 @@ export async function getProfile(app: FastifyInstance) {
 				errors: null,
 				data: {
 					...response.value.user,
-					email: response.value.user.email.toString(),
 					role: response.value.user.role.getValue(),
 				},
 			});
