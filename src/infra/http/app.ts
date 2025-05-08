@@ -17,6 +17,7 @@ import { createMunicipality } from "./controllers/municipality/create-municipali
 import { createQualifiedStaff } from "./controllers/municipality/create-qualified-staff.controller";
 import { createProjectPartnership } from "./controllers/municipality/create-project-partnership.controller";
 import { createAllocationDepartment } from "./controllers/municipality/create-allocation-department";
+import { createManagement } from "./controllers/municipality/create-management.controller";
 
 const version = "1.0.0 - Release 1";
 
@@ -56,6 +57,7 @@ export function buildApp(app = fastify().withTypeProvider<ZodTypeProvider>()) {
 	app.register(createQualifiedStaff);
 	app.register(createProjectPartnership);
 	app.register(createAllocationDepartment);
+	app.register(createManagement);
 
 	return app;
 }

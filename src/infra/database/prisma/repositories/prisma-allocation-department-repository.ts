@@ -18,7 +18,7 @@ export class PrismaAllocationDepartmentsRepository
 		return PrismaAllocationDepartmentMapper.toDomain(allocationDepartment);
 	}
 
-	async findAll(
+	async findByMunicipalityId(
 		municipalityId: string
 	): Promise<AllocationDepartment[] | null> {
 		const departments = await prisma.allocationDepartment.findMany({

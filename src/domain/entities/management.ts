@@ -2,32 +2,33 @@ import { Entity } from "../../core/entities/entity";
 import { UniqueEntityID } from "../../core/entities/unique-entity-id";
 import { Optional } from "../../core/types/optional";
 import { getCurrentDate } from "../../core/utils/get-current-date";
+import { Email } from "./value-objects/email";
 
 export interface ManagementProps {
-    initialDate: Date;
-    endDate: Date;
+	initialDate: Date;
+	endDate: Date;
 
-    managerName: string;
-    managerCpf: string;
-    managerEmail: string;
-    managerAddress: string;
-    managerPhone: string;
+	managerName: string;
+	managerCpf: string;
+	managerEmail: Email;
+	managerAddress: string;
+	managerPhone: string;
 
-    adminManagerName: string;
-    adminManagerCpf: string;
-    adminManagerEmail: string;
-    adminManagerAddress: string;
-    adminManagerPhone: string;
+	adminManagerName: string;
+	adminManagerCpf: string;
+	adminManagerEmail: Email;
+	adminManagerAddress: string;
+	adminManagerPhone: string;
 
-    legislationName: string;
-    legislationCpf: string;
-    legislationEmail: string;
-    legislationAddress: string;
-    legislationPhone: string;
+	legislationName: string;
+	legislationCpf: string;
+	legislationEmail: Email;
+	legislationAddress: string;
+	legislationPhone: string;
 
-    municipalityId: string;
-    createdAt: Date;
-    updatedAt?: Date | null;
+	municipalityId: string;
+	createdAt: Date;
+	updatedAt?: Date | null;
 }
 
 export class Management extends Entity<ManagementProps> {
