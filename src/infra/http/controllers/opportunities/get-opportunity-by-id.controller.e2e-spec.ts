@@ -1,12 +1,13 @@
 import fastify, { FastifyInstance } from "fastify";
-import { afterAll, beforeAll, describe, it } from "vitest";
+import { afterAll, beforeAll, describe, it, expect } from "vitest";
 import { buildApp } from "../../app";
 import { makeUser } from "../../../../../test/factories/make-user";
 import { Role } from "../../../../domain/entities/value-objects/role";
 import { makeOpportunity } from "../../../../../test/factories/make-opportunity";
 import request from "supertest";
+import { prisma } from "../../../database/prisma/prisma";
 
-describe("Create Opportunity (e2e)", () => {
+describe("Get Opportunity By Id (e2e)", () => {
 	let app: FastifyInstance;
 
 	beforeAll(async () => {
@@ -19,7 +20,7 @@ describe("Create Opportunity (e2e)", () => {
 		await app.close();
 	});
 
-	it("should be able to create an opportunity", async () => {
+	it("should be able to get an opportunity by id", async () => {
 		const user = makeUser({
 			role: Role.admin(),
 		});
@@ -31,10 +32,8 @@ describe("Create Opportunity (e2e)", () => {
 
 		const opportunity = makeOpportunity();
 
-		const response = await request(app.server)
-			.post("/opportunities")
-			.set("Authorization", `Bearer ${accessToken}`)
-			.send({
+		const createdOpportunity = await prisma.opportunity.create({
+			data: {
 				title: opportunity.title,
 				description: opportunity.description,
 				availableValue: opportunity.availableValue,
@@ -44,26 +43,34 @@ describe("Create Opportunity (e2e)", () => {
 				finalDeadline: opportunity.finalDeadline,
 				requiresCounterpart: opportunity.requiresCounterpart,
 				counterpartPercentage: opportunity.counterpartPercentage,
-				requiredDocuments: [
-					{
-						name: opportunity.requiredDocuments[0].name,
-						description: opportunity.requiredDocuments[0].description,
-						model: opportunity.requiredDocuments[0].model,
-					},
-				],
-			});
+				requiredDocuments: {
+					create: opportunity.requiredDocuments.map((doc) => ({
+						name: doc.name,
+						description: doc.description,
+						model: doc.model,
+					})),
+				},
+			},
+			include: {
+				requiredDocuments: true,
+			},
+		});
 
-		expect(response.statusCode).toEqual(201);
+		const response = await request(app.server)
+			.get(`/opportunities/${createdOpportunity.id}`)
+			.set("Authorization", `Bearer ${accessToken}`);
+
+		expect(response.statusCode).toEqual(200);
 		expect(response.body.data).toEqual(
 			expect.objectContaining({
-				id: expect.any(String),
+				id: createdOpportunity.id,
 				title: opportunity.title,
 				description: opportunity.description,
 			})
 		);
 	});
 
-	it("should not be able to create an opportunity with the same title", async () => {
+	it("should not be able to get an opportunity with non-existing id", async () => {
 		const user = makeUser({
 			role: Role.admin(),
 		});
@@ -73,34 +80,14 @@ describe("Create Opportunity (e2e)", () => {
 			role: user.role,
 		});
 
-		const opportunity = makeOpportunity();
-
 		const response = await request(app.server)
-			.post("/opportunities")
-			.set("Authorization", `Bearer ${accessToken}`)
-			.send({
-				title: opportunity.title,
-				description: opportunity.description,
-				availableValue: opportunity.availableValue,
-				minValue: opportunity.minValue,
-				maxValue: opportunity.maxValue,
-				initialDeadline: opportunity.initialDeadline,
-				finalDeadline: opportunity.finalDeadline,
-				requiresCounterpart: opportunity.requiresCounterpart,
-				counterpartPercentage: opportunity.counterpartPercentage,
-				requiredDocuments: [
-					{
-						name: opportunity.requiredDocuments[0].name,
-						description: opportunity.requiredDocuments[0].description,
-						model: opportunity.requiredDocuments[0].model,
-					},
-				],
-			});
+			.get("/opportunities/6d3bc502-7e7d-40b5-a6c6-e58e9fc7924c")
+			.set("Authorization", `Bearer ${accessToken}`);
 
-		expect(response.statusCode).toEqual(409);
+		expect(response.statusCode).toEqual(404);
 		expect(response.body).toEqual({
 			success: false,
-			errors: ["Título já cadastrado"],
+			errors: ["Oportunidade não encontrada"],
 			data: null,
 		});
 	});
