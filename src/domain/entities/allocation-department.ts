@@ -12,31 +12,39 @@ export interface AllocationDepartmentProps {
 }
 
 export class AllocationDepartment extends Entity<AllocationDepartmentProps> {
-    get description() {
-        return this.props.description;
-    }
+	get description() {
+		return this.props.description;
+	}
 
-    get address() {
-        return this.props.address;
-    }
+	get address() {
+		return this.props.address;
+	}
 
-    get municipalityId() {
-        return this.props.municipalityId;
-    }
+	get municipalityId() {
+		return this.props.municipalityId;
+	}
 
-    static create(
-        props: Optional<AllocationDepartmentProps, "createdAt">,
-        id?: UniqueEntityID
-    ) {
-        const allocationDepartment = new AllocationDepartment(
-            {
-                ...props,
-                createdAt: props.createdAt ?? getCurrentDate(),
-                updatedAt: null
-            },
-            id
-        );
+	get createdAt() {
+		return this.props.createdAt;
+	}
 
-        return allocationDepartment;
-    }
+	get updatedAt() {
+		return this.props.updatedAt;
+	}
+
+	static create(
+		props: Optional<AllocationDepartmentProps, "createdAt">,
+		id?: UniqueEntityID
+	) {
+		const allocationDepartment = new AllocationDepartment(
+			{
+				...props,
+				createdAt: props.createdAt ?? getCurrentDate(),
+				updatedAt: null,
+			},
+			id
+		);
+
+		return allocationDepartment;
+	}
 }
