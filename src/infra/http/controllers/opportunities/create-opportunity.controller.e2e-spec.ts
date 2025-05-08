@@ -19,7 +19,7 @@ describe("Create Opportunity (e2e)", () => {
 		await app.close();
 	});
 
-	it("it should be able to create an opportunity", async () => {
+	it("should be able to create an opportunity", async () => {
 		const user = makeUser({
 			role: Role.admin(),
 		});
@@ -77,6 +77,48 @@ describe("Create Opportunity (e2e)", () => {
 					updatedAt: null,
 				},
 			],
+		});
+	});
+
+	it("should not be able to create an opportunity with the same title", async () => {
+		const user = makeUser({
+			role: Role.admin(),
+		});
+
+		const accessToken = app.jwt.sign({
+			sub: user.id.toString(),
+			role: user.role,
+		});
+
+		const opportunity = makeOpportunity();
+
+		const response = await request(app.server)
+			.post("/opportunities")
+			.set("Authorization", `Bearer ${accessToken}`)
+			.send({
+				title: opportunity.title,
+				description: opportunity.description,
+				availableValue: opportunity.availableValue,
+				minValue: opportunity.minValue,
+				maxValue: opportunity.maxValue,
+				initialDeadline: opportunity.initialDeadline,
+				finalDeadline: opportunity.finalDeadline,
+				requiresCounterpart: opportunity.requiresCounterpart,
+				counterpartPercentage: opportunity.counterpartPercentage,
+				requiredDocuments: [
+					{
+						name: opportunity.requiredDocuments[0].name,
+						description: opportunity.requiredDocuments[0].description,
+						model: opportunity.requiredDocuments[0].model,
+					},
+				],
+			});
+
+		expect(response.statusCode).toEqual(409);
+		expect(response.body).toEqual({
+			success: false,
+			errors: ["Título já cadastrado"],
+			data: null,
 		});
 	});
 });
