@@ -30,6 +30,18 @@ export class EmploymentType {
         }
     }
 
+    static create(value: string): EmploymentType {
+
+        if (value === DomainEmploymentType.CLT || value === DomainEmploymentType.PJ ||
+            value === DomainEmploymentType.OTHERS
+        ) {
+            return new EmploymentType(value);
+        }
+
+        throw new Error("Invalid employment type."); 
+    }
+    
+
     public static clt(): EmploymentType {
         return new EmploymentType(DomainEmploymentType.CLT);
     }
