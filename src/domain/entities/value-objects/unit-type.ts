@@ -27,6 +27,15 @@ export class UnitType {
         }
     }
 
+    static create(value: string): UnitType {
+
+        if(value === DomainUnitType.UF || value === DomainUnitType.MUNICIPALITY) {
+            return new UnitType(value);
+        }
+
+        throw new Error("Invalid unit type format"); 
+	}
+
     public static uf(): UnitType {
         return new UnitType(DomainUnitType.UF);
     }

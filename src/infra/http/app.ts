@@ -13,6 +13,7 @@ import fastifyJwt from "@fastify/jwt";
 import { env } from "../env/env";
 import { errorHandler } from "./error-handler";
 import { authRoutes } from "./controllers/auth/auth.routes";
+import { createMunicipality } from "./controllers/municipality/create-municipality.controller";
 
 const version = "1.0.0 - Release 1";
 
@@ -48,6 +49,7 @@ export function buildApp(app = fastify().withTypeProvider<ZodTypeProvider>()) {
 		secret: env.JWT_SECRET,
 	});
 	app.register(authRoutes);
+	app.register(createMunicipality);
 
 	return app;
 }
