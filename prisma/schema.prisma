@@ -183,8 +183,8 @@ model Opportunity {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
-  Type   Type?   @relation(fields: [typeId], references: [id])
-  typeId String?
+  Type   Type   @relation(fields: [typeId], references: [id])
+  typeId String
 
   requiredDocuments RequiredDocument[]
 
@@ -219,6 +219,7 @@ model Type {
   // Relacionamentos com outras entidades
   opportunities Opportunity[]
   baseProducts  BaseProduct[]
+  baseProducts  BaseProduct[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
@@ -239,8 +240,8 @@ model BaseProduct {
   budget3Validity      DateTime
   unitValue            Decimal
 
-  Type   Type?   @relation(fields: [typeId], references: [id])
-  typeId String?
+  Type   Type   @relation(fields: [typeId], references: [id])
+  typeId String
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
