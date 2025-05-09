@@ -21,6 +21,7 @@ import { createMaintenanceContract } from "./controllers/municipality/create-mai
 
 import { opportunitiesRoutes } from "./controllers/opportunities/opportunities.routes";
 import { getOpportunityById } from "./controllers/opportunities/get-opportunity-by-id.controller";
+import { productsRoutes } from "./controllers/products/products.routes";
 
 const version = "1.0.0 - Release 1";
 
@@ -56,7 +57,8 @@ export function buildApp(app = fastify().withTypeProvider<ZodTypeProvider>()) {
 		secret: process.env.JWT_SECRET || "secret",
 	});
 	app.register(authRoutes);
-  app.register(opportunitiesRoutes);
+	app.register(opportunitiesRoutes);
+	app.register(productsRoutes);
 
 	app.register(createMunicipality);
 	app.register(createQualifiedStaff);
@@ -66,7 +68,6 @@ export function buildApp(app = fastify().withTypeProvider<ZodTypeProvider>()) {
 	app.register(createMaintenanceContract);
 
 	app.register(getOpportunityById);
-
 
 	return app;
 }
