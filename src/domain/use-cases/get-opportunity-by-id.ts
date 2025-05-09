@@ -22,6 +22,7 @@ type OpportunityResponse = {
 	finalDeadline: Date;
 	requiresCounterpart: boolean;
 	counterpartPercentage: number;
+	isActive: boolean;
 	createdAt: Date;
 	updatedAt: Date | null;
 	requiredDocuments: RequiredDocumentResponse[];
@@ -63,6 +64,7 @@ export class GetOpportunityByIdUseCase {
 			finalDeadline: opportunity.finalDeadline,
 			requiresCounterpart: opportunity.requiresCounterpart,
 			counterpartPercentage: opportunity.counterpartPercentage,
+			isActive: opportunity.isActive,
 			createdAt: opportunity.createdAt,
 			updatedAt: opportunity.updatedAt ?? null,
 			requiredDocuments: opportunity.requiredDocuments.map((doc) => ({
