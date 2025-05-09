@@ -34,6 +34,19 @@ export class CreateAllocationDepartmentUseCase {
 			);
 		}
 
+		const doesAllocationDepartmentExists = await this.allocationDepartmentsRepository.findByDescription(
+			data.description
+		)
+
+		if (doesAllocationDepartmentExists) {
+			return left(
+				new CustomError(
+					409,
+					"Departamento já cadastrado."
+				)
+			);
+		}
+
 		const allocationDepartment = AllocationDepartment.create({
 			...data,
 			municipalityId: municipality.id.toString(),

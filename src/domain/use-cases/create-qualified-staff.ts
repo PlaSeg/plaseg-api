@@ -32,7 +32,7 @@ export class CreateQualifiedStaffUseCase {
 
 		if (doesQualifiedStaffAlreadyExist) {
 			return left(
-				new CustomError(409, "Gestão qualificada já cadastrada!")
+				new CustomError(409, "Funcionário com esse CPF já cadastrado!")
 			);
 		}
 
@@ -40,7 +40,10 @@ export class CreateQualifiedStaffUseCase {
 
 		if (!municipality) {
 			return left(
-				new CustomError(404, "Cadastre um município antes de cadastrar uma gestão qualificada!")
+				new CustomError(
+					404,
+					"Cadastre um município antes de cadastrar um funcionário qualificado!"
+				)
 			);
 		}
 

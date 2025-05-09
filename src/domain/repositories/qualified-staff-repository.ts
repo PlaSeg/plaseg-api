@@ -9,3 +9,4 @@ export interface QualifiedStaffRepository {
 		municipalityId: string
 	): Promise<QualifiedStaff[] | null>;
 }
+ 

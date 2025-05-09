@@ -9,3 +9,4 @@ export interface ProjectPartnershipRepository {
 		municipalityId: string
 	): Promise<ProjectPartnership[] | null>;
 }
+ 

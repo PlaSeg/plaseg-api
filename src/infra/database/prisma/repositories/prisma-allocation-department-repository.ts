@@ -34,6 +34,19 @@ export class PrismaAllocationDepartmentsRepository
 		);
 	}
 
+	async findByDescription(description: string): Promise<AllocationDepartment | null> {
+		const allocationDepartment =
+			await prisma.allocationDepartment.findFirst({
+				where: { description },
+			});
+
+		if (!allocationDepartment) {
+			return null;
+		}
+
+		return PrismaAllocationDepartmentMapper.toDomain(allocationDepartment);
+	}
+
 	async create(allocationDepartment: AllocationDepartment): Promise<void> {
 		const data =
 			PrismaAllocationDepartmentMapper.toPrisma(allocationDepartment);

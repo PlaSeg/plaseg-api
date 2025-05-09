@@ -66,7 +66,9 @@ describe("Create Qualified Staff Use Case", () => {
 		expect(result.isLeft()).toBeTruthy();
 		if (result.isLeft()) {
 			expect(result.value.statusCode).toEqual(409);
-			expect(result.value.message).toEqual("Gestão qualificada já cadastrada!");
+			expect(result.value.message).toEqual(
+				"Funcionário com esse CPF já cadastrado!"
+			);
 		}
 		expect(inMemoryQualifiedStaffsRepository.items).toHaveLength(1);
 	});
@@ -89,7 +91,7 @@ describe("Create Qualified Staff Use Case", () => {
 		if (result.isLeft()) {
 			expect(result.value.statusCode).toEqual(404);
 			expect(result.value.message).toEqual(
-				"Cadastre um município antes de cadastrar uma gestão qualificada!"
+				"Cadastre um município antes de cadastrar um funcionário qualificado!"
 			);
 		}
 		expect(inMemoryQualifiedStaffsRepository.items).toHaveLength(0);
