@@ -1,5 +1,4 @@
 import { FastifyReply } from "fastify";
-import { env } from "../env/env";
 import { Encrypter } from "../../domain/cryptography/encypter";
 
 export class JwtEncrypter implements Encrypter {
@@ -13,7 +12,7 @@ export class JwtEncrypter implements Encrypter {
 			},
 			{
 				sign: {
-					expiresIn: env.EXPIRES_IN,
+					expiresIn: Number(process.env.EXPIRES_IN),
 				},
 			}
 		);

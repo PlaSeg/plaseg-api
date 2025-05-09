@@ -9,16 +9,18 @@ import fastifyCors from "@fastify/cors";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUI from "@fastify/swagger-ui";
 import fastifyJwt from "@fastify/jwt";
-
-import { env } from "../env/env";
 import { errorHandler } from "./error-handler";
 import { authRoutes } from "./controllers/auth/auth.routes";
+
 import { createMunicipality } from "./controllers/municipality/create-municipality.controller";
 import { createQualifiedStaff } from "./controllers/municipality/create-qualified-staff.controller";
 import { createProjectPartnership } from "./controllers/municipality/create-project-partnership.controller";
 import { createAllocationDepartment } from "./controllers/municipality/create-allocation-department";
 import { createManagement } from "./controllers/municipality/create-management.controller";
 import { createMaintenanceContract } from "./controllers/municipality/create-maintenance-contract.controller";
+
+import { opportunitiesRoutes } from "./controllers/opportunities/opportunities.routes";
+import { getOpportunityById } from "./controllers/opportunities/get-opportunity-by-id.controller";
 
 const version = "1.0.0 - Release 1";
 
@@ -30,7 +32,7 @@ export function buildApp(app = fastify().withTypeProvider<ZodTypeProvider>()) {
 	app.register(fastifySwagger, {
 		openapi: {
 			info: {
-				title: `PlaSeg API - ${env.NODE_ENV} - [Version: ${version}]`,
+				title: `PlaSeg API - ${process.env.NODE_ENV} - [Version: ${version}]`,
 				description:
 					"API para uma plataforma de criação automatizada de projetos municipais.",
 				version: version,
@@ -51,15 +53,20 @@ export function buildApp(app = fastify().withTypeProvider<ZodTypeProvider>()) {
 		routePrefix: "/",
 	});
 	app.register(fastifyJwt, {
-		secret: env.JWT_SECRET,
+		secret: process.env.JWT_SECRET || "secret",
 	});
 	app.register(authRoutes);
+  app.register(opportunitiesRoutes);
+  
 	app.register(createMunicipality);
 	app.register(createQualifiedStaff);
 	app.register(createProjectPartnership);
 	app.register(createAllocationDepartment);
 	app.register(createManagement);
 	app.register(createMaintenanceContract);
+
+	app.register(getOpportunityById);
+
 
 	return app;
 }

@@ -9,7 +9,7 @@ datasource db {
 
 enum Role {
   ADMIN
-  MEMBER
+  MUNICIPALITY
 }
 
 enum UnitType {
@@ -30,7 +30,7 @@ model User {
   document String @unique
   phone    String @unique
   password String
-  role     Role   @default(MEMBER)
+  role     Role   @default(MUNICIPALITY)
 
   municipality Municipality? @relation("UserMunicipality")
 
@@ -152,7 +152,7 @@ model Management {
 
 model Opportunity {
   id                    String   @id @default(uuid()) @map("id")
-  title                 String
+  title                 String   @unique
   description           String
   availableValue        Decimal
   minValue              Decimal
@@ -165,30 +165,18 @@ model Opportunity {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
-  OpportunityMandatoryDocument OpportunityMandatoryDocument[]
+  requiredDocuments RequiredDocument[]
 }
 
-model MandatoryDocument {
-  id            String @id @default(uuid())
+model RequiredDocument {
+  id          String @id @default(uuid())
+  name        String @unique
+  description String
+  model       String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id])
   opportunityId String
-  code          Int
-  name          String
-  description   String
-  model         String
-
-  updatedAt DateTime  @updatedAt
-  createdAt DateTime? @default(now())
-
-  OpportunityMandatoryDocument OpportunityMandatoryDocument[]
-}
-
-model OpportunityMandatoryDocument {
-  id                  String   @id @default(uuid())
-  mandatoryDocumentId String
-  opportunityId       String
-  updatedAt           DateTime @updatedAt
-  createdAt           DateTime @default(now())
-
-  mandatoryDocument MandatoryDocument @relation(fields: [mandatoryDocumentId], references: [id])
-  opportunity       Opportunity       @relation(fields: [opportunityId], references: [id])
 }

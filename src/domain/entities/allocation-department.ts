@@ -4,11 +4,11 @@ import { Optional } from "../../core/types/optional";
 import { getCurrentDate } from "../../core/utils/get-current-date";
 
 export interface AllocationDepartmentProps {
-    description: string;
-    address: string;
-    municipalityId: string;
-    createdAt: Date;
-    updatedAt?: Date | null;
+	description: string;
+	address: string;
+	municipalityId: string;
+	createdAt: Date;
+	updatedAt?: Date | null;
 }
 
 export class AllocationDepartment extends Entity<AllocationDepartmentProps> {

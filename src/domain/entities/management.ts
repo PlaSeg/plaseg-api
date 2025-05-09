@@ -13,7 +13,7 @@ export interface ManagementProps {
 	managerEmail: Email;
 	managerAddress: string;
 	managerPhone: string;
-
+  
 	adminManagerName: string;
 	adminManagerCpf: string;
 	adminManagerEmail: Email;
@@ -32,99 +32,99 @@ export interface ManagementProps {
 }
 
 export class Management extends Entity<ManagementProps> {
-    get initialDate() {
-        return this.props.initialDate;
-    }
+	get initialDate() {
+		return this.props.initialDate;
+	}
 
-    get endDate() {
-        return this.props.endDate;
-    }
+	get endDate() {
+		return this.props.endDate;
+	}
 
-    get managerName() {
-        return this.props.managerName;
-    }
+	get managerName() {
+		return this.props.managerName;
+	}
 
-    get managerCpf() {
-        return this.props.managerCpf;
-    }
+	get managerCpf() {
+		return this.props.managerCpf;
+	}
 
-    get managerEmail() {
-        return this.props.managerEmail;
-    }
+	get managerEmail() {
+		return this.props.managerEmail;
+	}
 
-    get managerAddress() {
-        return this.props.managerAddress;
-    }
+	get managerAddress() {
+		return this.props.managerAddress;
+	}
 
-    get managerPhone() {
-        return this.props.managerPhone;
-    }
+	get managerPhone() {
+		return this.props.managerPhone;
+	}
 
-    get adminManagerName() {
-        return this.props.adminManagerName;
-    }
+	get adminManagerName() {
+		return this.props.adminManagerName;
+	}
 
-    get adminManagerCpf() {
-        return this.props.adminManagerCpf;
-    }
+	get adminManagerCpf() {
+		return this.props.adminManagerCpf;
+	}
 
-    get adminManagerEmail() {
-        return this.props.adminManagerEmail;
-    }
+	get adminManagerEmail() {
+		return this.props.adminManagerEmail;
+	}
 
-    get adminManagerAddress() {
-        return this.props.adminManagerAddress;
-    }
+	get adminManagerAddress() {
+		return this.props.adminManagerAddress;
+	}
 
-    get adminManagerPhone() {
-        return this.props.adminManagerPhone;
-    }
+	get adminManagerPhone() {
+		return this.props.adminManagerPhone;
+	}
 
-    get legislationName() {
-        return this.props.legislationName;
-    }
+	get legislationName() {
+		return this.props.legislationName;
+	}
 
-    get legislationCpf() {
-        return this.props.legislationCpf;
-    }
+	get legislationCpf() {
+		return this.props.legislationCpf;
+	}
 
-    get legislationEmail() {
-        return this.props.legislationEmail;
-    }
+	get legislationEmail() {
+		return this.props.legislationEmail;
+	}
 
-    get legislationAddress() {
-        return this.props.legislationAddress;
-    }
+	get legislationAddress() {
+		return this.props.legislationAddress;
+	}
 
-    get legislationPhone() {
-        return this.props.legislationPhone;
-    }
+	get legislationPhone() {
+		return this.props.legislationPhone;
+	}
 
-    get municipalityId() {
-        return this.props.municipalityId;
-    }
+	get municipalityId() {
+		return this.props.municipalityId;
+	}
 
-    get createdAt() {
-        return this.props.createdAt;
-    }
+	get createdAt() {
+		return this.props.createdAt;
+	}
 
-    get updatedAt() {
-        return this.props.updatedAt;
-    }
+	get updatedAt() {
+		return this.props.updatedAt;
+	}
 
-    static create(
-        props: Optional<ManagementProps, "createdAt">,
-        id?: UniqueEntityID
-    ) {
-        const management = new Management(
-            {
-                ...props,
-                createdAt: props.createdAt ?? getCurrentDate(),
-                updatedAt: null
-            },
-            id
-        );
+	static create(
+		props: Optional<ManagementProps, "createdAt">,
+		id?: UniqueEntityID
+	) {
+		const management = new Management(
+			{
+				...props,
+				createdAt: props.createdAt ?? getCurrentDate(),
+				updatedAt: null,
+			},
+			id
+		);
 
-        return management;
-    }
+		return management;
+	}
 }
