@@ -1,3 +1,4 @@
+import { getCurrentDate } from "../../src/core/utils/get-current-date";
 import {
 	Opportunity,
 	OpportunityProps,
@@ -11,8 +12,8 @@ export function makeOpportunity(override: Partial<OpportunityProps> = {}) {
 		availableValue: 1000,
 		minValue: 100,
 		maxValue: 5000,
-		initialDeadline: new Date(),
-		finalDeadline: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 7),
+		initialDeadline: getCurrentDate("2025-05-05T00:00:00.000Z"),
+		finalDeadline: getCurrentDate(),
 		requiresCounterpart: true,
 		counterpartPercentage: 10,
 		requiredDocuments: [makeRequiredDocument()],
