@@ -65,6 +65,7 @@ describe("Get Opportunities (e2e)", () => {
 				counterpartPercentage: opportunity.counterpartPercentage,
 				initialDeadline: expect.any(String),
 				finalDeadline: expect.any(String),
+				isActive: opportunity.isActive,
 				createdAt: expect.any(String),
 				updatedAt: expect.any(String),
 				requiredDocuments: [],

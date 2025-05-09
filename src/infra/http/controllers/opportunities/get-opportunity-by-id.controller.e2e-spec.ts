@@ -43,6 +43,7 @@ describe("Get Opportunity By Id (e2e)", () => {
 				finalDeadline: opportunity.finalDeadline,
 				requiresCounterpart: opportunity.requiresCounterpart,
 				counterpartPercentage: opportunity.counterpartPercentage,
+				isActive: opportunity.isActive,
 				requiredDocuments: {
 					create: opportunity.requiredDocuments.map((doc) => ({
 						name: doc.name,
