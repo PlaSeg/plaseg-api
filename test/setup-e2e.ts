@@ -58,6 +58,13 @@ beforeAll(async () => {
 			},
 		});
 
+		await prisma.$connect();
+	} catch (error) {
+		console.error("Error setting up test database:", error);
+		throw error;
+	}
+});
+
 beforeEach(async () => {
 	await prisma.allocationDepartment.deleteMany();
 	await prisma.maintenanceContract.deleteMany();
@@ -66,12 +73,6 @@ beforeEach(async () => {
 	await prisma.qualifiedStaff.deleteMany();
 	await prisma.municipality.deleteMany();
 	await prisma.user.deleteMany();
-
-		await prisma.$connect();
-	} catch (error) {
-		console.error("Error setting up test database:", error);
-		throw error;
-	}
 });
 
 afterAll(async () => {

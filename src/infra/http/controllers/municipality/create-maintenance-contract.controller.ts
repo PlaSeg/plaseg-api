@@ -11,7 +11,7 @@ export async function createMaintenanceContract(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().post(
 		"/municipality/maintenance-contract",
 		{
-			onRequest: [verifyJwt, verifyUserRole("MEMBER")],
+			onRequest: [verifyJwt, verifyUserRole("MUNICIPALITY")],
 			schema: {
 				tags: ["Municipality"],
 				operationId: "createMaintenanceContract",
@@ -27,9 +27,12 @@ export async function createMaintenanceContract(app: FastifyInstance) {
 			},
 		},
 		async (request, reply) => {
-			const body = createMaintenanceContractRequestBodySchema.parse(request.body);
+			const body = createMaintenanceContractRequestBodySchema.parse(
+				request.body
+			);
 
-			const createAllocationDepartmentUseCase = makeCreateMaintenanceContractUseCase();
+			const createAllocationDepartmentUseCase =
+				makeCreateMaintenanceContractUseCase();
 
 			const response = await createAllocationDepartmentUseCase.execute({
 				...body,

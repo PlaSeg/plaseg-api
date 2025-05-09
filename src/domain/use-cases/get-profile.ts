@@ -1,6 +1,5 @@
 import { CustomError } from "../../core/errors/custom-error";
 import { Either, left, right } from "../../core/types/either";
-import { Role } from "../entities/value-objects/role";
 import { UsersRepository } from "../repositories/users-repository";
 
 type GetProfileUseCaseRequest = {
@@ -14,7 +13,7 @@ type GetProfileUseCaseResponse = Either<
 			id: string;
 			name: string;
 			email: string;
-			role: Role;
+			role: string;
 		};
 	}
 >;
@@ -33,10 +32,10 @@ export class GetProfileUseCase {
 
 		return right({
 			user: {
-				id: user.id.toString(),
 				name: user.name,
+				id: user.id.toString(),
 				email: user.email.toString(),
-				role: user.role,
+				role: user.role.toString(),
 			},
 		});
 	}

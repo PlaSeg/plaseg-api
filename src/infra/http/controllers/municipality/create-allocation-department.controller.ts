@@ -11,7 +11,7 @@ export async function createAllocationDepartment(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().post(
 		"/municipality/allocation-department",
 		{
-			onRequest: [verifyJwt, verifyUserRole("MEMBER")],
+			onRequest: [verifyJwt, verifyUserRole("MUNICIPALITY")],
 			schema: {
 				tags: ["Municipality"],
 				operationId: "createAllocationDepartment",
