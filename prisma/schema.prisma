@@ -219,7 +219,6 @@ model Type {
   // Relacionamentos com outras entidades
   opportunities Opportunity[]
   baseProducts  BaseProduct[]
-  baseProducts  BaseProduct[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
