@@ -56,8 +56,6 @@ export class Opportunity extends Entity<OpportunityProps> {
 		return this.props.counterpartPercentage;
 	}
 
-
-
 	get createdAt() {
 		return this.props.createdAt;
 	}
@@ -79,14 +77,17 @@ export class Opportunity extends Entity<OpportunityProps> {
 	}
 
 	static create(
-		props: Optional<OpportunityProps, "createdAt" | "requiredDocuments">,
+		props: Optional<
+			OpportunityProps,
+			"createdAt" | "requiredDocuments" | "updatedAt"
+		>,
 		id?: UniqueEntityID
 	) {
 		const opportunity = new Opportunity(
 			{
 				...props,
 				createdAt: props.createdAt ?? getCurrentDate(),
-				updatedAt: null,
+				updatedAt: props.updatedAt ?? null,
 				requiredDocuments: props.requiredDocuments ?? [],
 			},
 			id

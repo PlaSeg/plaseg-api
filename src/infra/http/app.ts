@@ -56,8 +56,7 @@ export function buildApp(app = fastify().withTypeProvider<ZodTypeProvider>()) {
 		secret: process.env.JWT_SECRET || "secret",
 	});
 	app.register(authRoutes);
-  app.register(opportunitiesRoutes);
-
+  	app.register(opportunitiesRoutes);
 	app.register(createMunicipality);
 	app.register(createQualifiedStaff);
 	app.register(createProjectPartnership);
@@ -65,7 +64,6 @@ export function buildApp(app = fastify().withTypeProvider<ZodTypeProvider>()) {
 	app.register(createManagement);
 	app.register(createMaintenanceContract);
 
-	app.register(getOpportunityById);
 
 
 	return app;

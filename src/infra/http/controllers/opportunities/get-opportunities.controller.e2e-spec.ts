@@ -66,7 +66,7 @@ describe("Get Opportunities (e2e)", () => {
 				initialDeadline: expect.any(String),
 				finalDeadline: expect.any(String),
 				createdAt: expect.any(String),
-				updatedAt: null,
+				updatedAt: expect.any(String),
 				requiredDocuments: [],
 			},
 		]);
