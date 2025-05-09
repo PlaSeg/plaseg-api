@@ -12,6 +12,13 @@ enum Role {
   MUNICIPALITY
 }
 
+enum TypeGroup {
+  CATEGORY
+  OPPORTUNITY
+  SUBCATEGORY
+  SUBSUBCATEGORY
+}
+
 enum UnitType {
   UF
   MUNICIPALITY
@@ -165,7 +172,12 @@ model Opportunity {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
+  Type   Type?   @relation(fields: [typeId], references: [id])
+  typeId String?
+
   requiredDocuments RequiredDocument[]
+
+  @@map("opportunities")
 }
 
 model RequiredDocument {
@@ -179,4 +191,25 @@ model RequiredDocument {
 
   opportunity   Opportunity @relation(fields: [opportunityId], references: [id])
   opportunityId String
+
+  @@map("required_documents")
+}
+
+model Type {
+  id          String    @id @default(uuid())
+  description String    @unique
+  group       TypeGroup
+  parentId    String?
+
+  // Auto-relacionamento para hierarquia
+  parent   Type?  @relation("TypeHierarchy", fields: [parentId], references: [id])
+  children Type[] @relation("TypeHierarchy")
+
+  // Relacionamentos com outras entidades
+  opportunities Opportunity[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("types")
 }
