@@ -26,13 +26,13 @@ describe("Get Profile (e2e)", () => {
 				phone: "86988889999",
 				document: "11111111111",
 				password: await hash("00000000", 6),
-				role: "MEMBER",
+				role: "MUNICIPALITY",
 			},
 		});
 
 		const accessToken = app.jwt.sign({
 			sub: user.id.toString(),
-			role: user.role,
+			role: user.role.toString(),
 		});
 
 		const response = await request(app.server)
@@ -47,7 +47,7 @@ describe("Get Profile (e2e)", () => {
 				id: expect.any(String),
 				name: "Acme",
 				email: "acme@gmail.com",
-				role: "MEMBER",
+				role: "MUNICIPALITY",
 			},
 		});
 	});
@@ -66,7 +66,7 @@ describe("Get Profile (e2e)", () => {
 	it("should not be able to get profile with invalid user id", async () => {
 		const accessToken = app.jwt.sign({
 			sub: "invalid-user-id",
-			role: "MEMBER",
+			role: "MUNICIPALITY",
 		});
 
 		const response = await request(app.server)

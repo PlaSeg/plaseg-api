@@ -2,7 +2,7 @@ import { Role as PrismaRole } from "@prisma/client";
 
 export enum DomainRole {
 	ADMIN = "ADMIN",
-	MEMBER = "MEMBER",
+	MUNICIPALITY = "MUNICIPALITY",
 }
 
 export class Role {
@@ -20,8 +20,8 @@ export class Role {
 		switch (this.value) {
 			case DomainRole.ADMIN:
 				return PrismaRole.ADMIN;
-			case DomainRole.MEMBER:
-				return PrismaRole.MEMBER;
+			case DomainRole.MUNICIPALITY:
+				return PrismaRole.MUNICIPALITY;
 			default:
 				throw new Error(`Invalid role: ${this.value}`);
 		}
@@ -32,7 +32,7 @@ export class Role {
 	}
 
 	public static member(): Role {
-		return new Role(DomainRole.MEMBER);
+		return new Role(DomainRole.MUNICIPALITY);
 	}
 
 	public toString(): string {

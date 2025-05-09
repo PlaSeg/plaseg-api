@@ -9,7 +9,25 @@ datasource db {
 
 enum Role {
   ADMIN
-  MEMBER
+  MUNICIPALITY
+}
+
+enum TypeGroup {
+  CATEGORY
+  OPPORTUNITY
+  SUBCATEGORY
+  SUBSUBCATEGORY
+}
+
+enum UnitType {
+  UF
+  MUNICIPALITY
+}
+
+enum EmploymentType {
+  CLT
+  PJ
+  OTHERS
 }
 
 model User {
@@ -19,10 +37,212 @@ model User {
   document String @unique
   phone    String @unique
   password String
-  role     Role   @default(MEMBER)
+  role     Role   @default(MUNICIPALITY)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  municipality Municipality? @relation("UserMunicipality")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 
   @@map("users")
+}
+
+model Municipality {
+  id                 String   @id @default(uuid())
+  name               String
+  guardInitialDate   DateTime
+  guardCount         Int
+  trafficInitialDate DateTime
+  trafficCount       Int
+  federativeUnit     String
+  unitType           UnitType
+
+  userId String @unique
+  user   User   @relation("UserMunicipality", fields: [userId], references: [id])
+
+  allocationDepartments AllocationDepartment[]
+  maintenanceContracts  MaintenanceContract[]
+  qualifiedStaff        QualifiedStaff[]
+  projectPartnerships   ProjectPartnership[]
+  managements           Management[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("municipalities")
+}
+
+model AllocationDepartment {
+  id          String @id @default(uuid())
+  description String
+  address     String
+
+  municipalityId String
+  municipality   Municipality @relation(fields: [municipalityId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("allocation_departments")
+}
+
+model MaintenanceContract {
+  id          String @id @default(uuid())
+  description String
+  attachment  String
+
+  municipalityId String
+  municipality   Municipality @relation(fields: [municipalityId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("maintenance_contracts")
+}
+
+model QualifiedStaff {
+  id             String         @id @default(uuid())
+  name           String
+  sector         String
+  education      String
+  experience     String
+  employmentType EmploymentType
+  document       String
+  isResponsible  Boolean
+
+  municipalityId String
+  municipality   Municipality @relation(fields: [municipalityId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("qualified_staffs")
+}
+
+model ProjectPartnership {
+  id        String @id @default(uuid())
+  term      String
+  agency    String
+  objective String
+  status    String
+
+  municipalityId String
+  municipality   Municipality @relation(fields: [municipalityId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("project_partnerships")
+}
+
+model Management {
+  id          String   @id @default(uuid())
+  initialDate DateTime
+  endDate     DateTime
+
+  managerName    String
+  managerCpf     String
+  managerEmail   String
+  managerAddress String
+  managerPhone   String
+
+  adminManagerName    String
+  adminManagerCpf     String
+  adminManagerEmail   String
+  adminManagerAddress String
+  adminManagerPhone   String
+
+  legislationName    String
+  legislationCpf     String
+  legislationEmail   String
+  legislationAddress String
+  legislationPhone   String
+
+  municipalityId String
+  municipality   Municipality @relation(fields: [municipalityId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("managements")
+}
+
+model Opportunity {
+  id                    String   @id @default(uuid()) @map("id")
+  title                 String   @unique
+  description           String
+  availableValue        Decimal
+  minValue              Decimal
+  maxValue              Decimal
+  initialDeadline       DateTime
+  finalDeadline         DateTime
+  requiresCounterpart   Boolean
+  counterpartPercentage Decimal
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  Type   Type?   @relation(fields: [typeId], references: [id])
+  typeId String?
+
+  requiredDocuments RequiredDocument[]
+
+  @@map("opportunities")
+}
+
+model RequiredDocument {
+  id          String @id @default(uuid())
+  name        String @unique
+  description String
+  model       String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id])
+  opportunityId String
+
+  @@map("required_documents")
+}
+
+model Type {
+  id          String    @id @default(uuid())
+  description String    @unique
+  group       TypeGroup
+  parentId    String?
+
+  // Auto-relacionamento para hierarquia
+  parent   Type?  @relation("TypeHierarchy", fields: [parentId], references: [id])
+  children Type[] @relation("TypeHierarchy")
+
+  // Relacionamentos com outras entidades
+  opportunities Opportunity[]
+  baseProducts  BaseProduct[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("types")
+}
+
+model BaseProduct {
+  id                   String   @id @default(uuid())
+  code                 String   @unique
+  name                 String
+  technicalDescription String
+  budget1              Decimal
+  budget1Validity      DateTime
+  budget2              Decimal
+  budget2Validity      DateTime
+  budget3              Decimal
+  budget3Validity      DateTime
+  unitValue            Decimal
+
+  Type   Type?   @relation(fields: [typeId], references: [id])
+  typeId String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("base_products")
 }
