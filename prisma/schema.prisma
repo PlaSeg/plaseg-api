@@ -82,6 +82,8 @@ model AllocationDepartment {
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
+
+  @@map("allocation_departments")
 }
 
 model MaintenanceContract {
@@ -94,6 +96,8 @@ model MaintenanceContract {
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
+
+  @@map("maintenance_contracts")
 }
 
 model QualifiedStaff {
@@ -111,6 +115,8 @@ model QualifiedStaff {
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
+
+  @@map("qualified_staffs")
 }
 
 model ProjectPartnership {
@@ -125,6 +131,8 @@ model ProjectPartnership {
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
+
+  @@map("project_partnerships")
 }
 
 model Management {
@@ -155,6 +163,8 @@ model Management {
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
+
+  @@map("managements")
 }
 
 model Opportunity {
@@ -168,6 +178,7 @@ model Opportunity {
   finalDeadline         DateTime
   requiresCounterpart   Boolean
   counterpartPercentage Decimal
+  isActive              Boolean @default(true)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt

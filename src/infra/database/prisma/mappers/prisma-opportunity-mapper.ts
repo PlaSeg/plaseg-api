@@ -36,6 +36,7 @@ export class PrismaOpportunityMapper {
 				finalDeadline: raw.finalDeadline,
 				requiresCounterpart: raw.requiresCounterpart,
 				counterpartPercentage: raw.counterpartPercentage.toNumber(),
+				isActive: raw.isActive,
 				requiredDocuments,
 				createdAt: raw.createdAt,
 				updatedAt: raw.updatedAt,
@@ -59,6 +60,7 @@ export class PrismaOpportunityMapper {
 			finalDeadline: getCurrentDate(opportunity.finalDeadline),
 			requiresCounterpart: opportunity.requiresCounterpart,
 			counterpartPercentage: opportunity.counterpartPercentage,
+			isActive: opportunity.isActive,
 			requiredDocuments: {
 				create: opportunity.requiredDocuments.map((doc) => ({
 					id: doc.id.toString(),

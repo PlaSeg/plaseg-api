@@ -67,7 +67,6 @@ export function buildApp(app = fastify().withTypeProvider<ZodTypeProvider>()) {
 	app.register(createManagement);
 	app.register(createMaintenanceContract);
 
-	app.register(getOpportunityById);
 
 	return app;
 }
