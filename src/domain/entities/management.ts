@@ -2,6 +2,7 @@ import { Entity } from "../../core/entities/entity";
 import { UniqueEntityID } from "../../core/entities/unique-entity-id";
 import { Optional } from "../../core/types/optional";
 import { getCurrentDate } from "../../core/utils/get-current-date";
+import { Email } from "./value-objects/email";
 
 export interface ManagementProps {
 	initialDate: Date;
@@ -9,19 +10,19 @@ export interface ManagementProps {
 
 	managerName: string;
 	managerCpf: string;
-	managerEmail: string;
+	managerEmail: Email;
 	managerAddress: string;
 	managerPhone: string;
-
+  
 	adminManagerName: string;
 	adminManagerCpf: string;
-	adminManagerEmail: string;
+	adminManagerEmail: Email;
 	adminManagerAddress: string;
 	adminManagerPhone: string;
 
 	legislationName: string;
 	legislationCpf: string;
-	legislationEmail: string;
+	legislationEmail: Email;
 	legislationAddress: string;
 	legislationPhone: string;
 
