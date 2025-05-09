@@ -7,18 +7,39 @@ export class InMemoryMunicipalitiesRepository
 	public items: Municipality[] = [];
 
 	async findById(id: string): Promise<Municipality | null> {
-		const municipality = this.items.find((m) => m.id.toString() === id);
-		return municipality ?? null;
+		const municipality = this.items.find(
+			(municipality) => municipality.id.toString() === id
+		);
+
+		if (!municipality) {
+			return null;
+		}
+
+		return municipality;
 	}
 
 	async findByName(name: string): Promise<Municipality | null> {
-		const municipality = this.items.find((m) => m.name === name);
-		return municipality ?? null;
+		const municipality = this.items.find(
+			(municipality) => municipality.name === name
+		);
+
+		if (!municipality) {
+			return null;
+		}
+
+		return municipality;
 	}
 
 	async findByUserId(userId: string): Promise<Municipality | null> {
-		const municipality = this.items.find((m) => m.userId === userId);
-		return municipality ?? null;
+		const municipality = this.items.find(
+			(municipality) => municipality.userId.toString() === userId
+		);
+
+		if (!municipality) {
+			return null;
+		}
+
+		return municipality;
 	}
 
 	async create(municipality: Municipality): Promise<void> {

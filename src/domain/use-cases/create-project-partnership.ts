@@ -40,14 +40,14 @@ export class CreateProjectPartnershipUseCase {
 			return left(
 				new CustomError(
 					404,
-					"Cadastre um município antes de cadastrar uma gestão qualificada!"
+					"Cadastre um município antes de cadastrar uma parceria de projeto!"
 				)
 			);
 		}
 
 		const projectPartnership = ProjectPartnership.create({
 			...data,
-			municipalityId: municipality.id.toString()
+			municipalityId: municipality.id.toString(),
 		});
 
 		await this.projectPartnershipsRepository.create(projectPartnership);
