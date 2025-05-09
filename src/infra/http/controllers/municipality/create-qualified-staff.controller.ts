@@ -11,7 +11,7 @@ export async function createQualifiedStaff(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().post(
 		"/municipality/qualified-staff",
 		{
-			onRequest: [verifyJwt, verifyUserRole("MEMBER")],
+			onRequest: [verifyJwt, verifyUserRole("MUNICIPALITY")],
 			schema: {
 				tags: ["Municipality"],
 				operationId: "createQualifiedStaff",
@@ -33,7 +33,7 @@ export async function createQualifiedStaff(app: FastifyInstance) {
 
 			const response = await createQualifiedStaffUseCase.execute({
 				...body,
-				userId: request.user.sub 
+				userId: request.user.sub,
 			});
 
 			if (response.isLeft()) {

@@ -11,7 +11,7 @@ export async function createProjectPartnership(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().post(
 		"/municipality/project-partnership",
 		{
-			onRequest: [verifyJwt, verifyUserRole("MEMBER")],
+			onRequest: [verifyJwt, verifyUserRole("MUNICIPALITY")],
 			schema: {
 				tags: ["Municipality"],
 				operationId: "createProjectPartnership",
@@ -32,10 +32,10 @@ export async function createProjectPartnership(app: FastifyInstance) {
 			const createProjectPartnershipUseCase =
 				makeCreateProjectPartnershipUseCase();
 
-            const response = await createProjectPartnershipUseCase.execute({
-                ...body,
-                userId: request.user.sub
-            });
+			const response = await createProjectPartnershipUseCase.execute({
+				...body,
+				userId: request.user.sub,
+			});
 
 			if (response.isLeft()) {
 				return reply.status(response.value.statusCode).send({

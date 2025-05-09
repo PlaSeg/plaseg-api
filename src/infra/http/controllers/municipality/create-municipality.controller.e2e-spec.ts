@@ -31,13 +31,13 @@ describe("Create Municipality (e2e)", () => {
 				password: await hash("00000000", 6),
 				phone: "86988889999",
 				document: "11111111111",
-				role: "MEMBER",
+				role: "MUNICIPALITY",
 			},
 		});
 
 		const accessToken = app.jwt.sign({
 			sub: user.id.toString(),
-			role: user.role,
+			role: user.role.toString(),
 		});
 
 		const response = await request(app.server)
@@ -79,13 +79,13 @@ describe("Create Municipality (e2e)", () => {
 				password: await hash("00000000", 6),
 				phone: "86988889999",
 				document: "11111111111",
-				role: "MEMBER",
+				role: "MUNICIPALITY",
 			},
 		});
 
 		const accessToken = app.jwt.sign({
 			sub: user.id.toString(),
-			role: user.role,
+			role: user.role.toString(),
 		});
 
 		// First municipality creation

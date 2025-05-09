@@ -15,7 +15,7 @@ import { authRoutes } from "./controllers/auth/auth.routes";
 import { createMunicipality } from "./controllers/municipality/create-municipality.controller";
 import { createQualifiedStaff } from "./controllers/municipality/create-qualified-staff.controller";
 import { createProjectPartnership } from "./controllers/municipality/create-project-partnership.controller";
-import { createAllocationDepartment } from "./controllers/municipality/create-allocation-department";
+import { createAllocationDepartment } from "./controllers/municipality/create-allocation-department.controller";
 import { createManagement } from "./controllers/municipality/create-management.controller";
 import { createMaintenanceContract } from "./controllers/municipality/create-maintenance-contract.controller";
 
@@ -57,7 +57,7 @@ export function buildApp(app = fastify().withTypeProvider<ZodTypeProvider>()) {
 	});
 	app.register(authRoutes);
   app.register(opportunitiesRoutes);
-  
+
 	app.register(createMunicipality);
 	app.register(createQualifiedStaff);
 	app.register(createProjectPartnership);

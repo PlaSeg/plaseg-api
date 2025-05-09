@@ -11,13 +11,15 @@ export async function createMunicipality(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().post(
 		"/municipality",
 		{
-            onRequest: [verifyJwt, verifyUserRole("MEMBER")],
+			onRequest: [verifyJwt, verifyUserRole("MUNICIPALITY")],
 			schema: {
 				tags: ["Municipality"],
 				operationId: "createMunicipality",
-                security: [{ bearerAuth: [] }],
+				security: [{ bearerAuth: [] }],
 				summary: "Create a new municipality",
-				body: createMunicipalityRequestBodySchema.describe("Create municipality request body"),
+				body: createMunicipalityRequestBodySchema.describe(
+					"Create municipality request body"
+				),
 				response: {
 					201: successResponseSchema(z.null()).describe("Created"),
 					400: errorResponseSchema.describe("Bad Request"),
@@ -30,9 +32,9 @@ export async function createMunicipality(app: FastifyInstance) {
 			const createMunicipalityUseCase = makeCreateMunicipalityUseCase();
 
 			const response = await createMunicipalityUseCase.execute({
-                ...body,
-                userId: request.user.sub
-            });
+				...body,
+				userId: request.user.sub,
+			});
 
 			if (response.isLeft()) {
 				return reply.status(response.value.statusCode).send({
