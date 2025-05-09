@@ -90,3 +90,25 @@ export const opportunityResponseSchema = z.object({
 export const getOpportunitiesResponseSchema = z
 	.array(opportunityResponseSchema)
 	.nullable();
+
+export const updateOpportunityRequestBodySchema = z.object({
+	title: z.string().min(1).optional(),
+	description: z.string().min(1).optional(),
+	availableValue: z.number().positive().optional(),
+	minValue: z.number().positive().optional(),
+	maxValue: z.number().positive().optional(),
+	initialDeadline: z.coerce.date().optional(),
+	finalDeadline: z.coerce.date().optional(),
+	requiresCounterpart: z.boolean().optional(),
+	counterpartPercentage: z.number().min(0).max(100).optional(),
+	requiredDocuments: z
+		.array(
+			z.object({
+				id: z.string().uuid().optional(),
+				name: z.string().min(1).optional(),
+				description: z.string().min(1).optional(),
+				model: z.string().min(1).optional(),
+			})
+		)
+		.optional(),
+});
