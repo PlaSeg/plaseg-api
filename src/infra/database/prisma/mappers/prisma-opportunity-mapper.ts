@@ -6,6 +6,7 @@ import {
 import { Opportunity } from "../../../../domain/entities/opportunity";
 import { UniqueEntityID } from "../../../../core/entities/unique-entity-id";
 import { RequiredDocument } from "../../../../domain/entities/required-document";
+import { getCurrentDate } from "../../../../core/utils/get-current-date";
 
 export class PrismaOpportunityMapper {
 	static toDomain(
@@ -53,8 +54,9 @@ export class PrismaOpportunityMapper {
 			availableValue: opportunity.availableValue,
 			minValue: opportunity.minValue,
 			maxValue: opportunity.maxValue,
-			initialDeadline: opportunity.initialDeadline,
-			finalDeadline: opportunity.finalDeadline,
+			initialDeadline: getCurrentDate(opportunity.initialDeadline),
+			createdAt: getCurrentDate(opportunity.createdAt),
+			finalDeadline: getCurrentDate(opportunity.finalDeadline),
 			requiresCounterpart: opportunity.requiresCounterpart,
 			counterpartPercentage: opportunity.counterpartPercentage,
 			requiredDocuments: {

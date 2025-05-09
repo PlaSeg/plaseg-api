@@ -27,7 +27,7 @@ describe("Get Opportunity By Id (e2e)", () => {
 
 		const accessToken = app.jwt.sign({
 			sub: user.id.toString(),
-			role: user.role,
+			role: user.role.toString(),
 		});
 
 		const opportunity = makeOpportunity();
@@ -77,7 +77,7 @@ describe("Get Opportunity By Id (e2e)", () => {
 
 		const accessToken = app.jwt.sign({
 			sub: user.id.toString(),
-			role: user.role,
+			role: user.role.toString(),
 		});
 
 		const response = await request(app.server)
