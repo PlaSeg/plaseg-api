@@ -33,6 +33,10 @@ export class CreateTypeUseCase {
 			const parentType = await this.typeRepository.findById(request.parentId);
 			const requestGroup = TypeGroup.create(request.group);
 
+			if (!parentType) {
+				return left(new CustomError(409, "Esse pai não existe!"));
+			}
+
 			if (requestGroup.getValue() === DomainTypeGroup.CATEGORY) {
 				return left(new CustomError(409, "Categoria não deve ter pai."))
 			}
