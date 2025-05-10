@@ -16,6 +16,7 @@ export const createOpportunityRequestBodySchema = z
 			.min(10, "A descrição deve ter no mínimo 10 caracteres"),
 		availableValue: z.number().positive("O valor disponível deve ser positivo"),
 		minValue: z.number().positive("O valor mínimo deve ser positivo"),
+		typeId: z.string().uuid("O tipo deve ser um UUID válido"),
 		maxValue: z.number().positive("O valor máximo deve ser positivo"),
 		initialDeadline: z.coerce.date({
 			message: "Data inicial inválida",
@@ -29,7 +30,6 @@ export const createOpportunityRequestBodySchema = z
 			.min(0, "A porcentagem de contrapartida deve ser maior ou igual a 0")
 			.max(100, "A porcentagem de contrapartida deve ser menor ou igual a 100"),
 		isActive: z.boolean().default(true),
-		typeId: z.string().uuid(),
 		requiredDocuments: z
 			.array(requiredDocumentSchema)
 			.min(1, "Pelo menos um documento é obrigatório"),

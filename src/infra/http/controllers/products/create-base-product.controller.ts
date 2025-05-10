@@ -8,11 +8,11 @@ import { makeCreateBaseProductUseCase } from "../../../database/prisma/use-cases
 
 export async function createBaseProduct(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().post(
-		"/products/base-product",
+		"/base-products",
 		{
 			onRequest: [verifyUserRole("ADMIN")],
 			schema: {
-				tags: ["Products"],
+				tags: ["Base Products"],
 				operationId: "createBaseProduct",
 				summary: "Create a new base product",
 				security: [{ bearerAuth: [] }],

@@ -7,11 +7,11 @@ import { getProfileResponseSchema } from "../../schemas/auth";
 
 export async function getProfile(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().get(
-		"/users/profile",
+		"/auth/profile",
 		{
 			onRequest: [verifyJwt],
 			schema: {
-				tags: ["Users"],
+				tags: ["Auth"],
 				operationId: "getProfile",
 				summary: "Get user profile",
 				security: [{ bearerAuth: [] }],

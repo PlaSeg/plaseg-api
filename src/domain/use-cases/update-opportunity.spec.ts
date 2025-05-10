@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { InMemoryOpportunitiesRepository } from "../../../test/repositories/in-memory-opportunities-repository";
 import { UpdateOpportunityUseCase } from "./update-opportunity";
 import { makeOpportunity } from "../../../test/factories/make-opportunity";
-import { CustomError } from "../../core/errors/custom-error";
 
 let inMemoryOpportunitiesRepository: InMemoryOpportunitiesRepository;
 let sut: UpdateOpportunityUseCase;
@@ -18,7 +17,7 @@ describe("Update Opportunity Use Case", () => {
 		await inMemoryOpportunitiesRepository.create(opportunity);
 
 		const newOpportunity = makeOpportunity();
-		const { id, ...updateData } = newOpportunity;
+		const { ...updateData } = newOpportunity;
 
 		const result = await sut.execute({
 			id: opportunity.id.toString(),
@@ -47,7 +46,6 @@ describe("Update Opportunity Use Case", () => {
 				})
 			);
 
-			// Verificar documentos obrigatórios
 			expect(updatedOpportunity.requiredDocuments).toHaveLength(
 				newOpportunity.requiredDocuments.length
 			);
@@ -66,7 +64,7 @@ describe("Update Opportunity Use Case", () => {
 	});
 
 	it("should not be able to update an opportunity with non-existing id", async () => {
-		const { id, ...updateData } = makeOpportunity();
+		const { ...updateData } = makeOpportunity();
 
 		const result = await sut.execute({
 			id: "6d3bc502-7e7d-40b5-a6c6-e58e9fc7924c",

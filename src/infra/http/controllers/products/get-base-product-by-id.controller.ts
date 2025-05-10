@@ -8,11 +8,11 @@ import { z } from "zod";
 
 export async function getBaseProductById(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().get(
-		"/products/base-product/:id",
+		"/base-products/:id",
 		{
 			onRequest: [verifyUserRole("ADMIN")],
 			schema: {
-				tags: ["Products"],
+				tags: ["Base Products"],
 				operationId: "getBaseProductById",
 				summary: "Get base product by id",
 				security: [{ bearerAuth: [] }],

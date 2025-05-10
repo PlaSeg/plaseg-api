@@ -36,7 +36,7 @@ describe("Get Profile (e2e)", () => {
 		});
 
 		const response = await request(app.server)
-			.get("/users/profile")
+			.get("/auth/profile")
 			.set("Authorization", `Bearer ${accessToken}`);
 
 		expect(response.statusCode).toEqual(200);
@@ -53,7 +53,7 @@ describe("Get Profile (e2e)", () => {
 	});
 
 	it("should not be able to get profile without token", async () => {
-		const response = await request(app.server).get("/users/profile");
+		const response = await request(app.server).get("/auth/profile");
 
 		expect(response.statusCode).toEqual(401);
 		expect(response.body).toEqual({
@@ -70,7 +70,7 @@ describe("Get Profile (e2e)", () => {
 		});
 
 		const response = await request(app.server)
-			.get("/users/profile")
+			.get("/auth/profile")
 			.set("Authorization", `Bearer ${accessToken}`);
 
 		expect(response.statusCode).toEqual(404);
