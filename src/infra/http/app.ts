@@ -21,6 +21,7 @@ import { createMaintenanceContract } from "./controllers/municipality/create-mai
 
 import { opportunitiesRoutes } from "./controllers/opportunities/opportunities.routes";
 import { productsRoutes } from "./controllers/products/products.routes";
+import { typesRoutes } from "./controllers/types/types.routes";
 
 const version = "1.0.0 - Release 1";
 
@@ -58,6 +59,7 @@ export function buildApp(app = fastify().withTypeProvider<ZodTypeProvider>()) {
 	app.register(authRoutes);
 	app.register(opportunitiesRoutes);
 	app.register(productsRoutes);
+	app.register(typesRoutes);
 
 	app.register(createMunicipality);
 	app.register(createQualifiedStaff);
