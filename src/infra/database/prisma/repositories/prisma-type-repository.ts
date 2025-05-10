@@ -34,7 +34,7 @@ export class PrismaTypeRepository implements TypesRepository {
     }
     
     async findByGroupAndParentId(group: TypeGroup, parentId?: string): Promise<Type[] | null> {
-        const types = await prisma.type.findMany({
+		const types = await prisma.type.findMany({
             where: {
                 group: group.toPrisma(),
                 parentId: parentId ?? null
