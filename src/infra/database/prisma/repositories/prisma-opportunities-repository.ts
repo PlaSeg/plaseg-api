@@ -65,11 +65,37 @@ export class PrismaOpportunitiesRepository implements OpportunitiesRepository {
 	async update(opportunity: Opportunity): Promise<void> {
 		const data = PrismaOpportunityMapper.toPrisma(opportunity);
 
-		await prisma.opportunity.update({
-			where: {
-				id: opportunity.id.toString(),
-			},
-			data,
+		await prisma.$transaction(async (tx) => {
+			// Atualiza a oportunidade
+			await tx.opportunity.update({
+				where: {
+					id: opportunity.id.toString(),
+				},
+				data: {
+					...data,
+					requiredDocuments: undefined,
+				},
+			});
+
+			for (const doc of opportunity.requiredDocuments) {
+				await tx.requiredDocument.upsert({
+					where: {
+						id: doc.id.toString(),
+					},
+					create: {
+						id: doc.id.toString(),
+						name: doc.name,
+						description: doc.description,
+						model: doc.model,
+						opportunityId: opportunity.id.toString(),
+					},
+					update: {
+						name: doc.name,
+						description: doc.description,
+						model: doc.model,
+					},
+				});
+			}
 		});
 	}
 }

@@ -20,6 +20,7 @@ type CreateOpportunityUseCaseRequest = {
 	finalDeadline: Date;
 	requiresCounterpart: boolean;
 	counterpartPercentage: number;
+	typeId: string;
 	requiredDocuments: RequiredDocumentRequest[];
 };
 
@@ -37,8 +38,10 @@ type CreateOpportunityUseCaseResponse = Either<
 			finalDeadline: Date;
 			requiresCounterpart: boolean;
 			counterpartPercentage: number;
+			typeId: string;
 			createdAt: Date;
 			updatedAt: Date | null;
+
 			requiredDocuments: {
 				id: string;
 				name: string;
@@ -91,6 +94,7 @@ export class CreateOpportunityUseCase {
 				finalDeadline: opportunity.finalDeadline,
 				requiresCounterpart: opportunity.requiresCounterpart,
 				counterpartPercentage: opportunity.counterpartPercentage,
+				typeId: opportunity.typeId,
 				requiredDocuments: opportunity.requiredDocuments.map((doc) => ({
 					id: doc.id.toString(),
 					name: doc.name,
