@@ -56,11 +56,26 @@ API para uma plataforma de criação automatizada de projetos municipais.
 
 ## Endpoints
 
-| Método   | Endpoint         | Descrição                                   |
-| -------- | ---------------- | ------------------------------------------- |
-| **POST** | `/auth/sign-up`  | Registrar um novo usuário                   |
-| **POST** | `/auth/sign-in`  | Fazer login e obter o token de autenticação |
-| **GET**  | `/users/profile` | Obter o perfil do usuário autenticado       |
+| Método   | Endpoint                              | Descrição                                   |
+| -------- | ------------------------------------- | ------------------------------------------- |
+| **POST** | `/auth/sign-up`                       | Registrar um novo usuário                   |
+| **POST** | `/auth/sign-in`                       | Fazer login e obter o token de autenticação |
+| **GET**  | `/auth/profile`                       | Obter o perfil do usuário autenticado       |
+| **POST** | `/municipality`                       | Criar um novo município                     |
+| **POST** | `/municipality/qualified-staff`       | Criar um novo funcionário qualificado       |
+| **POST** | `/municipality/project-partnership`   | Criar uma nova parceria de projeto          |
+| **POST** | `/municipality/allocation-department` | Criar um novo departamento de alocação      |
+| **POST** | `/municipality/management`            | Criar um novo gerenciamento                 |
+| **POST** | `/municipality/maintenance-contract`  | Criar um novo contrato de manutenção        |
+| **POST** | `/types`                              | Criar um novo tipo                          |
+| **GET**  | `/types/group-parent-id`              | Obter tipos por grupo e parent-id           |
+| **POST** | `/opportunities`                      | Criar uma nova oportunidade                 |
+| **GET**  | `/opportunities`                      | Obter oportunidades                         |
+| **GET**  | `/opportunities/{id}`                 | Obter oportunidade por id                   |
+| **PUT**  | `/opportunities/{id}`                 | Atualizar uma oportunidade existente        |
+| **POST** | `/base-products`                      | Criar um novo produto base                  |
+| **GET**  | `/base-products`                      | Obter produtos base                         |
+| **GET**  | `/base-products/{id}`                 | Obter produto base por id                   |
 
 ## Instalação
 

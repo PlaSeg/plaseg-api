@@ -7,11 +7,11 @@ import { makeGetBaseProductUseCase } from "../../../database/prisma/use-cases/ma
 
 export async function getBaseProducts(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().get(
-		"/products/base-product",
+		"/base-products",
 		{
 			onRequest: [verifyUserRole("ADMIN")],
 			schema: {
-				tags: ["Products"],
+				tags: ["Base Products"],
 				operationId: "getBaseProducts",
 				summary: "Get base products",
 				security: [{ bearerAuth: [] }],

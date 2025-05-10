@@ -9,24 +9,13 @@ import fastifyCors from "@fastify/cors";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUI from "@fastify/swagger-ui";
 import fastifyJwt from "@fastify/jwt";
+
 import { errorHandler } from "./error-handler";
 import { authRoutes } from "./controllers/auth/auth.routes";
-
-import { createMunicipality } from "./controllers/municipality/create-municipality.controller";
-import { createQualifiedStaff } from "./controllers/municipality/create-qualified-staff.controller";
-import { createProjectPartnership } from "./controllers/municipality/create-project-partnership.controller";
-import { createAllocationDepartment } from "./controllers/municipality/create-allocation-department.controller";
-import { createManagement } from "./controllers/municipality/create-management.controller";
-import { createMaintenanceContract } from "./controllers/municipality/create-maintenance-contract.controller";
-
 import { opportunitiesRoutes } from "./controllers/opportunities/opportunities.routes";
-
-import { getOpportunityById } from "./controllers/opportunities/get-opportunity-by-id.controller";
-import { productsRoutes } from "./controllers/products/products.routes";
-
 import { productsRoutes } from "./controllers/products/products.routes";
 import { typesRoutes } from "./controllers/types/types.routes";
-
+import { municipalityRoutes } from "./controllers/municipality/municipality.routes";
 
 const version = "1.0.0 - Release 1";
 
@@ -62,16 +51,10 @@ export function buildApp(app = fastify().withTypeProvider<ZodTypeProvider>()) {
 		secret: process.env.JWT_SECRET || "secret",
 	});
 	app.register(authRoutes);
+	app.register(municipalityRoutes);
+	app.register(typesRoutes);
 	app.register(opportunitiesRoutes);
 	app.register(productsRoutes);
-	app.register(typesRoutes);
-
-	app.register(createMunicipality);
-	app.register(createQualifiedStaff);
-	app.register(createProjectPartnership);
-	app.register(createAllocationDepartment);
-	app.register(createManagement);
-	app.register(createMaintenanceContract);
 
 	return app;
 }

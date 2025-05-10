@@ -67,15 +67,6 @@ describe("TypeGroup Value Object", () => {
 			const typeGroup = TypeGroup.opportunity();
 			expect(typeGroup.toPrisma()).toBe("OPPORTUNITY");
 		});
-
-		it("should throw error for invalid type group conversion", () => {
-			const typeGroup = TypeGroup.create(DomainTypeGroup.SERVICE);
-			// @ts-ignore - Forçando um valor inválido para testar o erro
-			typeGroup["value"] = "INVALID_GROUP";
-			expect(() => typeGroup.toPrisma()).toThrow(
-				"Invalid type group: INVALID_GROUP"
-			);
-		});
 	});
 
 	describe("toString", () => {

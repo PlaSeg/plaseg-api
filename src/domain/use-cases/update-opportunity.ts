@@ -108,8 +108,7 @@ export class UpdateOpportunityUseCase {
 						description: doc.description ?? "",
 						model: doc.model ?? "",
 					});
-			  })
-			: opportunity.requiredDocuments;
+			}) : opportunity.requiredDocuments;
 
 		const updatedOpportunity = Opportunity.create(
 			{
