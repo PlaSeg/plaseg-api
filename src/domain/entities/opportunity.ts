@@ -15,8 +15,6 @@ export interface OpportunityProps {
 	requiresCounterpart: boolean;
 	counterpartPercentage: number;
 	requiredDocuments: RequiredDocument[];
-	isActive: boolean;
-	typeId: string;
 	createdAt: Date;
 	updatedAt?: Date | null;
 }
@@ -58,9 +56,7 @@ export class Opportunity extends Entity<OpportunityProps> {
 		return this.props.counterpartPercentage;
 	}
 
-	get isActive() {
-		return this.props.isActive;
-	}
+
 
 	get createdAt() {
 		return this.props.createdAt;
@@ -73,9 +69,6 @@ export class Opportunity extends Entity<OpportunityProps> {
 	get requiredDocuments() {
 		return this.props.requiredDocuments;
 	}
-	get typeId() {
-		return this.props.typeId;
-	}
 
 	set requiredDocuments(requiredDocuments: RequiredDocument[]) {
 		this.props.requiredDocuments = requiredDocuments;
@@ -86,19 +79,15 @@ export class Opportunity extends Entity<OpportunityProps> {
 	}
 
 	static create(
-		props: Optional<
-			OpportunityProps,
-			"createdAt" | "requiredDocuments" | "updatedAt" | "isActive"
-		>,
+		props: Optional<OpportunityProps, "createdAt" | "requiredDocuments">,
 		id?: UniqueEntityID
 	) {
 		const opportunity = new Opportunity(
 			{
 				...props,
 				createdAt: props.createdAt ?? getCurrentDate(),
-				updatedAt: props.updatedAt ?? null,
+				updatedAt: null,
 				requiredDocuments: props.requiredDocuments ?? [],
-				isActive: props.isActive ?? true,
 			},
 			id
 		);

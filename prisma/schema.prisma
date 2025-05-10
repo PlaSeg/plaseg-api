@@ -13,7 +13,6 @@ enum Role {
 }
 
 enum TypeGroup {
-  SERVICE
   CATEGORY
   OPPORTUNITY
   SUBCATEGORY
@@ -179,13 +178,12 @@ model Opportunity {
   finalDeadline         DateTime
   requiresCounterpart   Boolean
   counterpartPercentage Decimal
-  isActive              Boolean @default(true)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
-  Type   Type   @relation(fields: [typeId], references: [id])
-  typeId String
+  Type   Type?   @relation(fields: [typeId], references: [id])
+  typeId String?
 
   requiredDocuments RequiredDocument[]
 
@@ -240,8 +238,8 @@ model BaseProduct {
   budget3Validity      DateTime
   unitValue            Decimal
 
-  Type   Type   @relation(fields: [typeId], references: [id])
-  typeId String
+  Type   Type?   @relation(fields: [typeId], references: [id])
+  typeId String?
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt

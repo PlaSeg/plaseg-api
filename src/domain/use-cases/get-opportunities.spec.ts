@@ -24,11 +24,9 @@ describe("Get Opportunities Use Case", () => {
 
 		if (result.isRight() && result.value) {
 			expect(result.value.opportunities).toHaveLength(1);
-			expect(result.value.opportunities).toEqual([
-				expect.objectContaining({
-					id: opportunity.id.toString(),
-				}),
-			]);
+			expect(result.value.opportunities).toEqual([expect.objectContaining({
+				id: opportunity.id.toString(),
+			})]);
 		}
 	});
 });

@@ -4,7 +4,6 @@ import {
 	OpportunityProps,
 } from "../../src/domain/entities/opportunity";
 import { makeRequiredDocument } from "./make-required-document";
-import { UniqueEntityID } from "../../src/core/entities/unique-entity-id";
 
 export function makeOpportunity(override: Partial<OpportunityProps> = {}) {
 	const opportunity = Opportunity.create({
@@ -18,7 +17,6 @@ export function makeOpportunity(override: Partial<OpportunityProps> = {}) {
 		requiresCounterpart: true,
 		counterpartPercentage: 10,
 		requiredDocuments: [makeRequiredDocument()],
-		typeId: new UniqueEntityID().toString(),
 		...override,
 	});
 

@@ -28,8 +28,6 @@ export const createOpportunityRequestBodySchema = z
 			.number()
 			.min(0, "A porcentagem de contrapartida deve ser maior ou igual a 0")
 			.max(100, "A porcentagem de contrapartida deve ser menor ou igual a 100"),
-		isActive: z.boolean().default(true),
-		typeId: z.string().uuid(),
 		requiredDocuments: z
 			.array(requiredDocumentSchema)
 			.min(1, "Pelo menos um documento é obrigatório"),
@@ -75,7 +73,6 @@ export const opportunityResponseSchema = z.object({
 	finalDeadline: z.coerce.date(),
 	requiresCounterpart: z.boolean(),
 	counterpartPercentage: z.number(),
-	isActive: z.boolean(),
 	createdAt: z.coerce.date(),
 	updatedAt: z.coerce.date().nullable().optional(),
 	requiredDocuments: z.array(
@@ -93,26 +90,3 @@ export const opportunityResponseSchema = z.object({
 export const getOpportunitiesResponseSchema = z
 	.array(opportunityResponseSchema)
 	.nullable();
-
-export const updateOpportunityRequestBodySchema = z.object({
-	title: z.string().min(1).optional(),
-	description: z.string().min(1).optional(),
-	availableValue: z.number().positive().optional(),
-	minValue: z.number().positive().optional(),
-	maxValue: z.number().positive().optional(),
-	initialDeadline: z.coerce.date().optional(),
-	finalDeadline: z.coerce.date().optional(),
-	requiresCounterpart: z.boolean().optional(),
-	counterpartPercentage: z.number().min(0).max(100).optional(),
-	isActive: z.boolean().optional(),
-	requiredDocuments: z
-		.array(
-			z.object({
-				id: z.string().uuid().optional(),
-				name: z.string().min(1).optional(),
-				description: z.string().min(1).optional(),
-				model: z.string().min(1).optional(),
-			})
-		)
-		.optional(),
-});

@@ -4,7 +4,6 @@ import { buildApp } from "../../app";
 import { makeUser } from "../../../../../test/factories/make-user";
 import { Role } from "../../../../domain/entities/value-objects/role";
 import { makeOpportunity } from "../../../../../test/factories/make-opportunity";
-import { makeType } from "../../../../../test/factories/make-type";
 import request from "supertest";
 import { prisma } from "../../../database/prisma/prisma";
 
@@ -31,21 +30,7 @@ describe("Get Opportunities (e2e)", () => {
 			role: user.role.toString(),
 		});
 
-		const type = makeType();
-		await prisma.type.create({
-			data: {
-				id: type.id.toString(),
-				description: type.description,
-				group: type.group.toPrisma(),
-				parentId: type.parentId ?? null,
-				createdAt: type.createdAt,
-				updatedAt: type.updatedAt,
-			},
-		});
-
-		const opportunity = makeOpportunity({
-			typeId: type.id.toString(),
-		});
+		const opportunity = makeOpportunity();
 
 		await prisma.opportunity.createMany({
 			data: [
@@ -59,7 +44,6 @@ describe("Get Opportunities (e2e)", () => {
 					finalDeadline: opportunity.finalDeadline,
 					requiresCounterpart: opportunity.requiresCounterpart,
 					counterpartPercentage: opportunity.counterpartPercentage,
-					typeId: opportunity.typeId,
 				},
 			],
 		});
@@ -81,9 +65,8 @@ describe("Get Opportunities (e2e)", () => {
 				counterpartPercentage: opportunity.counterpartPercentage,
 				initialDeadline: expect.any(String),
 				finalDeadline: expect.any(String),
-				isActive: opportunity.isActive,
 				createdAt: expect.any(String),
-				updatedAt: expect.any(String),
+				updatedAt: null,
 				requiredDocuments: [],
 			},
 		]);

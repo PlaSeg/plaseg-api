@@ -26,7 +26,6 @@ describe("Create Opportunity Use Case", () => {
 			finalDeadline: opportunityData.finalDeadline,
 			requiresCounterpart: opportunityData.requiresCounterpart,
 			counterpartPercentage: opportunityData.counterpartPercentage,
-			typeId: opportunityData.typeId,
 			requiredDocuments: [
 				{
 					name: requiredDocument.name,
@@ -60,7 +59,6 @@ describe("Create Opportunity Use Case", () => {
 			expect(opportunity.requiredDocuments[0].model).toBe(
 				requiredDocument.model
 			);
-			expect(opportunity.typeId).toBe(opportunityData.typeId);
 		}
 	});
 
@@ -78,7 +76,6 @@ describe("Create Opportunity Use Case", () => {
 			finalDeadline: opportunityData.finalDeadline,
 			requiresCounterpart: opportunityData.requiresCounterpart,
 			counterpartPercentage: opportunityData.counterpartPercentage,
-			typeId: opportunityData.typeId,
 			requiredDocuments: [
 				{
 					name: requiredDocument.name,
@@ -98,7 +95,6 @@ describe("Create Opportunity Use Case", () => {
 			finalDeadline: opportunityData.finalDeadline,
 			requiresCounterpart: opportunityData.requiresCounterpart,
 			counterpartPercentage: opportunityData.counterpartPercentage,
-			typeId: opportunityData.typeId,
 			requiredDocuments: [
 				{
 					name: requiredDocument.name,
