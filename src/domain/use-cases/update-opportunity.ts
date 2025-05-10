@@ -24,6 +24,7 @@ type UpdateOpportunityUseCaseRequest = {
 	requiresCounterpart?: boolean;
 	counterpartPercentage?: number;
 	isActive?: boolean;
+	typeId?: string;
 	requiredDocuments?: RequiredDocumentRequest[];
 };
 
@@ -48,6 +49,7 @@ type OpportunityResponse = {
 	requiresCounterpart: boolean;
 	counterpartPercentage: number;
 	isActive: boolean;
+	typeId: string;
 	createdAt: Date;
 	updatedAt: Date | null;
 	requiredDocuments: RequiredDocumentResponse[];
@@ -124,6 +126,7 @@ export class UpdateOpportunityUseCase {
 					request.counterpartPercentage ?? opportunity.counterpartPercentage,
 				isActive: request.isActive ?? opportunity.isActive,
 				requiredDocuments,
+				typeId: request.typeId ?? opportunity.typeId,
 				createdAt: opportunity.createdAt,
 				updatedAt: getCurrentDate(),
 			},
@@ -145,6 +148,7 @@ export class UpdateOpportunityUseCase {
 				requiresCounterpart: updatedOpportunity.requiresCounterpart,
 				counterpartPercentage: updatedOpportunity.counterpartPercentage,
 				isActive: updatedOpportunity.isActive,
+				typeId: updatedOpportunity.typeId,
 				createdAt: updatedOpportunity.createdAt,
 				updatedAt: updatedOpportunity.updatedAt ?? null,
 				requiredDocuments: updatedOpportunity.requiredDocuments.map((doc) => ({

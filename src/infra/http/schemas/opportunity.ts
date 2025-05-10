@@ -29,6 +29,7 @@ export const createOpportunityRequestBodySchema = z
 			.min(0, "A porcentagem de contrapartida deve ser maior ou igual a 0")
 			.max(100, "A porcentagem de contrapartida deve ser menor ou igual a 100"),
 		isActive: z.boolean().default(true),
+		typeId: z.string().uuid(),
 		requiredDocuments: z
 			.array(requiredDocumentSchema)
 			.min(1, "Pelo menos um documento é obrigatório"),
