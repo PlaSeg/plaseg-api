@@ -4,6 +4,7 @@ import { buildApp } from "../../app";
 import { makeUser } from "../../../../../test/factories/make-user";
 import { Role } from "../../../../domain/entities/value-objects/role";
 import { makeOpportunity } from "../../../../../test/factories/make-opportunity";
+import { makeType } from "../../../../../test/factories/make-type";
 import request from "supertest";
 import { prisma } from "../../../database/prisma/prisma";
 
@@ -30,7 +31,21 @@ describe("Update Opportunity (e2e)", () => {
 			role: user.role.toString(),
 		});
 
-		const opportunity = makeOpportunity();
+		const type = makeType();
+		await prisma.type.create({
+			data: {
+				id: type.id.toString(),
+				description: type.description,
+				group: type.group.toPrisma(),
+				parentId: type.parentId ?? null,
+				createdAt: type.createdAt,
+				updatedAt: type.updatedAt,
+			},
+		});
+
+		const opportunity = makeOpportunity({
+			typeId: type.id.toString(),
+		});
 
 		const createdOpportunity = await prisma.opportunity.create({
 			data: {
@@ -43,6 +58,7 @@ describe("Update Opportunity (e2e)", () => {
 				finalDeadline: opportunity.finalDeadline,
 				requiresCounterpart: opportunity.requiresCounterpart,
 				counterpartPercentage: opportunity.counterpartPercentage,
+				typeId: opportunity.typeId,
 				requiredDocuments: {
 					create: opportunity.requiredDocuments.map((doc) => ({
 						name: doc.name,
@@ -141,9 +157,43 @@ describe("Update Opportunity (e2e)", () => {
 			role: user.role.toString(),
 		});
 
+		// Cria dois tipos
+		const type1 = makeType({
+			description: "Test Type 1",
+		});
+		const type2 = makeType({
+			description: "Test Type 2",
+		});
+
+		await prisma.type.create({
+			data: {
+				id: type1.id.toString(),
+				description: type1.description,
+				group: type1.group.toPrisma(),
+				parentId: type1.parentId ?? null,
+				createdAt: type1.createdAt,
+				updatedAt: type1.updatedAt,
+			},
+		});
+
+		await prisma.type.create({
+			data: {
+				id: type2.id.toString(),
+				description: type2.description,
+				group: type2.group.toPrisma(),
+				parentId: type2.parentId ?? null,
+				createdAt: type2.createdAt,
+				updatedAt: type2.updatedAt,
+			},
+		});
+
 		// Cria duas oportunidades
-		const opportunity1 = makeOpportunity();
-		const opportunity2 = makeOpportunity();
+		const opportunity1 = makeOpportunity({
+			typeId: type1.id.toString(),
+		});
+		const opportunity2 = makeOpportunity({
+			typeId: type2.id.toString(),
+		});
 
 		await prisma.opportunity.create({
 			data: {
@@ -156,6 +206,7 @@ describe("Update Opportunity (e2e)", () => {
 				finalDeadline: opportunity1.finalDeadline,
 				requiresCounterpart: opportunity1.requiresCounterpart,
 				counterpartPercentage: opportunity1.counterpartPercentage,
+				typeId: opportunity1.typeId,
 				requiredDocuments: {
 					create: opportunity1.requiredDocuments.map((doc) => ({
 						name: doc.name,
@@ -177,6 +228,7 @@ describe("Update Opportunity (e2e)", () => {
 				finalDeadline: opportunity2.finalDeadline,
 				requiresCounterpart: opportunity2.requiresCounterpart,
 				counterpartPercentage: opportunity2.counterpartPercentage,
+				typeId: opportunity2.typeId,
 				requiredDocuments: {
 					create: opportunity2.requiredDocuments.map((doc) => ({
 						name: "teste2",

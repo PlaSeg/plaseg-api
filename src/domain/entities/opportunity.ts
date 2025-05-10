@@ -16,6 +16,7 @@ export interface OpportunityProps {
 	counterpartPercentage: number;
 	requiredDocuments: RequiredDocument[];
 	isActive: boolean;
+	typeId: string;
 	createdAt: Date;
 	updatedAt?: Date | null;
 }
@@ -71,6 +72,9 @@ export class Opportunity extends Entity<OpportunityProps> {
 
 	get requiredDocuments() {
 		return this.props.requiredDocuments;
+	}
+	get typeId() {
+		return this.props.typeId;
 	}
 
 	set requiredDocuments(requiredDocuments: RequiredDocument[]) {
