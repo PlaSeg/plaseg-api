@@ -1,6 +1,7 @@
 import { CustomError } from "../../core/errors/custom-error";
 import { Either, left, right } from "../../core/types/either";
 import { OpportunitiesRepository } from "../repositories/opportunities-repositories";
+import { TypesRepository } from "../repositories/type-repository";
 
 type RequiredDocumentResponse = {
 	id: string;
@@ -23,6 +24,7 @@ type OpportunityResponse = {
 	requiresCounterpart: boolean;
 	counterpartPercentage: number;
 	isActive: boolean;
+	typeDescription: string;
 	createdAt: Date;
 	updatedAt: Date | null;
 	requiredDocuments: RequiredDocumentResponse[];
@@ -40,7 +42,10 @@ type GetOpportunityByIdUseCaseResponse = Either<
 >;
 
 export class GetOpportunityByIdUseCase {
-	constructor(private opportunitiesRepository: OpportunitiesRepository) {}
+	constructor(
+		private opportunitiesRepository: OpportunitiesRepository,
+		private typesRepository: TypesRepository
+	) {}
 
 	async execute({
 		opportunityId,
@@ -52,6 +57,8 @@ export class GetOpportunityByIdUseCase {
 		if (!opportunity) {
 			return left(new CustomError(404, "Oportunidade não encontrada"));
 		}
+
+		const type = await this.typesRepository.findById(opportunity.typeId);
 
 		const opportunityResponse: OpportunityResponse = {
 			id: opportunity.id.toString(),
@@ -65,6 +72,7 @@ export class GetOpportunityByIdUseCase {
 			requiresCounterpart: opportunity.requiresCounterpart,
 			counterpartPercentage: opportunity.counterpartPercentage,
 			isActive: opportunity.isActive,
+			typeDescription: type?.description ?? "Tipo não encontrado",
 			createdAt: opportunity.createdAt,
 			updatedAt: opportunity.updatedAt ?? null,
 			requiredDocuments: opportunity.requiredDocuments.map((doc) => ({
