@@ -39,7 +39,7 @@ export class CreateBaseProductUseCase {
 				new CustomError(409, "Produto base com esse código já cadastrado!")
 			);
 		}
-		console.log(data.typeId)
+
 		const typeCategory = await this.typeRepository.findById(data.typeId);
 
 		if (!typeCategory) {
