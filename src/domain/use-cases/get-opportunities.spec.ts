@@ -2,18 +2,33 @@ import { describe, it, beforeEach } from "vitest";
 import { InMemoryOpportunitiesRepository } from "../../../test/repositories/in-memory-opportunities-repository";
 import { GetOpportunitiesUseCase } from "./get-opportunities";
 import { makeOpportunity } from "../../../test/factories/make-opportunity";
+import { InMemoryTypesRepository } from "../../../test/repositories/in-memory-types-repository";
+import { makeType } from "../../../test/factories/make-type";
+import { TypeGroup } from "../../domain/entities/value-objects/type-group";
 
 let inMemoryOpportunitiesRepository: InMemoryOpportunitiesRepository;
+let inMemoryTypesRepository: InMemoryTypesRepository;
 let sut: GetOpportunitiesUseCase;
 
 describe("Get Opportunities Use Case", () => {
 	beforeEach(() => {
 		inMemoryOpportunitiesRepository = new InMemoryOpportunitiesRepository();
-		sut = new GetOpportunitiesUseCase(inMemoryOpportunitiesRepository);
+		inMemoryTypesRepository = new InMemoryTypesRepository();
+		sut = new GetOpportunitiesUseCase(
+			inMemoryOpportunitiesRepository,
+			inMemoryTypesRepository
+		);
 	});
 
 	it("should be able to get opportunities", async () => {
-		const opportunity = makeOpportunity();
+		const type = makeType({
+			group: TypeGroup.opportunity(),
+		});
+		await inMemoryTypesRepository.create(type);
+
+		const opportunity = makeOpportunity({
+			typeId: type.id.toString(),
+		});
 
 		await inMemoryOpportunitiesRepository.create(opportunity);
 
@@ -27,6 +42,7 @@ describe("Get Opportunities Use Case", () => {
 			expect(result.value.opportunities).toEqual([
 				expect.objectContaining({
 					id: opportunity.id.toString(),
+					typeDescription: type.description,
 				}),
 			]);
 		}
