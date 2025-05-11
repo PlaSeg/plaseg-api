@@ -2,34 +2,36 @@ import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { errorResponseSchema, successResponseSchema } from "../../schemas/http";
 import { verifyUserRole } from "../../middleware/verify-user-role";
-import { createTypeBodySchema } from "../../schemas/type";
-import { makeCreateTypeUseCase } from "../../../database/prisma/use-cases/make-create-type-use-case";
+import { makeDeleteTypeUseCase } from "../../../database/prisma/use-cases/make-delete-type-use-case";
 import { z } from "zod";
 
-export async function createType(app: FastifyInstance) {
-	app.withTypeProvider<ZodTypeProvider>().post(
-		"/types",
+export async function deleteType(app: FastifyInstance) {
+	app.withTypeProvider<ZodTypeProvider>().delete(
+		"/types/:id",
 		{
 			onRequest: [verifyUserRole("ADMIN")],
 			schema: {
 				tags: ["Types"],
-				operationId: "createType",
-				summary: "Create a new type",
+				operationId: "deleteType",
+				summary: "Delete a type",
 				security: [{ bearerAuth: [] }],
-				body: createTypeBodySchema.describe("Create type request body"),
+				params: z.object({
+					id: z.string().uuid("Id inválido"),
+				}),
 				response: {
-					201: successResponseSchema(z.null()).describe("Created"),
+					200: successResponseSchema(z.null()).describe("Deleted"),
 					400: errorResponseSchema.describe("Bad Request"),
+					404: errorResponseSchema.describe("Not Found"),
 					409: errorResponseSchema.describe("Conflict"),
 				},
 			},
 		},
 		async (request, reply) => {
-			const body = createTypeBodySchema.parse(request.body);
+			const { id } = request.params;
 
-			const createTypeUseCase = makeCreateTypeUseCase();
+			const deleteTypeUseCase = makeDeleteTypeUseCase();
 
-			const result = await createTypeUseCase.execute(body);
+			const result = await deleteTypeUseCase.execute({ id });
 
 			if (result.isLeft()) {
 				return reply.status(result.value.statusCode).send({
@@ -39,7 +41,7 @@ export async function createType(app: FastifyInstance) {
 				});
 			}
 
-			return reply.status(201).send({
+			return reply.status(200).send({
 				success: true,
 				errors: null,
 				data: null,

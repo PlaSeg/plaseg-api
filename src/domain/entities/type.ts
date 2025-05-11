@@ -5,11 +5,11 @@ import { getCurrentDate } from "../../core/utils/get-current-date";
 import { TypeGroup } from "./value-objects/type-group";
 
 export interface TypeProps {
-    description: string;
-    group: TypeGroup;
-    parentId?: string;
-    createdAt: Date;
-    updatedAt?: Date | null;
+	description: string;
+	group: TypeGroup;
+	parentId?: string;
+	createdAt: Date;
+	updatedAt?: Date | null;
 }
 
 export class Type extends Entity<TypeProps> {
@@ -31,6 +31,10 @@ export class Type extends Entity<TypeProps> {
 
 	get updatedAt() {
 		return this.props.updatedAt;
+	}
+
+	set createdAt(createdAt: Date) {
+		this.props.createdAt = createdAt;
 	}
 
 	static create(
