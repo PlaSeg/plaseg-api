@@ -1,7 +1,9 @@
 import { CustomError } from "../../core/errors/custom-error";
 import { Either, left, right } from "../../core/types/either";
 import { BaseProduct } from "../entities/base-product";
+import { DomainTypeGroup } from "../entities/value-objects/type-group";
 import { BaseProductsRepository } from "../repositories/base-products-repository";
+import { TypesRepository } from "../repositories/type-repository";
 
 type CreateBaseProductUseCaseRequest = {
 	code: string;
@@ -20,7 +22,10 @@ type CreateBaseProductUseCaseRequest = {
 type CreateBaseProductUseCaseResponse = Either<CustomError, null>;
 
 export class CreateBaseProductUseCase {
-	constructor(private baseProductRepository: BaseProductsRepository) {}
+	constructor(
+		private baseProductRepository: BaseProductsRepository,
+		private typeRepository: TypesRepository
+	) {}
 
 	async execute(
 		data: CreateBaseProductUseCaseRequest
@@ -31,15 +36,31 @@ export class CreateBaseProductUseCase {
 
 		if (doesBaseProductExists) {
 			return left(
+				new CustomError(409, "Produto base com esse código já cadastrado!")
+			);
+		}
+
+		const typeCategory = await this.typeRepository.findById(data.typeId);
+
+		if (!typeCategory) {
+			return left(new CustomError(409, "Esse tipo não existe"));
+		}
+
+		if (
+			typeCategory.group.getValue() !== DomainTypeGroup.CATEGORY &&
+			typeCategory.group.getValue() !== DomainTypeGroup.SUBCATEGORY &&
+			typeCategory.group.getValue() !== DomainTypeGroup.SUBSUBCATEGORY
+		) {
+			return left(
 				new CustomError(
 					409,
-					"Produto base com esse código já cadastrado!"
+					"O tipo para o produto base deve ser categoria, subcategoria ou subsubcategoria"
 				)
 			);
 		}
 
 		const baseProduct = BaseProduct.create({
-			...data
+			...data,
 		});
 
 		await this.baseProductRepository.create(baseProduct);

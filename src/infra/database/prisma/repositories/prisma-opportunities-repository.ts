@@ -66,7 +66,6 @@ export class PrismaOpportunitiesRepository implements OpportunitiesRepository {
 		const data = PrismaOpportunityMapper.toPrisma(opportunity);
 
 		await prisma.$transaction(async (tx) => {
-			// Atualiza a oportunidade
 			await tx.opportunity.update({
 				where: {
 					id: opportunity.id.toString(),
