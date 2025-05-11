@@ -30,35 +30,37 @@ export class CreateTypeUseCase {
 		}
 
 		if (request.parentId) {
-			const parentType = await this.typeRepository.findById(request.parentId);
+			const newTypeGroup = TypeGroup.create(request.group);
 
-			const requestGroup = TypeGroup.create(request.group);
-
-			if (requestGroup.getValue() === DomainTypeGroup.CATEGORY) {
-				return left(new CustomError(409, "Categoria não deve ter pai."));
+			if (newTypeGroup.getValue() === DomainTypeGroup.CATEGORY) {
+				return left(
+					new CustomError(409, "Uma categoria não pode ter um tipo pai.")
+				);
 			}
 
+			const parentType = await this.typeRepository.findById(request.parentId);
+
 			if (!parentType) {
-				return left(new CustomError(409, "Esse pai não existe!"));
+				return left(new CustomError(409, "Este tipo pai não existe!"));
 			}
 
 			if (
-				parentType?.group.getValue() === DomainTypeGroup.CATEGORY &&
-				requestGroup.getValue() !== DomainTypeGroup.SUBCATEGORY
+				parentType.group.getValue() === DomainTypeGroup.CATEGORY &&
+				newTypeGroup.getValue() !== DomainTypeGroup.SUBCATEGORY
 			) {
 				return left(
-					new CustomError(409, "Você está cadatrando o pai como uma categoria.")
+					new CustomError(409, "Uma categoria só pode ser pai de subcategorias")
 				);
 			}
 
 			if (
-				parentType?.group.getValue() === DomainTypeGroup.SUBCATEGORY &&
-				requestGroup.getValue() !== DomainTypeGroup.SUBSUBCATEGORY
+				parentType.group.getValue() === DomainTypeGroup.SUBCATEGORY &&
+				newTypeGroup.getValue() !== DomainTypeGroup.SUBSUBCATEGORY
 			) {
 				return left(
 					new CustomError(
 						409,
-						"Você está cadastrando o pai como uma subcategoria."
+						"Uma subcategoria só pode ser pai de subsubcategorias."
 					)
 				);
 			}
