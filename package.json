@@ -19,6 +19,9 @@
 		"test:e2e:watch": "vitest -c ./vitest.config.e2e.mts",
 		"test:cov": "vitest run --coverage -c ./vitest.config.coverage.mts"
 	},
+	"prisma": {
+		"seed": "tsx prisma/seed.ts"
+	},
 	"devDependencies": {
 		"@types/bcrypt": "^5.0.2",
 		"@types/node": "^22.7.0",
