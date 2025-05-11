@@ -31,4 +31,12 @@ export class InMemoryTypeRepository implements TypesRepository {
 	async create(type: Type): Promise<void> {
 		this.items.push(type);
 	}
+
+	async delete(id: string): Promise<void> {
+		const typeIndex = this.items.findIndex((item) => item.id.toString() === id);
+
+		if (typeIndex >= 0) {
+			this.items.splice(typeIndex, 1);
+		}
+	}
 }

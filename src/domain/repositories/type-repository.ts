@@ -5,4 +5,5 @@ export interface TypesRepository {
 	findByDescription(description: string): Promise<Type | null>;
 	findMany(): Promise<Type[] | null>;
 	create(type: Type): Promise<void>;
+	delete(id: string): Promise<void>;
 }

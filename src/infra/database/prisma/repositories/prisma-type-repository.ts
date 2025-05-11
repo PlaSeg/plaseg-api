@@ -49,4 +49,12 @@ export class PrismaTypeRepository implements TypesRepository {
 			data,
 		});
 	}
+
+	async delete(id: string): Promise<void> {
+		await prisma.type.delete({
+			where: {
+				id,
+			},
+		});
+	}
 }
