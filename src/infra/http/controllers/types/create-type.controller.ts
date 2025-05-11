@@ -2,9 +2,9 @@ import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { errorResponseSchema, successResponseSchema } from "../../schemas/http";
 import { verifyUserRole } from "../../middleware/verify-user-role";
-import { z } from "zod";
 import { createTypeBodySchema } from "../../schemas/type";
 import { makeCreateTypeUseCase } from "../../../database/prisma/use-cases/make-create-type-use-case";
+import { z } from "zod";
 
 export async function createType(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().post(
@@ -16,9 +16,7 @@ export async function createType(app: FastifyInstance) {
 				operationId: "createType",
 				summary: "Create a new type",
 				security: [{ bearerAuth: [] }],
-				body: createTypeBodySchema.describe(
-					"Create type request body"
-				),
+				body: createTypeBodySchema.describe("Create type request body"),
 				response: {
 					201: successResponseSchema(z.null()).describe("Created"),
 					400: errorResponseSchema.describe("Bad Request"),

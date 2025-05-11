@@ -1,8 +1,8 @@
-import type { FastifyInstance } from "fastify";
+import { FastifyInstance } from "fastify";
 import { createType } from "./create-type.controller";
-import { getTypesByGroupParentId } from "./get-type-by-group-parent-id.controller";
+import { getTypes } from "./get-types.controller";
 
 export async function typesRoutes(app: FastifyInstance) {
 	app.register(createType);
-	app.register(getTypesByGroupParentId);
+	app.register(getTypes);
 }

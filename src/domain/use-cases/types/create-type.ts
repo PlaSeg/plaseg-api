@@ -1,11 +1,11 @@
-import { CustomError } from "../../core/errors/custom-error";
-import { Either, left, right } from "../../core/types/either";
-import { Type } from "../entities/type";
+import { CustomError } from "../../../core/errors/custom-error";
+import { Either, left, right } from "../../../core/types/either";
+import { Type } from "../../entities/type";
 import {
 	DomainTypeGroup,
 	TypeGroup,
-} from "../entities/value-objects/type-group";
-import { TypesRepository } from "../repositories/type-repository";
+} from "../../entities/value-objects/type-group";
+import { TypesRepository } from "../../repositories/type-repository";
 
 type CreateTypeRequest = {
 	description: string;
@@ -26,11 +26,12 @@ export class CreateTypeUseCase {
 		);
 
 		if (doesTypeAlreadyExist) {
-			return left(new CustomError(409, "Categoria já cadastrada"));
+			return left(new CustomError(409, "Tipo já cadastrado"));
 		}
 
 		if (request.parentId) {
 			const parentType = await this.typeRepository.findById(request.parentId);
+
 			const requestGroup = TypeGroup.create(request.group);
 
 			if (requestGroup.getValue() === DomainTypeGroup.CATEGORY) {

@@ -1,10 +1,19 @@
 import { Type } from "../../../../domain/entities/type";
-import { TypeGroup } from "../../../../domain/entities/value-objects/type-group";
 import { TypesRepository } from "../../../../domain/repositories/type-repository";
 import { PrismaTypeMapper } from "../mappers/prisma-type-mapper";
 import { prisma } from "../prisma";
 
 export class PrismaTypeRepository implements TypesRepository {
+	async findMany(): Promise<Type[] | null> {
+		const types = await prisma.type.findMany();
+
+		if (!types) {
+			return null;
+		}
+
+		return types.map(PrismaTypeMapper.toDomain);
+	}
+
 	async findByDescription(description: string): Promise<Type | null> {
 		const type = await prisma.type.findUnique({
 			where: {
@@ -31,51 +40,13 @@ export class PrismaTypeRepository implements TypesRepository {
 		}
 
 		return PrismaTypeMapper.toDomain(type);
-    }
-    
-    async findByGroupAndParentId(group: TypeGroup, parentId?: string): Promise<Type[] | null> {
-		const types = await prisma.type.findMany({
-            where: {
-                group: group.toPrisma(),
-                parentId: parentId ?? null
-            }
-		})
-		
-		if (!types) {
-			return null;
-		}
-
-        return types.map(PrismaTypeMapper.toDomain);
-	}
-	
-	async findMany(): Promise<Type[] | null> {
-		const types = await prisma.type.findMany({})
-
-		if (!types) {
-			return null;
-		}
-
-		return types.map(PrismaTypeMapper.toDomain);
-	}
-
-	async findByGroup(group: TypeGroup): Promise<Type[] | null> {
-		const types = await prisma.type.findMany({
-			where: {
-				group: group.toPrisma()
-			}
-		})
-		if (!types) {
-			return null;
-		}
-
-		return types.map(PrismaTypeMapper.toDomain);
 	}
 
 	async create(type: Type): Promise<void> {
 		const data = PrismaTypeMapper.toPrisma(type);
 
 		await prisma.type.create({
-			data
-		})
+			data,
+		});
 	}
 }
