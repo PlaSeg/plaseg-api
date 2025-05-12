@@ -6,7 +6,6 @@ import { TypeGroup } from "../entities/value-objects/type-group";
 import { Type } from "../entities/type";
 import { InMemoryTypesRepository } from "../../test/repositories/in-memory-types-repository";
 
-
 let inMemoryOpportunitiesRepository: InMemoryOpportunitiesRepository;
 let inMemoryTypesRepository: InMemoryTypesRepository;
 let sut: CreateOpportunityUseCase;
