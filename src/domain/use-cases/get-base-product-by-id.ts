@@ -1,6 +1,8 @@
 import { CustomError } from "../../core/errors/custom-error";
 import { Either, left, right } from "../../core/types/either";
+import { Type } from "../entities/type";
 import { BaseProductsRepository } from "../repositories/base-products-repository";
+import { TypesRepository } from "../repositories/type-repository";
 
 type GetBaseProductByIdUseCaseRequest = {
 	id: string;
@@ -19,6 +21,9 @@ type BaseProductResponse = {
 	budget3Validity: Date;
 	unitValue: number;
 	typeId: string;
+	category: string;
+	subcategory: string | null;
+	subsubcategory: string | null;
 	createdAt: Date;
 	updatedAt: Date | null;
 };
@@ -31,7 +36,18 @@ type GetBaseProductByIdUseCaseResponse = Either<
 >;
 
 export class GetBaseProductByIdUseCase {
-	constructor(private baseProductsRepository: BaseProductsRepository) {}
+	constructor(
+		private baseProductsRepository: BaseProductsRepository,
+		private typeRepository: TypesRepository
+	) {}
+
+	private extractCategoryTree(categories: Type[]) {
+		const category = categories[0]?.description ?? null;
+		const subcategory = categories[1]?.description ?? null;
+		const subsubcategory = categories[2]?.description ?? null;
+
+		return { category, subcategory, subsubcategory };
+	}
 
 	async execute(
 		request: GetBaseProductByIdUseCaseRequest
@@ -41,6 +57,12 @@ export class GetBaseProductByIdUseCase {
 		if (!baseProduct) {
 			return left(new CustomError(404, "Produto base não encontrado"));
 		}
+
+		const categoriesPrisma = await this.typeRepository.findCategoryTree(
+			baseProduct.typeId
+		);
+
+		const categories = this.extractCategoryTree(categoriesPrisma);
 
 		const baseProductResponse = {
 			id: baseProduct.id.toString(),
@@ -55,6 +77,7 @@ export class GetBaseProductByIdUseCase {
 			budget3Validity: baseProduct.budget3Validity,
 			unitValue: baseProduct.unitValue,
 			typeId: baseProduct.typeId,
+			...categories,
 			createdAt: baseProduct.createdAt,
 			updatedAt: baseProduct.updatedAt ?? null,
 		};

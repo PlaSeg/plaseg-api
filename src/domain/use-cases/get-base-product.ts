@@ -1,6 +1,8 @@
 import { CustomError } from "../../core/errors/custom-error";
 import { Either, right } from "../../core/types/either";
+import { Type } from "../entities/type";
 import { BaseProductsRepository } from "../repositories/base-products-repository";
+import { TypesRepository } from "../repositories/type-repository";
 
 type BaseProductResponse = {
 	id: string;
@@ -15,6 +17,9 @@ type BaseProductResponse = {
 	budget3Validity: Date;
 	unitValue: number;
 	typeId: string;
+	category: string;
+	subcategory: string | null;
+	subsubcategory: string | null;
 	createdAt: Date;
 	updatedAt: Date | null;
 };
@@ -27,7 +32,18 @@ type GetBaseProductUseCaseResponse = Either<
 >;
 
 export class GetBaseProductUseCase {
-	constructor(private baseProductsRepository: BaseProductsRepository) {}
+	constructor(
+		private baseProductsRepository: BaseProductsRepository,
+		private typeRepository: TypesRepository
+	) {}
+
+	private extractCategoryTree(categories: Type[]) {
+		const category = categories[0]?.description ?? null;
+		const subcategory = categories[1]?.description ?? null;
+		const subsubcategory = categories[2]?.description ?? null;
+
+		return { category, subcategory, subsubcategory };
+	}
 
 	async execute(): Promise<GetBaseProductUseCaseResponse> {
 		const baseProducts = await this.baseProductsRepository.findMany();
@@ -38,22 +54,34 @@ export class GetBaseProductUseCase {
 			});
 		}
 
-		const baseProductsResponse = baseProducts.map((baseProduct) => ({
-			id: baseProduct.id.toString(),
-			code: baseProduct.code,
-			name: baseProduct.name,
-			technicalDescription: baseProduct.technicalDescription,
-			budget1: baseProduct.budget1,
-			budget1Validity: baseProduct.budget1Validity,
-			budget2: baseProduct.budget2,
-			budget2Validity: baseProduct.budget2Validity,
-			budget3: baseProduct.budget3,
-			budget3Validity: baseProduct.budget3Validity,
-			unitValue: baseProduct.unitValue,
-			typeId: baseProduct.typeId,
-			createdAt: baseProduct.createdAt,
-			updatedAt: baseProduct.updatedAt ?? null,
-		}));
+		const baseProductsResponse = await Promise.all(
+			baseProducts.map(async (baseProduct) => {
+				const categoriesPrisma = await this.typeRepository.findCategoryTree(
+					baseProduct.typeId
+				);
+				const categories = this.extractCategoryTree(categoriesPrisma);
+
+				return {
+					id: baseProduct.id.toString(),
+					code: baseProduct.code,
+					name: baseProduct.name,
+					technicalDescription: baseProduct.technicalDescription,
+					budget1: baseProduct.budget1,
+					budget1Validity: baseProduct.budget1Validity,
+					budget2: baseProduct.budget2,
+					budget2Validity: baseProduct.budget2Validity,
+					budget3: baseProduct.budget3,
+					budget3Validity: baseProduct.budget3Validity,
+					unitValue: baseProduct.unitValue,
+					typeId: baseProduct.typeId,
+					category: categories.category,
+					subcategory: categories.subcategory,
+					subsubcategory: categories.subsubcategory,
+					createdAt: baseProduct.createdAt,
+					updatedAt: baseProduct.updatedAt ?? null,
+				};
+			})
+		);
 
 		return right({ baseProducts: baseProductsResponse });
 	}

@@ -37,6 +37,9 @@ export const baseProductResponseSchema = z.object({
 	budget3Validity: z.coerce.date(),
 	unitValue: z.number(),
 	typeId: z.string().uuid(),
+	category: z.string(),
+	subcategory: z.string().nullable(),
+	subsubcategory: z.string().nullable(),
 	createdAt: z.coerce.date(),
 	updatedAt: z.coerce.date().nullable(),
 });
