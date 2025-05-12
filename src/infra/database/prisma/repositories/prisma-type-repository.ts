@@ -31,25 +31,28 @@ export class PrismaTypeRepository implements TypesRepository {
 		}
 
 		return PrismaTypeMapper.toDomain(type);
-    }
-    
-    async findByGroupAndParentId(group: TypeGroup, parentId?: string): Promise<Type[] | null> {
+	}
+
+	async findByGroupAndParentId(
+		group: TypeGroup,
+		parentId?: string
+	): Promise<Type[] | null> {
 		const types = await prisma.type.findMany({
-            where: {
-                group: group.toPrisma(),
-                parentId: parentId ?? null
-            }
-		})
-		
+			where: {
+				group: group.toPrisma(),
+				parentId: parentId ?? null,
+			},
+		});
+
 		if (!types) {
 			return null;
 		}
 
-        return types.map(PrismaTypeMapper.toDomain);
+		return types.map(PrismaTypeMapper.toDomain);
 	}
-	
+
 	async findMany(): Promise<Type[] | null> {
-		const types = await prisma.type.findMany({})
+		const types = await prisma.type.findMany({});
 
 		if (!types) {
 			return null;
@@ -61,9 +64,9 @@ export class PrismaTypeRepository implements TypesRepository {
 	async findByGroup(group: TypeGroup): Promise<Type[] | null> {
 		const types = await prisma.type.findMany({
 			where: {
-				group: group.toPrisma()
-			}
-		})
+				group: group.toPrisma(),
+			},
+		});
 		if (!types) {
 			return null;
 		}
@@ -71,11 +74,29 @@ export class PrismaTypeRepository implements TypesRepository {
 		return types.map(PrismaTypeMapper.toDomain);
 	}
 
+	async findCategoryTree(typeId: string): Promise<Type[]> {
+		const tree: Type[] = [];
+
+		let current = await prisma.type.findUnique({
+			where: { id: typeId },
+		});
+
+		while (current) {
+			tree.unshift(PrismaTypeMapper.toDomain(current));
+			if (!current.parentId) break;
+			current = await prisma.type.findUnique({
+				where: { id: current.parentId },
+			});
+		}
+
+		return tree;
+	}
+
 	async create(type: Type): Promise<void> {
 		const data = PrismaTypeMapper.toPrisma(type);
 
 		await prisma.type.create({
-			data
-		})
+			data,
+		});
 	}
 }

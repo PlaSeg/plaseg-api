@@ -10,5 +10,6 @@ export interface TypesRepository {
 		parentId?: string
 	): Promise<Type[] | null>;
 	findByDescription(description: string): Promise<Type | null>;
+	findCategoryTree(typeId: string): Promise<Type[]>;
 	create(type: Type): Promise<void>;
 }
