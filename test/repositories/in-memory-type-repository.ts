@@ -53,4 +53,20 @@ export class InMemoryTypeRepository implements TypesRepository {
 		});
 		return types.length > 0 ? types : null;
 	}
+
+	async findCategoryTree(typeId: string): Promise<Type[]> {
+		const tree: Type[] = [];
+
+		let current = this.items.find((item) => item.id.toString() === typeId);
+
+		while (current) {
+			tree.unshift(current);
+			if (!current.parentId) break;
+			current = this.items.find(
+				(item) => item.id.toString() === current?.parentId?.toString()
+			);
+		}
+
+		return tree;
+	}
 }
