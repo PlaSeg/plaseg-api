@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const requiredDocumentSchema = z.object({
+export const requiredDocumentSchema = z.object({
 	name: z.string().min(3, "O nome deve ter no mínimo 3 caracteres"),
 	description: z
 		.string()
@@ -75,6 +75,7 @@ export const opportunityResponseSchema = z.object({
 	finalDeadline: z.coerce.date(),
 	requiresCounterpart: z.boolean(),
 	counterpartPercentage: z.number(),
+	typeDescription: z.string(),
 	isActive: z.boolean(),
 	createdAt: z.coerce.date(),
 	updatedAt: z.coerce.date().nullable().optional(),

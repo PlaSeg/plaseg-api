@@ -6,7 +6,7 @@ export function makeType(override: Partial<Type> = {}, id?: UniqueEntityID) {
 	const type = Type.create(
 		{
 			description: "Test Type",
-			group: TypeGroup.service(),
+			group: TypeGroup.opportunity(),
 			...override,
 		},
 		id

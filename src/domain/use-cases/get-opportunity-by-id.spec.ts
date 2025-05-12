@@ -2,18 +2,33 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { InMemoryOpportunitiesRepository } from "../../../test/repositories/in-memory-opportunities-repository";
 import { GetOpportunityByIdUseCase } from "./get-opportunity-by-id";
 import { makeOpportunity } from "../../../test/factories/make-opportunity";
+import { InMemoryTypesRepository } from "../../../test/repositories/in-memory-types-repository";
+import { makeType } from "../../../test/factories/make-type";
+import { TypeGroup } from "../../domain/entities/value-objects/type-group";
 
 let inMemoryOpportunitiesRepository: InMemoryOpportunitiesRepository;
+let inMemoryTypesRepository: InMemoryTypesRepository;
 let sut: GetOpportunityByIdUseCase;
 
 describe("Get Opportunity By Id Use Case", () => {
 	beforeEach(() => {
 		inMemoryOpportunitiesRepository = new InMemoryOpportunitiesRepository();
-		sut = new GetOpportunityByIdUseCase(inMemoryOpportunitiesRepository);
+		inMemoryTypesRepository = new InMemoryTypesRepository();
+		sut = new GetOpportunityByIdUseCase(
+			inMemoryOpportunitiesRepository,
+			inMemoryTypesRepository
+		);
 	});
 
 	it("should be able to get an opportunity by id", async () => {
-		const opportunity = makeOpportunity();
+		const type = makeType({
+			group: TypeGroup.opportunity(),
+		});
+		await inMemoryTypesRepository.create(type);
+
+		const opportunity = makeOpportunity({
+			typeId: type.id.toString(),
+		});
 
 		await inMemoryOpportunitiesRepository.create(opportunity);
 
@@ -29,6 +44,7 @@ describe("Get Opportunity By Id Use Case", () => {
 					id: opportunity.id.toString(),
 					title: opportunity.title,
 					description: opportunity.description,
+					typeDescription: type.description,
 				})
 			);
 		}

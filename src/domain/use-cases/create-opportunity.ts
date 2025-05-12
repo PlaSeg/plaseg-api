@@ -3,6 +3,8 @@ import { Either, left, right } from "../../core/types/either";
 import { Opportunity } from "../entities/opportunity";
 import { OpportunitiesRepository } from "../repositories/opportunities-repositories";
 import { RequiredDocument } from "../entities/required-document";
+import { TypesRepository } from "../repositories/type-repository";
+import { TypeGroup } from "../entities/value-objects/type-group";
 
 type RequiredDocumentRequest = {
 	name: string;
@@ -55,7 +57,10 @@ type CreateOpportunityUseCaseResponse = Either<
 >;
 
 export class CreateOpportunityUseCase {
-	constructor(private opportunityRepository: OpportunitiesRepository) {}
+	constructor(
+		private opportunityRepository: OpportunitiesRepository,
+		private typesRepository: TypesRepository
+	) {}
 
 	async execute(
 		request: CreateOpportunityUseCaseRequest
@@ -65,6 +70,18 @@ export class CreateOpportunityUseCase {
 
 		if (doesOpportunityAlreadyExist) {
 			return left(new CustomError(409, "Título já cadastrado"));
+		}
+
+		const type = await this.typesRepository.findById(request.typeId);
+
+		if (!type) {
+			return left(new CustomError(404, "Tipo não encontrado"));
+		}
+
+		if (type.group.getValue() !== TypeGroup.opportunity().getValue()) {
+			return left(
+				new CustomError(400, "O tipo selecionado não é uma oportunidade")
+			);
 		}
 
 		const requiredDocuments = request.requiredDocuments.map((document) =>
