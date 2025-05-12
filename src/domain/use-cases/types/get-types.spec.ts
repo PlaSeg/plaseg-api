@@ -87,4 +87,50 @@ describe("Get Types Use Case", () => {
 			});
 		}
 	});
+
+	it("should be able to filter types by parent", async () => {
+		const category = makeType({
+			description: "Arma de Fogo",
+			group: TypeGroup.category(),
+		});
+
+		await inMemoryTypeRepository.create(category);
+
+		const subcategory = makeType({
+			description: "Pistola",
+			group: TypeGroup.subcategory(),
+			parentId: category.id.toString(),
+		});
+
+		await inMemoryTypeRepository.create(subcategory);
+
+		const result = await sut.execute({
+			parentId: category.id.toString(),
+		});
+
+		expect(result.isRight()).toBe(true);
+		if (result.isRight()) {
+			expect(result.value).toEqual({
+				types: [
+					{
+						id: expect.any(String),
+						createdAt: expect.any(Date),
+						description: subcategory.description,
+						group: subcategory.group.toString(),
+						parent: category.description,
+						updatedAt: null,
+					},
+				],
+			});
+		}
+	});
+
+	it("should return null if there are no types", async () => {
+		const result = await sut.execute({});
+
+		expect(result.isRight()).toBe(true);
+		if (result.isRight()) {
+			expect(result.value).toEqual({ types: null });
+		}
+	});
 });

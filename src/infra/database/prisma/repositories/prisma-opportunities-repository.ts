@@ -1,4 +1,4 @@
-import { OpportunitiesRepository } from "../../../../domain/repositories/opportunities-repositories";
+import { OpportunitiesRepository } from "../../../../domain/repositories/opportunities-repository";
 import { prisma } from "../prisma";
 import { Opportunity } from "../../../../domain/entities/opportunity";
 import { PrismaOpportunityMapper } from "../mappers/prisma-opportunity-mapper";

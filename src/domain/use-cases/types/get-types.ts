@@ -32,7 +32,7 @@ export class GetTypesUseCase {
 	}: GetTypesUseCaseRequest): Promise<GetTypesUseCaseResponse> {
 		const allTypes = await this.typesRepository.findMany();
 
-		if (!allTypes) {
+		if (!allTypes || allTypes.length === 0) {
 			return right({ types: null });
 		}
 

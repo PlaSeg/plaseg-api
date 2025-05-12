@@ -2,9 +2,9 @@ import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { errorResponseSchema, successResponseSchema } from "../../schemas/http";
 import { verifyUserRole } from "../../middleware/verify-user-role";
-import { z } from "zod";
 import { createBaseProductBodySchema } from "../../schemas/base-product";
 import { makeCreateBaseProductUseCase } from "../../../database/prisma/use-cases/make-create-base-product-use-case";
+import { z } from "zod";
 
 export async function createBaseProduct(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().post(

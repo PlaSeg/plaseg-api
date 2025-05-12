@@ -5,7 +5,6 @@ import { PrismaTypeRepository } from "../repositories/prisma-type-repository";
 export function makeCreateOpportunityUseCase() {
 	const opportunitiesRepository = new PrismaOpportunitiesRepository();
 	const typesRepository = new PrismaTypeRepository();
-
 	const useCase = new CreateOpportunityUseCase(
 		opportunitiesRepository,
 		typesRepository

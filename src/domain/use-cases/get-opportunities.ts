@@ -1,6 +1,6 @@
 import { CustomError } from "../../core/errors/custom-error";
 import { Either, right } from "../../core/types/either";
-import { OpportunitiesRepository } from "../repositories/opportunities-repositories";
+import { OpportunitiesRepository } from "../repositories/opportunities-repository";
 import { TypesRepository } from "../repositories/type-repository";
 
 type RequiredDocumentResponse = {

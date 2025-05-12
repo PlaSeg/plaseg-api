@@ -1,5 +1,5 @@
 import { Opportunity } from "../../src/domain/entities/opportunity";
-import { OpportunitiesRepository } from "../../src/domain/repositories/opportunities-repositories";
+import { OpportunitiesRepository } from "../../src/domain/repositories/opportunities-repository";
 
 export class InMemoryOpportunitiesRepository
 	implements OpportunitiesRepository

@@ -1,5 +1,5 @@
 import { AllocationDepartment } from "../../../../domain/entities/allocation-department";
-import { AllocationDeparmentsRepository } from "../../../../domain/repositories/allocation-department";
+import { AllocationDeparmentsRepository } from "../../../../domain/repositories/allocation-department-repository";
 import { PrismaAllocationDepartmentMapper } from "../mappers/prisma-allocation-department-mapper";
 import { prisma } from "../prisma";
 
@@ -34,11 +34,12 @@ export class PrismaAllocationDepartmentsRepository
 		);
 	}
 
-	async findByDescription(description: string): Promise<AllocationDepartment | null> {
-		const allocationDepartment =
-			await prisma.allocationDepartment.findFirst({
-				where: { description },
-			});
+	async findByDescription(
+		description: string
+	): Promise<AllocationDepartment | null> {
+		const allocationDepartment = await prisma.allocationDepartment.findFirst({
+			where: { description },
+		});
 
 		if (!allocationDepartment) {
 			return null;

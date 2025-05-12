@@ -1,7 +1,7 @@
 import { CustomError } from "../../core/errors/custom-error";
 import { Either, left, right } from "../../core/types/either";
 import { Opportunity } from "../entities/opportunity";
-import { OpportunitiesRepository } from "../repositories/opportunities-repositories";
+import { OpportunitiesRepository } from "../repositories/opportunities-repository";
 import { RequiredDocument } from "../entities/required-document";
 import { TypesRepository } from "../repositories/type-repository";
 import { TypeGroup } from "../entities/value-objects/type-group";

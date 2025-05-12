@@ -3,13 +3,13 @@ import { PrismaMunicipalityRepository } from "../repositories/prisma-municipalit
 import { PrismaQualifiedStaffRepository } from "../repositories/prisma-qualified-staffs-repository";
 
 export function makeCreateQualifiedStaffUseCase() {
-    const QualifiedStaffsRepository = new PrismaQualifiedStaffRepository();
-    const MunicipalitiesRepository = new PrismaMunicipalityRepository();
+	const QualifiedStaffsRepository = new PrismaQualifiedStaffRepository();
+	const MunicipalitiesRepository = new PrismaMunicipalityRepository();
 
-    const useCase = new CreateQualifiedStaffUseCase(
-			QualifiedStaffsRepository,
-			MunicipalitiesRepository
-		);
+	const useCase = new CreateQualifiedStaffUseCase(
+		QualifiedStaffsRepository,
+		MunicipalitiesRepository
+	);
 
-    return useCase;
+	return useCase;
 }

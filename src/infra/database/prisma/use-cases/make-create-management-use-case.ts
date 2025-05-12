@@ -5,7 +5,6 @@ import { PrismaManagementRepository } from "../repositories/prisma-management-re
 export function makeCreateManagementUseCase() {
 	const managementRepository = new PrismaManagementRepository();
 	const municipalityRepository = new PrismaMunicipalityRepository();
-
 	const useCase = new CreateManagementUseCase(
 		managementRepository,
 		municipalityRepository
