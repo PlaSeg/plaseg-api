@@ -1,10 +1,10 @@
 import { PrismaTypeRepository } from "../repositories/prisma-type-repository";
-import { CreateTypeUseCase } from "../../../../domain/use-cases/create-type";
+import { CreateTypeUseCase } from "../../../../domain/use-cases/types/create-type";
 
 export function makeCreateTypeUseCase() {
-    const typesRepository = new PrismaTypeRepository();
+	const typesRepository = new PrismaTypeRepository();
 
-    const useCase = new CreateTypeUseCase(typesRepository);
+	const useCase = new CreateTypeUseCase(typesRepository);
 
-    return useCase;
+	return useCase;
 }

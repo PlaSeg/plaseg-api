@@ -5,6 +5,16 @@ import { PrismaTypeMapper } from "../mappers/prisma-type-mapper";
 import { prisma } from "../prisma";
 
 export class PrismaTypeRepository implements TypesRepository {
+	async findMany(): Promise<Type[] | null> {
+		const types = await prisma.type.findMany();
+
+		if (!types) {
+			return null;
+		}
+
+		return types.map(PrismaTypeMapper.toDomain);
+	}
+
 	async findByDescription(description: string): Promise<Type | null> {
 		const type = await prisma.type.findUnique({
 			where: {
@@ -51,16 +61,6 @@ export class PrismaTypeRepository implements TypesRepository {
 		return types.map(PrismaTypeMapper.toDomain);
 	}
 
-	async findMany(): Promise<Type[] | null> {
-		const types = await prisma.type.findMany({});
-
-		if (!types) {
-			return null;
-		}
-
-		return types.map(PrismaTypeMapper.toDomain);
-	}
-
 	async findByGroup(group: TypeGroup): Promise<Type[] | null> {
 		const types = await prisma.type.findMany({
 			where: {
@@ -97,6 +97,14 @@ export class PrismaTypeRepository implements TypesRepository {
 
 		await prisma.type.create({
 			data,
+		});
+	}
+
+	async delete(id: string): Promise<void> {
+		await prisma.type.delete({
+			where: {
+				id,
+			},
 		});
 	}
 }

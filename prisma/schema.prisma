@@ -184,7 +184,7 @@ model Opportunity {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
-  Type   Type   @relation(fields: [typeId], references: [id])
+  Type   Type   @relation(fields: [typeId], references: [id], onDelete: Cascade)
   typeId String
 
   requiredDocuments RequiredDocument[]
@@ -201,7 +201,7 @@ model RequiredDocument {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
-  opportunity   Opportunity @relation(fields: [opportunityId], references: [id])
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
   opportunityId String
 
   @@map("required_documents")
@@ -213,11 +213,9 @@ model Type {
   group       TypeGroup
   parentId    String?
 
-  // Auto-relacionamento para hierarquia
-  parent   Type?  @relation("TypeHierarchy", fields: [parentId], references: [id])
+  parent   Type?  @relation("TypeHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
   children Type[] @relation("TypeHierarchy")
 
-  // Relacionamentos com outras entidades
   opportunities Opportunity[]
   baseProducts  BaseProduct[]
 
