@@ -1,6 +1,6 @@
 import { CustomError } from "../../core/errors/custom-error";
 import { Either, left, right } from "../../core/types/either";
-import { OpportunitiesRepository } from "../repositories/opportunities-repositories";
+import { OpportunitiesRepository } from "../repositories/opportunities-repository";
 import { RequiredDocument } from "../entities/required-document";
 import { Opportunity } from "../entities/opportunity";
 import { getCurrentDate } from "../../core/utils/get-current-date";
@@ -107,8 +107,7 @@ export class UpdateOpportunityUseCase {
 						name: doc.name ?? "",
 						description: doc.description ?? "",
 						model: doc.model ?? "",
-					});
-			}) : opportunity.requiredDocuments;
+					})}) : opportunity.requiredDocuments
 
 		const updatedOpportunity = Opportunity.create(
 			{

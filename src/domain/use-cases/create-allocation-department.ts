@@ -1,7 +1,7 @@
 import { CustomError } from "../../core/errors/custom-error";
 import { Either, left, right } from "../../core/types/either";
 import { AllocationDepartment } from "../entities/allocation-department";
-import { AllocationDeparmentsRepository } from "../repositories/allocation-department";
+import { AllocationDeparmentsRepository } from "../repositories/allocation-department-repository";
 import { MunicipalitiesRepository } from "../repositories/municipalities-repository";
 
 type CreateAllocationDepartmentUseCaseRequest = {
@@ -34,17 +34,13 @@ export class CreateAllocationDepartmentUseCase {
 			);
 		}
 
-		const doesAllocationDepartmentExists = await this.allocationDepartmentsRepository.findByDescription(
-			data.description
-		)
+		const doesAllocationDepartmentExists =
+			await this.allocationDepartmentsRepository.findByDescription(
+				data.description
+			);
 
 		if (doesAllocationDepartmentExists) {
-			return left(
-				new CustomError(
-					409,
-					"Departamento já cadastrado."
-				)
-			);
+			return left(new CustomError(409, "Departamento já cadastrado."));
 		}
 
 		const allocationDepartment = AllocationDepartment.create({

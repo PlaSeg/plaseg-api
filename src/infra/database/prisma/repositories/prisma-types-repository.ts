@@ -1,10 +1,10 @@
 import { Type } from "../../../../domain/entities/type";
 import { TypeGroup } from "../../../../domain/entities/value-objects/type-group";
-import { TypesRepository } from "../../../../domain/repositories/type-repository";
+import { TypesRepository } from "../../../../domain/repositories/types-repository";
 import { PrismaTypeMapper } from "../mappers/prisma-type-mapper";
 import { prisma } from "../prisma";
 
-export class PrismaTypeRepository implements TypesRepository {
+export class PrismaTypesRepository implements TypesRepository {
 	async findByDescription(description: string): Promise<Type | null> {
 		const type = await prisma.type.findUnique({
 			where: {

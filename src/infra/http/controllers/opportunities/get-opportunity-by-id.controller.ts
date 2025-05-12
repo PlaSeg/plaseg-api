@@ -3,9 +3,8 @@ import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { errorResponseSchema, successResponseSchema } from "../../schemas/http";
 import { opportunityResponseSchema } from "../../schemas/opportunity";
 import { verifyJwt } from "../../middleware/auth";
-
-import { z } from "zod";
 import { makeGetOpportunityByIdUseCase } from "../../../database/prisma/use-cases/make-get-opportunity-by-id-use-case";
+import { z } from "zod";
 
 export async function getOpportunityById(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().get(

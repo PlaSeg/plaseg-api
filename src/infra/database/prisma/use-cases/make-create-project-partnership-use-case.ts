@@ -5,7 +5,6 @@ import { PrismaProjectPartnershipsRepository } from "../repositories/prisma-proj
 export function makeCreateProjectPartnershipUseCase() {
 	const QualifiedStaffsRepository = new PrismaProjectPartnershipsRepository();
 	const MunicipalitiesRepository = new PrismaMunicipalityRepository();
-
 	const useCase = new CreateProjectPartnershipUseCase(
 		QualifiedStaffsRepository,
 		MunicipalitiesRepository

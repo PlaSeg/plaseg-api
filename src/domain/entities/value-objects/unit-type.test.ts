@@ -42,7 +42,9 @@ describe("UnitType Value Object", () => {
 			const unitType = UnitType.uf();
 			// @ts-expect-error - Testing invalid unit type
 			unitType["value"] = "INVALID_UNIT_TYPE";
-			expect(() => unitType.toPrisma()).toThrow("Invalid unit type: INVALID_UNIT_TYPE");
+			expect(() => unitType.toPrisma()).toThrow(
+				"Invalid unit type: INVALID_UNIT_TYPE"
+			);
 		});
 	});
 

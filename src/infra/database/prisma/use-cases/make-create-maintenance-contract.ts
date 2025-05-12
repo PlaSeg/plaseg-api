@@ -3,8 +3,13 @@ import { CreateMaintenanceContractUseCase } from "../../../../domain/use-cases/c
 import { PrismaMunicipalityRepository } from "../repositories/prisma-municipalities-repository";
 
 export function makeCreateMaintenanceContractUseCase() {
-	const maintenanceContractsRepository = new PrismaMaintenanceContractRepository();
-    const municipalitiesRepository = new PrismaMunicipalityRepository();
+	const maintenanceContractsRepository =
+		new PrismaMaintenanceContractRepository();
+	const municipalitiesRepository = new PrismaMunicipalityRepository();
+	const usecase = new CreateMaintenanceContractUseCase(
+		maintenanceContractsRepository,
+		municipalitiesRepository
+	);
 
-	return new CreateMaintenanceContractUseCase(maintenanceContractsRepository, municipalitiesRepository);
+	return usecase;
 }

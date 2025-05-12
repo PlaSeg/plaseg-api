@@ -2,7 +2,7 @@ import { CustomError } from "../../core/errors/custom-error";
 import { Either, right } from "../../core/types/either";
 import { Type } from "../entities/type";
 import { BaseProductsRepository } from "../repositories/base-products-repository";
-import { TypesRepository } from "../repositories/type-repository";
+import { TypesRepository } from "../repositories/types-repository";
 
 type BaseProductResponse = {
 	id: string;

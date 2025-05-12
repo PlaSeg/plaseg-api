@@ -5,7 +5,7 @@ import {
 	DomainTypeGroup,
 	TypeGroup,
 } from "../../entities/value-objects/type-group";
-import { TypesRepository } from "../../repositories/type-repository";
+import { TypesRepository } from "../../repositories/types-repository";
 
 type CreateTypeRequest = {
 	description: string;

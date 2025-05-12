@@ -1,6 +1,6 @@
 import { CustomError } from "../../../core/errors/custom-error";
 import { Either, left, right } from "../../../core/types/either";
-import { TypesRepository } from "../../repositories/type-repository";
+import { TypesRepository } from "../../repositories/types-repository";
 
 type DeleteTypeRequest = {
 	id: string;

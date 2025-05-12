@@ -1,4 +1,4 @@
-import { InMemoryTypeRepository } from "../../../../test/repositories/in-memory-type-repository";
+import { InMemoryTypesRepository } from "../../../../test/repositories/in-memory-types-repository";
 import { CreateTypeUseCase } from "./create-type";
 import { makeType } from "../../../../test/factories/make-type";
 import {
@@ -6,12 +6,12 @@ import {
 	TypeGroup,
 } from "../../entities/value-objects/type-group";
 
-let inMemoryTypeRepository: InMemoryTypeRepository;
+let inMemoryTypeRepository: InMemoryTypesRepository;
 let sut: CreateTypeUseCase;
 
 describe("Create Type Use Case", () => {
 	beforeEach(() => {
-		inMemoryTypeRepository = new InMemoryTypeRepository();
+		inMemoryTypeRepository = new InMemoryTypesRepository();
 		sut = new CreateTypeUseCase(inMemoryTypeRepository);
 	});
 

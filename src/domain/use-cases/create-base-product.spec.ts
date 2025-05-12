@@ -1,19 +1,19 @@
 import { describe, it, beforeEach } from "vitest";
 import { InMemoryBaseProductsRepository } from "../../../test/repositories/in-memory-base-products-repository";
-import { InMemoryTypeRepository } from "../../../test/repositories/in-memory-type-repository";
+import { InMemoryTypesRepository } from "../../../test/repositories/in-memory-types-repository";
 import { CreateBaseProductUseCase } from "./create-base-product";
 import { TypeGroup } from "../entities/value-objects/type-group";
 import { makeBaseProduct } from "../../../test/factories/make-base-product";
 import { makeType } from "../../../test/factories/make-type";
 
 let inMemoryBaseProductsRepository: InMemoryBaseProductsRepository;
-let inMemoryTypeRepository: InMemoryTypeRepository;
+let inMemoryTypeRepository: InMemoryTypesRepository;
 let sut: CreateBaseProductUseCase;
 
 describe("Create Base Product Use Case", () => {
 	beforeEach(() => {
 		inMemoryBaseProductsRepository = new InMemoryBaseProductsRepository();
-		inMemoryTypeRepository = new InMemoryTypeRepository();
+		inMemoryTypeRepository = new InMemoryTypesRepository();
 		sut = new CreateBaseProductUseCase(
 			inMemoryBaseProductsRepository,
 			inMemoryTypeRepository

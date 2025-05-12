@@ -4,8 +4,7 @@ import { makeOpportunity } from "../../../test/factories/make-opportunity";
 import { makeRequiredDocument } from "../../../test/factories/make-required-document";
 import { TypeGroup } from "../entities/value-objects/type-group";
 import { Type } from "../entities/type";
-import { InMemoryTypesRepository } from "../../test/repositories/in-memory-types-repository";
-
+import { InMemoryTypesRepository } from "../../../test/repositories/in-memory-types-repository";
 
 let inMemoryOpportunitiesRepository: InMemoryOpportunitiesRepository;
 let inMemoryTypesRepository: InMemoryTypesRepository;

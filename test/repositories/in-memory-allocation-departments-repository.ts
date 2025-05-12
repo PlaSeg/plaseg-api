@@ -1,5 +1,5 @@
 import { AllocationDepartment } from "../../src/domain/entities/allocation-department";
-import { AllocationDeparmentsRepository } from "../../src/domain/repositories/allocation-department";
+import { AllocationDeparmentsRepository } from "../../src/domain/repositories/allocation-department-repository";
 
 export class InMemoryAllocationDepartmentsRepository
 	implements AllocationDeparmentsRepository

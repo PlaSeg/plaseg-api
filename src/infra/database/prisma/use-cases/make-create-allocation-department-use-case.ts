@@ -3,9 +3,9 @@ import { PrismaAllocationDepartmentsRepository } from "../repositories/prisma-al
 import { PrismaMunicipalityRepository } from "../repositories/prisma-municipalities-repository";
 
 export function makeCreateAllocationDepartmentUseCase() {
-	const allocationDepartmentsRepository = new PrismaAllocationDepartmentsRepository();
+	const allocationDepartmentsRepository =
+		new PrismaAllocationDepartmentsRepository();
 	const municipalitiesRepository = new PrismaMunicipalityRepository();
-
 	const useCase = new CreateAllocationDepartmentUseCase(
 		allocationDepartmentsRepository,
 		municipalitiesRepository

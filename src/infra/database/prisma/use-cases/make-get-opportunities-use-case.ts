@@ -1,10 +1,10 @@
 import { PrismaOpportunitiesRepository } from "../repositories/prisma-opportunities-repository";
 import { GetOpportunitiesUseCase } from "../../../../domain/use-cases/get-opportunities";
-import { PrismaTypeRepository } from "../repositories/prisma-type-repository";
+import { PrismaTypesRepository } from "../repositories/prisma-types-repository";
 
 export function makeGetOpportunitiesUseCase() {
 	const opportunitiesRepository = new PrismaOpportunitiesRepository();
-	const typesRepository = new PrismaTypeRepository();
+	const typesRepository = new PrismaTypesRepository();
 
 	const useCase = new GetOpportunitiesUseCase(
 		opportunitiesRepository,

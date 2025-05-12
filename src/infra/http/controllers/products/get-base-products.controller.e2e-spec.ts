@@ -5,7 +5,6 @@ import { prisma } from "../../../database/prisma/prisma";
 import { hash } from "bcrypt";
 import fastify, { FastifyInstance } from "fastify";
 
-// Helper para criar usuário admin
 async function createAdminUser() {
 	return prisma.user.create({
 		data: {
@@ -61,10 +60,10 @@ describe("Get Base Products (e2e)", () => {
 			role: admin.role,
 		});
 
-		// Cria árvore de categorias
 		const category = await prisma.type.create({
 			data: { description: "Categoria", group: "CATEGORY" },
 		});
+
 		const subcategory = await prisma.type.create({
 			data: {
 				description: "Subcategoria",
@@ -72,6 +71,7 @@ describe("Get Base Products (e2e)", () => {
 				parentId: category.id,
 			},
 		});
+
 		const subsubcategory = await prisma.type.create({
 			data: {
 				description: "Subsubcategoria",
@@ -80,8 +80,7 @@ describe("Get Base Products (e2e)", () => {
 			},
 		});
 
-		// Cria produto base
-		const baseProduct = await prisma.baseProduct.create({
+		await prisma.baseProduct.create({
 			data: {
 				code: "P001",
 				name: "Produto Base 1",

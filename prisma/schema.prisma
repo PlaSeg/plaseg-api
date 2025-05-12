@@ -238,7 +238,7 @@ model BaseProduct {
   budget3Validity      DateTime
   unitValue            Decimal
 
-  Type   Type   @relation(fields: [typeId], references: [id])
+  Type   Type   @relation(fields: [typeId], references: [id], onDelete: Cascade)
   typeId String
 
   createdAt DateTime  @default(now())

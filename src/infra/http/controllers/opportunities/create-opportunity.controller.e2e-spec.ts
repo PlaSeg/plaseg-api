@@ -1,5 +1,5 @@
 import fastify, { FastifyInstance } from "fastify";
-import { afterAll, beforeAll, beforeEach, describe, it } from "vitest";
+import { afterAll, beforeAll, describe, it } from "vitest";
 import { buildApp } from "../../app";
 import { makeUser } from "../../../../../test/factories/make-user";
 import { Role } from "../../../../domain/entities/value-objects/role";

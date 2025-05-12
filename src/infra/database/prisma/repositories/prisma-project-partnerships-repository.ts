@@ -60,19 +60,19 @@ export class PrismaProjectPartnershipsRepository
 		if (!projectPartnerships.length) {
 			return null;
 		}
-		
+
 		const projectPartnershipsDomain = projectPartnerships.map((pp) => {
 			return PrismaProjectPartnershipMapper.toDomain(pp);
 		});
-	
+
 		return projectPartnershipsDomain;
 	}
 
 	async create(projectPartnership: ProjectPartnership): Promise<void> {
-		const data = PrismaProjectPartnershipMapper.toPrisma(projectPartnership)
+		const data = PrismaProjectPartnershipMapper.toPrisma(projectPartnership);
 
 		await prisma.projectPartnership.create({
-			data
+			data,
 		});
 	}
 }
