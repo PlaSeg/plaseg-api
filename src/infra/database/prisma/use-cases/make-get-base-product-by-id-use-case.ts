@@ -1,10 +1,10 @@
 import { GetBaseProductByIdUseCase } from "../../../../domain/use-cases/get-base-product-by-id";
 import { PrismaBaseProductsRepository } from "../repositories/prisma-base-product-repository";
-import { PrismaTypeRepository } from "../repositories/prisma-type-repository";
+import { PrismaTypesRepository } from "../repositories/prisma-types-repository";
 
 export function makeGetBaseProductByIdUseCase() {
 	const baseProductsRepository = new PrismaBaseProductsRepository();
-	const typeRepository = new PrismaTypeRepository();
+	const typeRepository = new PrismaTypesRepository();
 	const getBaseProductByIdUseCase = new GetBaseProductByIdUseCase(
 		baseProductsRepository,
 		typeRepository

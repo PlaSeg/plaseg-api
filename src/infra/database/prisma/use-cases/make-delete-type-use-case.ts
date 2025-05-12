@@ -1,8 +1,8 @@
-import { PrismaTypeRepository } from "../repositories/prisma-type-repository";
+import { PrismaTypesRepository } from "../repositories/prisma-types-repository";
 import { DeleteTypeUseCase } from "../../../../domain/use-cases/types/delete-type";
 
 export function makeDeleteTypeUseCase() {
-	const typesRepository = new PrismaTypeRepository();
+	const typesRepository = new PrismaTypesRepository();
 
 	const useCase = new DeleteTypeUseCase(typesRepository);
 

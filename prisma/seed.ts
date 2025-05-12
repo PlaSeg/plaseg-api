@@ -1,43 +1,51 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, TypeGroup } from "@prisma/client";
+import { types } from "./seed/types";
+import { opportunities } from "./seed/opportunities";
+import { baseProducts } from "./seed/base-products";
 
 const prisma = new PrismaClient();
 
 async function seed() {
 	await prisma.opportunity.deleteMany();
+	await prisma.baseProduct.deleteMany();
 	await prisma.type.deleteMany();
 
-	await prisma.type.create({
-		data: {
-			description: "Armas de Fogo",
-			group: "CATEGORY",
-			children: {
-				create: [
-					{
-						description: "Pistola Glock",
-						group: "SUBCATEGORY",
-						children: {
-							create: [
-								{
-									description: "Pistola Glock 9mm",
-									group: "SUBSUBCATEGORY",
-								},
-							],
-						},
-					},
-					{
-						description: "Metralhadora",
-						group: "SUBCATEGORY",
-					},
-				],
+	types().forEach(async (type) => {
+		await prisma.type.create({
+			data: {
+				description: type.description,
+				group: type.group,
+				children: {
+					create: type.children?.create,
+				},
 			},
+		});
+	});
+
+	const edital = await prisma.type.create({
+		data: {
+			description: "Edital",
+			group: TypeGroup.OPPORTUNITY,
 		},
 	});
 
-	await prisma.type.create({
+	opportunities(edital.id).forEach(async (opportunity) => {
+		await prisma.opportunity.create({
+			data: opportunity,
+		});
+	});
+
+	const weapon = await prisma.type.create({
 		data: {
-			description: "Edital",
-			group: "OPPORTUNITY",
+			description: "Armas",
+			group: TypeGroup.CATEGORY,
 		},
+	});
+
+	baseProducts(weapon.id).forEach(async (baseProduct) => {
+		await prisma.baseProduct.create({
+			data: baseProduct,
+		});
 	});
 
 	console.log("Seed complete");

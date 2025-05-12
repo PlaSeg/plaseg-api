@@ -3,7 +3,7 @@ import { ManagementsRepository } from "../../../../domain/repositories/managemen
 import { PrismaManagementMapper } from "../mappers/prisma-management-mapper";
 import { prisma } from "../prisma";
 
-export class PrismaManagementRepository implements ManagementsRepository {
+export class PrismaManagementsRepository implements ManagementsRepository {
 	async findById(id: string): Promise<Management | null> {
 		const management = await prisma.management.findUnique({
 			where: { id },

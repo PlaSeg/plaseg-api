@@ -1,15 +1,15 @@
 import { describe, it, beforeEach } from "vitest";
-import { InMemoryTypeRepository } from "../../../../test/repositories/in-memory-type-repository";
+import { InMemoryTypesRepository } from "../../../../test/repositories/in-memory-types-repository";
 import { GetTypesUseCase } from "./get-types";
 import { makeType } from "../../../../test/factories/make-type";
 import { TypeGroup } from "../../entities/value-objects/type-group";
 
-let inMemoryTypeRepository: InMemoryTypeRepository;
+let inMemoryTypeRepository: InMemoryTypesRepository;
 let sut: GetTypesUseCase;
 
 describe("Get Types Use Case", () => {
 	beforeEach(() => {
-		inMemoryTypeRepository = new InMemoryTypeRepository();
+		inMemoryTypeRepository = new InMemoryTypesRepository();
 		sut = new GetTypesUseCase(inMemoryTypeRepository);
 	});
 

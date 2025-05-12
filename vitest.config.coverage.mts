@@ -19,6 +19,7 @@ export default defineConfig({
 				// Arquivos de configuração
 				"**/vitest.config*.mts",
 				"**/prisma/seed.ts",
+				"**/prisma/seed/*.ts",
 
 				// Tipos e definições especiais
 				"**/src/core/types/fastify-jwt.d.ts",

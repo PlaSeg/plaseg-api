@@ -1,10 +1,10 @@
 import { GetBaseProductUseCase } from "../../../../domain/use-cases/get-base-product";
 import { PrismaBaseProductsRepository } from "../repositories/prisma-base-product-repository";
-import { PrismaTypeRepository } from "../repositories/prisma-type-repository";
+import { PrismaTypesRepository } from "../repositories/prisma-types-repository";
 
 export function makeGetBaseProductUseCase() {
 	const baseProductsRepository = new PrismaBaseProductsRepository();
-	const typeRepository = new PrismaTypeRepository();
+	const typeRepository = new PrismaTypesRepository();
 
 	const usecase = new GetBaseProductUseCase(
 		baseProductsRepository,

@@ -1,5 +1,5 @@
 import { Either, right } from "../../../core/types/either";
-import { TypesRepository } from "../../repositories/type-repository";
+import { TypesRepository } from "../../repositories/types-repository";
 
 type GetTypesUseCaseRequest = {
 	group?: string;
@@ -55,7 +55,7 @@ export class GetTypesUseCase {
 				id: type.id.toString(),
 				description: type.description,
 				group: type.group.toString(),
-				parent: parentType?.description ?? null,
+				parent: parentType ? parentType.description : null,
 				createdAt: type.createdAt,
 				updatedAt: type.updatedAt,
 			};

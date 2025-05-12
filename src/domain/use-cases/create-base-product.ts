@@ -3,7 +3,7 @@ import { Either, left, right } from "../../core/types/either";
 import { BaseProduct } from "../entities/base-product";
 import { DomainTypeGroup } from "../entities/value-objects/type-group";
 import { BaseProductsRepository } from "../repositories/base-products-repository";
-import { TypesRepository } from "../repositories/type-repository";
+import { TypesRepository } from "../repositories/types-repository";
 
 type CreateBaseProductUseCaseRequest = {
 	code: string;

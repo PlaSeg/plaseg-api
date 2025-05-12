@@ -1,7 +1,7 @@
 import { CustomError } from "../../core/errors/custom-error";
 import { Either, right } from "../../core/types/either";
 import { OpportunitiesRepository } from "../repositories/opportunities-repository";
-import { TypesRepository } from "../repositories/type-repository";
+import { TypesRepository } from "../repositories/types-repository";
 
 type RequiredDocumentResponse = {
 	id: string;
