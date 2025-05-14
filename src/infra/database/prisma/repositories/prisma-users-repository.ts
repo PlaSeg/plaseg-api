@@ -46,6 +46,16 @@ export class PrismaUsersRepository implements UsersRepository {
 		return PrismaUserMapper.toDomain(user);
 	}
 
+	async findManyAdmins(): Promise<User[]> {
+		const admins = await prisma.user.findMany({
+			where: {
+				role: "ADMIN",
+			},
+		});
+
+		return admins.map(PrismaUserMapper.toDomain);
+	}
+
 	async create(user: User): Promise<void> {
 		const data = PrismaUserMapper.toPrisma(user);
 
