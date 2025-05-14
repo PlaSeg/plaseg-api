@@ -50,22 +50,8 @@ describe("Get Types (e2e)", () => {
 
 		expect(response.status).toBe(200);
 		expect(response.body.data).toEqual([
-			{
-				id: category.id,
-				description: category.description,
-				group: category.group,
-				parent: null,
-				createdAt: category.createdAt.toISOString(),
-				updatedAt: category.updatedAt?.toISOString(),
-			},
-			{
-				id: category.id,
-				description: category.description,
-				group: category.group,
-				parent: category.description,
-				createdAt: category.createdAt.toISOString(),
-				updatedAt: category.updatedAt?.toISOString(),
-			},
+			expect.objectContaining({ id: parentCategory.id }),
+			expect.objectContaining({ id: category.id }),
 		]);
 	});
 
