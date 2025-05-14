@@ -4,13 +4,13 @@ import { GetTypesUseCase } from "./get-types";
 import { makeType } from "../../../../test/factories/make-type";
 import { TypeGroup } from "../../entities/value-objects/type-group";
 
-let inMemoryTypeRepository: InMemoryTypesRepository;
+let inMemoryTypesRepository: InMemoryTypesRepository;
 let sut: GetTypesUseCase;
 
 describe("Get Types Use Case", () => {
 	beforeEach(() => {
-		inMemoryTypeRepository = new InMemoryTypesRepository();
-		sut = new GetTypesUseCase(inMemoryTypeRepository);
+		inMemoryTypesRepository = new InMemoryTypesRepository();
+		sut = new GetTypesUseCase(inMemoryTypesRepository);
 	});
 
 	it("should be able to get types", async () => {
@@ -21,8 +21,8 @@ describe("Get Types Use Case", () => {
 			description: "Test Type 2",
 		});
 
-		await inMemoryTypeRepository.create(type);
-		await inMemoryTypeRepository.create(type2);
+		await inMemoryTypesRepository.create(type);
+		await inMemoryTypesRepository.create(type2);
 
 		const result = await sut.execute({});
 
@@ -57,18 +57,10 @@ describe("Get Types Use Case", () => {
 			group: TypeGroup.category(),
 		});
 
-		await inMemoryTypeRepository.create(category);
-
-		const subcategory = makeType({
-			description: "Pistola",
-			group: TypeGroup.subcategory(),
-			parentId: category.id.toString(),
-		});
-
-		await inMemoryTypeRepository.create(subcategory);
+		await inMemoryTypesRepository.create(category);
 
 		const result = await sut.execute({
-			group: "SUBCATEGORY",
+			group: "CATEGORY",
 		});
 
 		expect(result.isRight()).toBe(true);
@@ -78,9 +70,9 @@ describe("Get Types Use Case", () => {
 					{
 						id: expect.any(String),
 						createdAt: expect.any(Date),
-						description: subcategory.description,
-						group: subcategory.group.toString(),
-						parent: category.description,
+						description: category.description,
+						group: category.group.toString(),
+						parent: null,
 						updatedAt: null,
 					},
 				],
@@ -89,23 +81,23 @@ describe("Get Types Use Case", () => {
 	});
 
 	it("should be able to filter types by parent", async () => {
-		const category = makeType({
+		const parentCategory = makeType({
 			description: "Arma de Fogo",
 			group: TypeGroup.category(),
 		});
 
-		await inMemoryTypeRepository.create(category);
+		await inMemoryTypesRepository.create(parentCategory);
 
-		const subcategory = makeType({
+		const category = makeType({
 			description: "Pistola",
-			group: TypeGroup.subcategory(),
-			parentId: category.id.toString(),
+			group: TypeGroup.category(),
+			parentId: parentCategory.id.toString(),
 		});
 
-		await inMemoryTypeRepository.create(subcategory);
+		await inMemoryTypesRepository.create(category);
 
 		const result = await sut.execute({
-			parentId: category.id.toString(),
+			parentId: parentCategory.id.toString(),
 		});
 
 		expect(result.isRight()).toBe(true);
@@ -115,9 +107,9 @@ describe("Get Types Use Case", () => {
 					{
 						id: expect.any(String),
 						createdAt: expect.any(Date),
-						description: subcategory.description,
-						group: subcategory.group.toString(),
-						parent: category.description,
+						description: category.description,
+						group: category.group.toString(),
+						parent: parentCategory.description,
 						updatedAt: null,
 					},
 				],

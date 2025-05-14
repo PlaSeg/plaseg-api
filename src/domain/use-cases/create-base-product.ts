@@ -46,16 +46,9 @@ export class CreateBaseProductUseCase {
 			return left(new CustomError(409, "Esse tipo não existe"));
 		}
 
-		if (
-			typeCategory.group.getValue() !== DomainTypeGroup.CATEGORY &&
-			typeCategory.group.getValue() !== DomainTypeGroup.SUBCATEGORY &&
-			typeCategory.group.getValue() !== DomainTypeGroup.SUBSUBCATEGORY
-		) {
+		if (typeCategory.group.getValue() !== DomainTypeGroup.CATEGORY) {
 			return left(
-				new CustomError(
-					409,
-					"O tipo para o produto base deve ser categoria, subcategoria ou subsubcategoria"
-				)
+				new CustomError(409, "O tipo para o produto base deve ser categoria")
 			);
 		}
 

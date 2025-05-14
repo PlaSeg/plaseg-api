@@ -60,26 +60,25 @@ describe("Get Base Product By Id (e2e)", () => {
 			role: admin.role,
 		});
 
-		// Cria árvore de categorias
 		const category = await prisma.type.create({
 			data: { description: "Categoria", group: "CATEGORY" },
 		});
+		
 		const subcategory = await prisma.type.create({
 			data: {
 				description: "Subcategoria",
-				group: "SUBCATEGORY",
+				group: "CATEGORY",
 				parentId: category.id,
 			},
 		});
 		const subsubcategory = await prisma.type.create({
 			data: {
 				description: "Subsubcategoria",
-				group: "SUBSUBCATEGORY",
+				group: "CATEGORY",
 				parentId: subcategory.id,
 			},
 		});
 
-		// Cria produto base
 		const baseProduct = await prisma.baseProduct.create({
 			data: {
 				code: "P001",
@@ -126,7 +125,6 @@ describe("Get Base Product By Id (e2e)", () => {
 			role: user.role,
 		});
 
-		// Cria um produto base para tentar acessar
 		const category = await prisma.type.create({
 			data: { description: "Categoria", group: "CATEGORY" },
 		});
@@ -155,7 +153,6 @@ describe("Get Base Product By Id (e2e)", () => {
 	});
 
 	it("should not allow unauthenticated access", async () => {
-		// Cria um produto base para tentar acessar
 		const category = await prisma.type.create({
 			data: { description: "Categoria", group: "CATEGORY" },
 		});

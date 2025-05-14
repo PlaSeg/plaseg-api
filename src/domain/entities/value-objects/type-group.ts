@@ -1,11 +1,9 @@
 import { TypeGroup as PrismaTypeGroup } from "@prisma/client";
 
 export enum DomainTypeGroup {
-    SERVICE = "SERVICE",
-    CATEGORY = "CATEGORY",
-    SUBCATEGORY = "SUBCATEGORY",
-    SUBSUBCATEGORY = "SUBSUBCATEGORY",
-    OPPORTUNITY = "OPPORTUNITY"
+	SERVICE = "SERVICE",
+	OPPORTUNITY = "OPPORTUNITY",
+	CATEGORY = "CATEGORY",
 }
 
 export class TypeGroup {
@@ -25,10 +23,6 @@ export class TypeGroup {
 				return PrismaTypeGroup.SERVICE;
 			case DomainTypeGroup.CATEGORY:
 				return PrismaTypeGroup.CATEGORY;
-			case DomainTypeGroup.SUBCATEGORY:
-				return PrismaTypeGroup.SUBCATEGORY;
-			case DomainTypeGroup.SUBSUBCATEGORY:
-				return PrismaTypeGroup.SUBSUBCATEGORY;
 			case DomainTypeGroup.OPPORTUNITY:
 				return PrismaTypeGroup.OPPORTUNITY;
 			default:
@@ -40,8 +34,6 @@ export class TypeGroup {
 		if (
 			value === DomainTypeGroup.SERVICE ||
 			value === DomainTypeGroup.CATEGORY ||
-			value === DomainTypeGroup.SUBCATEGORY ||
-			value === DomainTypeGroup.SUBSUBCATEGORY ||
 			value === DomainTypeGroup.OPPORTUNITY
 		) {
 			return new TypeGroup(value);
@@ -56,14 +48,6 @@ export class TypeGroup {
 
 	public static category(): TypeGroup {
 		return new TypeGroup(DomainTypeGroup.CATEGORY);
-	}
-
-	public static subcategory(): TypeGroup {
-		return new TypeGroup(DomainTypeGroup.SUBCATEGORY);
-	}
-
-	public static subsubcategory(): TypeGroup {
-		return new TypeGroup(DomainTypeGroup.SUBSUBCATEGORY);
 	}
 
 	public static opportunity(): TypeGroup {
