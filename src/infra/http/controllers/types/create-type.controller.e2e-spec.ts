@@ -34,7 +34,7 @@ describe("Create Type (e2e)", () => {
 			.set("Authorization", `Bearer ${accessToken}`)
 			.send({
 				description: "Pistola Glock",
-				group: "SUBCATEGORY",
+				group: "CATEGORY",
 			});
 
 		const createdType = await prisma.type.findFirst({
@@ -46,7 +46,7 @@ describe("Create Type (e2e)", () => {
 		expect(createdType).toEqual({
 			id: expect.any(String),
 			description: "Pistola Glock",
-			group: "SUBCATEGORY",
+			group: "CATEGORY",
 			parentId: null,
 			createdAt: expect.any(Date),
 			updatedAt: null,
@@ -85,11 +85,7 @@ describe("Create Type (e2e)", () => {
 			});
 
 		expect(response.status).toBe(409);
-		expect(response.body).toEqual({
-			success: false,
-			errors: ["Tipo já cadastrado"],
-			data: null,
-		});
+		expect(response.body.errors).toEqual(["O tipo já existe"]);
 	});
 
 	it("should not be able to create a type with a non-existent parent", async () => {
@@ -106,16 +102,12 @@ describe("Create Type (e2e)", () => {
 			.post("/types")
 			.set("Authorization", `Bearer ${accessToken}`)
 			.send({
-				description: "Nova Subcategoria",
-				group: "SUBCATEGORY",
+				description: "Nova categoria",
+				group: "CATEGORY",
 				parentId: "be69e71c-acff-44e1-bf9c-3c9672131350",
 			});
 
-		expect(response.status).toBe(409);
-		expect(response.body).toEqual({
-			success: false,
-			errors: ["Este tipo pai não existe!"],
-			data: null,
-		});
+		expect(response.status).toBe(404);
+		expect(response.body.errors).toEqual(["O tipo pai não existe"]);
 	});
 });

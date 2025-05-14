@@ -64,22 +64,6 @@ describe("Get Base Products (e2e)", () => {
 			data: { description: "Categoria", group: "CATEGORY" },
 		});
 
-		const subcategory = await prisma.type.create({
-			data: {
-				description: "Subcategoria",
-				group: "SUBCATEGORY",
-				parentId: category.id,
-			},
-		});
-
-		const subsubcategory = await prisma.type.create({
-			data: {
-				description: "Subsubcategoria",
-				group: "SUBSUBCATEGORY",
-				parentId: subcategory.id,
-			},
-		});
-
 		await prisma.baseProduct.create({
 			data: {
 				code: "P001",
@@ -92,7 +76,7 @@ describe("Get Base Products (e2e)", () => {
 				budget3: 300,
 				budget3Validity: new Date(),
 				unitValue: 150,
-				typeId: subsubcategory.id,
+				typeId: category.id,
 			},
 		});
 
@@ -106,8 +90,6 @@ describe("Get Base Products (e2e)", () => {
 		const product = response.body.data.baseProducts[0];
 		expect(product.code).toBe("P001");
 		expect(product.category).toBe("Categoria");
-		expect(product.subcategory).toBe("Subcategoria");
-		expect(product.subsubcategory).toBe("Subsubcategoria");
 	});
 
 	it("should not allow non-admin users to access base products", async () => {

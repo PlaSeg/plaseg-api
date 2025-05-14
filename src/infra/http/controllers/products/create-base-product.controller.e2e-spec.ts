@@ -44,8 +44,8 @@ describe("Create Base Product (e2e)", () => {
 			.set("Authorization", `Bearer ${accessToken}`)
 			.send({
 				code: "BP001",
-				name: "Test Base Product",
-				technicalDescription: "This is a test base product",
+				name: "Produto Base 1",
+				technicalDescription: "Descrição técnica 1",
 				unitValue: 100,
 				typeId: categoryTypeId,
 				budget1: 90,
@@ -194,9 +194,7 @@ describe("Create Base Product (e2e)", () => {
 		expect(response.status).toBe(409);
 		expect(response.body).toEqual({
 			success: false,
-			errors: [
-				"O tipo para o produto base deve ser categoria, subcategoria ou subsubcategoria",
-			],
+			errors: ["O tipo para o produto base deve ser categoria"],
 			data: null,
 		});
 	});

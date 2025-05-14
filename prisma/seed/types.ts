@@ -14,11 +14,11 @@ export const types = () => {
 							create: [
 								{
 									description: "Pistola Glock 9mm",
-									group: TypeGroup.SUBCATEGORY,
+									group: TypeGroup.CATEGORY,
 								},
 								{
 									description: "Pistola Beretta 92",
-									group: TypeGroup.SUBCATEGORY,
+									group: TypeGroup.CATEGORY,
 								},
 							],
 						},
@@ -30,11 +30,11 @@ export const types = () => {
 							create: [
 								{
 									description: "Fuzil AR-15",
-									group: TypeGroup.SUBCATEGORY,
+									group: TypeGroup.CATEGORY,
 								},
 								{
 									description: "Fuzil AK-47",
-									group: TypeGroup.SUBCATEGORY,
+									group: TypeGroup.CATEGORY,
 								},
 							],
 						},
@@ -46,7 +46,7 @@ export const types = () => {
 							create: [
 								{
 									description: "Espingarda Pump Calibre 12",
-									group: TypeGroup.SUBCATEGORY,
+									group: TypeGroup.CATEGORY,
 								},
 							],
 						},
@@ -58,7 +58,7 @@ export const types = () => {
 							create: [
 								{
 									description: "Submetralhadora MP5",
-									group: TypeGroup.SUBCATEGORY,
+									group: TypeGroup.CATEGORY,
 								},
 							],
 						},
@@ -69,7 +69,7 @@ export const types = () => {
 					},
 					{
 						description: "Metralhadoras",
-							group: TypeGroup.CATEGORY,
+						group: TypeGroup.CATEGORY,
 					},
 				],
 			},

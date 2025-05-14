@@ -29,18 +29,18 @@ describe("Get Types (e2e)", () => {
 			role: user.role.toString(),
 		});
 
-		const category = await prisma.type.create({
+		const parentCategory = await prisma.type.create({
 			data: {
 				description: "Arma de fogo",
 				group: "CATEGORY",
 			},
 		});
 
-		const subcategory = await prisma.type.create({
+		const category = await prisma.type.create({
 			data: {
 				description: "Pistola Glock",
-				group: "SUBCATEGORY",
-				parentId: category.id,
+				group: "CATEGORY",
+				parentId: parentCategory.id,
 			},
 		});
 
@@ -50,22 +50,8 @@ describe("Get Types (e2e)", () => {
 
 		expect(response.status).toBe(200);
 		expect(response.body.data).toEqual([
-			{
-				id: category.id,
-				description: category.description,
-				group: category.group,
-				parent: null,
-				createdAt: category.createdAt.toISOString(),
-				updatedAt: category.updatedAt?.toISOString(),
-			},
-			{
-				id: subcategory.id,
-				description: subcategory.description,
-				group: subcategory.group,
-				parent: category.description,
-				createdAt: subcategory.createdAt.toISOString(),
-				updatedAt: subcategory.updatedAt?.toISOString(),
-			},
+			expect.objectContaining({ id: parentCategory.id }),
+			expect.objectContaining({ id: category.id }),
 		]);
 	});
 

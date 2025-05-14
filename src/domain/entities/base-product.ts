@@ -12,15 +12,15 @@ export interface BaseProductProps {
 	budget2: number;
 	budget2Validity: Date;
 	budget3: number;
-    budget3Validity: Date;
-    unitValue: number;
-    typeId: string;
+	budget3Validity: Date;
+	unitValue: number;
+	typeId: string;
+
 	createdAt: Date;
 	updatedAt?: Date | null;
 }
 
 export class BaseProduct extends Entity<BaseProductProps> {
-
 	get code() {
 		return this.props.code;
 	}

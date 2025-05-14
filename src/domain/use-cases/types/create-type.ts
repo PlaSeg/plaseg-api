@@ -1,10 +1,7 @@
 import { CustomError } from "../../../core/errors/custom-error";
 import { Either, left, right } from "../../../core/types/either";
 import { Type } from "../../entities/type";
-import {
-	DomainTypeGroup,
-	TypeGroup,
-} from "../../entities/value-objects/type-group";
+import { TypeGroup } from "../../entities/value-objects/type-group";
 import { TypesRepository } from "../../repositories/types-repository";
 
 type CreateTypeRequest = {
@@ -26,43 +23,18 @@ export class CreateTypeUseCase {
 		);
 
 		if (doesTypeAlreadyExist) {
-			return left(new CustomError(409, "Tipo já cadastrado"));
+			return left(new CustomError(409, "O tipo já existe"));
 		}
 
 		if (request.parentId) {
-			const newTypeGroup = TypeGroup.create(request.group);
-
-			if (newTypeGroup.getValue() === DomainTypeGroup.CATEGORY) {
-				return left(
-					new CustomError(409, "Uma categoria não pode ter um tipo pai.")
-				);
-			}
-
 			const parentType = await this.typeRepository.findById(request.parentId);
 
 			if (!parentType) {
-				return left(new CustomError(409, "Este tipo pai não existe!"));
+				return left(new CustomError(404, "O tipo pai não existe"));
 			}
 
-			if (
-				parentType.group.getValue() === DomainTypeGroup.CATEGORY &&
-				newTypeGroup.getValue() !== DomainTypeGroup.SUBCATEGORY
-			) {
-				return left(
-					new CustomError(409, "Uma categoria só pode ser pai de subcategorias")
-				);
-			}
-
-			if (
-				parentType.group.getValue() === DomainTypeGroup.SUBCATEGORY &&
-				newTypeGroup.getValue() !== DomainTypeGroup.SUBSUBCATEGORY
-			) {
-				return left(
-					new CustomError(
-						409,
-						"Uma subcategoria só pode ser pai de subsubcategorias."
-					)
-				);
+			if (parentType.group.toString() !== TypeGroup.category().toString()) {
+				return left(new CustomError(400, "O tipo pai não é uma categoria"));
 			}
 		}
 

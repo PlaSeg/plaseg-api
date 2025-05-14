@@ -26,16 +26,6 @@ describe("TypeGroup Value Object", () => {
 			expect(typeGroup.toString()).toBe(DomainTypeGroup.CATEGORY);
 		});
 
-		it("should create subcategory type group", () => {
-			const typeGroup = TypeGroup.subcategory();
-			expect(typeGroup.toString()).toBe(DomainTypeGroup.SUBCATEGORY);
-		});
-
-		it("should create subsubcategory type group", () => {
-			const typeGroup = TypeGroup.subsubcategory();
-			expect(typeGroup.toString()).toBe(DomainTypeGroup.SUBSUBCATEGORY);
-		});
-
 		it("should create opportunity type group", () => {
 			const typeGroup = TypeGroup.opportunity();
 			expect(typeGroup.toString()).toBe(DomainTypeGroup.OPPORTUNITY);
@@ -51,16 +41,6 @@ describe("TypeGroup Value Object", () => {
 		it("should convert category to prisma type group", () => {
 			const typeGroup = TypeGroup.category();
 			expect(typeGroup.toPrisma()).toBe("CATEGORY");
-		});
-
-		it("should convert subcategory to prisma type group", () => {
-			const typeGroup = TypeGroup.subcategory();
-			expect(typeGroup.toPrisma()).toBe("SUBCATEGORY");
-		});
-
-		it("should convert subsubcategory to prisma type group", () => {
-			const typeGroup = TypeGroup.subsubcategory();
-			expect(typeGroup.toPrisma()).toBe("SUBSUBCATEGORY");
 		});
 
 		it("should convert opportunity to prisma type group", () => {

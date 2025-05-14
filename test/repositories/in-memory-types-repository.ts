@@ -31,28 +31,4 @@ export class InMemoryTypesRepository implements TypesRepository {
 	async create(type: Type): Promise<void> {
 		this.items.push(type);
 	}
-
-	async delete(id: string): Promise<void> {
-		const typeIndex = this.items.findIndex((item) => item.id.toString() === id);
-
-		if (typeIndex >= 0) {
-			this.items.splice(typeIndex, 1);
-		}
-	}
-
-	async findCategoryTree(typeId: string): Promise<Type[]> {
-		const tree: Type[] = [];
-
-		let current = this.items.find((item) => item.id.toString() === typeId);
-
-		while (current) {
-			tree.unshift(current);
-			if (!current.parentId) break;
-			current = this.items.find(
-				(item) => item.id.toString() === current?.parentId?.toString()
-			);
-		}
-
-		return tree;
-	}
 }

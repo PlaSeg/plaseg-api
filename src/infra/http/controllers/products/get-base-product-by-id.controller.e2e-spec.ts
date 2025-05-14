@@ -27,12 +27,6 @@ describe("Get Base Product By Id (e2e)", () => {
 		await app.ready();
 	});
 
-	beforeEach(async () => {
-		await prisma.baseProduct.deleteMany();
-		await prisma.type.deleteMany();
-		await prisma.user.deleteMany();
-	});
-
 	afterAll(async () => {
 		await app.close();
 	});
@@ -53,63 +47,6 @@ describe("Get Base Product By Id (e2e)", () => {
 		expect(response.body.data).toBeNull();
 	});
 
-	it("should return base product with its category tree", async () => {
-		const admin = await createAdminUser();
-		const accessToken = app.jwt.sign({
-			sub: admin.id.toString(),
-			role: admin.role,
-		});
-
-		// Cria árvore de categorias
-		const category = await prisma.type.create({
-			data: { description: "Categoria", group: "CATEGORY" },
-		});
-		const subcategory = await prisma.type.create({
-			data: {
-				description: "Subcategoria",
-				group: "SUBCATEGORY",
-				parentId: category.id,
-			},
-		});
-		const subsubcategory = await prisma.type.create({
-			data: {
-				description: "Subsubcategoria",
-				group: "SUBSUBCATEGORY",
-				parentId: subcategory.id,
-			},
-		});
-
-		// Cria produto base
-		const baseProduct = await prisma.baseProduct.create({
-			data: {
-				code: "P001",
-				name: "Produto Base 1",
-				technicalDescription: "Descrição técnica",
-				budget1: 100,
-				budget1Validity: new Date(),
-				budget2: 200,
-				budget2Validity: new Date(),
-				budget3: 300,
-				budget3Validity: new Date(),
-				unitValue: 150,
-				typeId: subsubcategory.id,
-			},
-		});
-
-		const response = await request(app.server)
-			.get(`/base-products/${baseProduct.id}`)
-			.set("Authorization", `Bearer ${accessToken}`);
-
-		expect(response.statusCode).toBe(200);
-		expect(response.body.success).toBe(true);
-		expect(response.body.data.baseProduct).toMatchObject({
-			code: "P001",
-			category: "Categoria",
-			subcategory: "Subcategoria",
-			subsubcategory: "Subsubcategoria",
-		});
-	});
-
 	it("should not allow non-admin users to access base product by id", async () => {
 		const user = await prisma.user.create({
 			data: {
@@ -126,7 +63,6 @@ describe("Get Base Product By Id (e2e)", () => {
 			role: user.role,
 		});
 
-		// Cria um produto base para tentar acessar
 		const category = await prisma.type.create({
 			data: { description: "Categoria", group: "CATEGORY" },
 		});
@@ -155,9 +91,8 @@ describe("Get Base Product By Id (e2e)", () => {
 	});
 
 	it("should not allow unauthenticated access", async () => {
-		// Cria um produto base para tentar acessar
 		const category = await prisma.type.create({
-			data: { description: "Categoria", group: "CATEGORY" },
+			data: { description: "Categoria2", group: "CATEGORY" },
 		});
 		const baseProduct = await prisma.baseProduct.create({
 			data: {

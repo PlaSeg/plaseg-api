@@ -7,16 +7,16 @@ import { makeBaseProduct } from "../../../test/factories/make-base-product";
 import { makeType } from "../../../test/factories/make-type";
 
 let inMemoryBaseProductsRepository: InMemoryBaseProductsRepository;
-let inMemoryTypeRepository: InMemoryTypesRepository;
+let inMemoryTypesRepository: InMemoryTypesRepository;
 let sut: CreateBaseProductUseCase;
 
 describe("Create Base Product Use Case", () => {
 	beforeEach(() => {
 		inMemoryBaseProductsRepository = new InMemoryBaseProductsRepository();
-		inMemoryTypeRepository = new InMemoryTypesRepository();
+		inMemoryTypesRepository = new InMemoryTypesRepository();
 		sut = new CreateBaseProductUseCase(
 			inMemoryBaseProductsRepository,
-			inMemoryTypeRepository
+			inMemoryTypesRepository
 		);
 	});
 
@@ -26,7 +26,7 @@ describe("Create Base Product Use Case", () => {
 			group: TypeGroup.category(),
 		});
 
-		await inMemoryTypeRepository.create(type);
+		await inMemoryTypesRepository.create(type);
 
 		const baseProduct = makeBaseProduct({
 			typeId: type.id.toString(),
