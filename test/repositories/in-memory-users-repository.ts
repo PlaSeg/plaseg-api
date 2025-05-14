@@ -1,5 +1,6 @@
 import { UsersRepository } from "../../src/domain/repositories/users-repository";
 import { User } from "../../src/domain/entities/user";
+import { DomainRole } from "../../src/domain/entities/value-objects/role";
 
 export class InMemoryUsersRepository implements UsersRepository {
 	public items: User[] = [];
@@ -32,6 +33,12 @@ export class InMemoryUsersRepository implements UsersRepository {
 		}
 
 		return user;
+	}
+
+	async findManyAdmins(): Promise<User[]> {
+		return this.items.filter(
+			(user) => user.role.getValue() === DomainRole.ADMIN
+		);
 	}
 
 	async create(user: User): Promise<void> {

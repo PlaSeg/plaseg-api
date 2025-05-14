@@ -16,7 +16,7 @@ import { opportunitiesRoutes } from "./controllers/opportunities/opportunities.r
 import { productsRoutes } from "./controllers/products/products.routes";
 import { typesRoutes } from "./controllers/types/types.routes";
 import { municipalityRoutes } from "./controllers/municipality/municipality.routes";
-
+import { adminRoutes } from "./controllers/admin/admin.routes";
 const version = "1.0.0 - Release 1";
 
 export function buildApp(app = fastify().withTypeProvider<ZodTypeProvider>()) {
@@ -55,7 +55,7 @@ export function buildApp(app = fastify().withTypeProvider<ZodTypeProvider>()) {
 	app.register(typesRoutes);
 	app.register(opportunitiesRoutes);
 	app.register(productsRoutes);
-
+	app.register(adminRoutes);
 	return app;
 }
 
