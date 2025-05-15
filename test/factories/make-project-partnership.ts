@@ -2,7 +2,6 @@ import {
 	ProjectPartnership,
 	ProjectPartnershipProps,
 } from "../../src/domain/entities/project-partnership";
-import { UniqueEntityID } from "../../src/core/entities/unique-entity-id";
 
 export function makeProjectPartnership(
 	override: Partial<ProjectPartnershipProps> = {}
@@ -12,7 +11,6 @@ export function makeProjectPartnership(
 		agency: "Agency XYZ",
 		objective: "Improve infrastructure",
 		status: "Active",
-		municipalityId: new UniqueEntityID().toString(),
 		...override,
 	});
 

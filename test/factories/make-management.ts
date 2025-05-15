@@ -3,7 +3,6 @@ import {
 	ManagementProps,
 } from "../../src/domain/entities/management";
 import { Email } from "../../src/domain/entities/value-objects/email";
-import { UniqueEntityID } from "../../src/core/entities/unique-entity-id";
 
 export function makeManagement(override: Partial<ManagementProps> = {}) {
 	const management = Management.create({
@@ -24,7 +23,6 @@ export function makeManagement(override: Partial<ManagementProps> = {}) {
 		legislationEmail: Email.create("legislation@example.com"),
 		legislationAddress: "789 Legislation St",
 		legislationPhone: "86933330000",
-		municipalityId: new UniqueEntityID().toString(),
 		...override,
 	});
 
