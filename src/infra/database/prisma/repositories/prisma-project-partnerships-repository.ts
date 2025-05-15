@@ -67,12 +67,4 @@ export class PrismaProjectPartnershipsRepository
 
 		return projectPartnershipsDomain;
 	}
-
-	async create(projectPartnership: ProjectPartnership): Promise<void> {
-		const data = PrismaProjectPartnershipMapper.toPrisma(projectPartnership);
-
-		await prisma.projectPartnership.create({
-			data,
-		});
-	}
 }
