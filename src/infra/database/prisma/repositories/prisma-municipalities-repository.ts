@@ -9,6 +9,13 @@ export class PrismaMunicipalityRepository implements MunicipalitiesRepository {
 			where: {
 				id,
 			},
+			include: {
+				qualifiedStaff: true,
+				projectsPartnerships: true,
+				allocationDepartments: true,
+				managements: true,
+				maintenanceContracts: true
+			}
 		});
 
 		if (!municipality) {
@@ -23,6 +30,13 @@ export class PrismaMunicipalityRepository implements MunicipalitiesRepository {
 			where: {
 				name,
 			},
+			include: {
+				qualifiedStaff: true,
+				projectsPartnerships: true,
+				allocationDepartments: true,
+				managements: true,
+				maintenanceContracts: true,
+			},
 		});
 
 		if (!municipality) {
@@ -36,6 +50,13 @@ export class PrismaMunicipalityRepository implements MunicipalitiesRepository {
 		const municipality = await prisma.municipality.findFirst({
 			where: {
 				userId,
+			},
+			include: {
+				qualifiedStaff: true,
+				projectsPartnerships: true,
+				allocationDepartments: true,
+				managements: true,
+				maintenanceContracts: true,
 			},
 		});
 

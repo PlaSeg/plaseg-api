@@ -26,7 +26,6 @@ export interface ManagementProps {
 	legislationAddress: string;
 	legislationPhone: string;
 
-	municipalityId: string;
 	createdAt: Date;
 	updatedAt?: Date | null;
 }
@@ -98,10 +97,6 @@ export class Management extends Entity<ManagementProps> {
 
 	get legislationPhone() {
 		return this.props.legislationPhone;
-	}
-
-	get municipalityId() {
-		return this.props.municipalityId;
 	}
 
 	get createdAt() {

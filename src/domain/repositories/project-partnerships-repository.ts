@@ -7,5 +7,4 @@ export interface ProjectPartnershipsRepository {
 	findByMunicipalityId(
 		municipalityId: string
 	): Promise<ProjectPartnership[] | null>;
-	create(projectPartnership: ProjectPartnership): Promise<void>;
 }

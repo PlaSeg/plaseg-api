@@ -33,12 +33,4 @@ export class PrismaMaintenanceContractRepository
 			PrismaMaintenanceContractMapper.toDomain(contract)
 		);
 	}
-
-	async create(maintenanceContract: MaintenanceContract): Promise<void> {
-		const data = PrismaMaintenanceContractMapper.toPrisma(maintenanceContract);
-
-		await prisma.maintenanceContract.create({
-			data,
-		});
-	}
 }

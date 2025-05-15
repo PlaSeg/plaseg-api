@@ -1,6 +1,7 @@
 import { Management } from "../../../../domain/entities/management";
 import { ManagementsRepository } from "../../../../domain/repositories/managements-repository";
 import { PrismaManagementMapper } from "../mappers/prisma-management-mapper";
+
 import { prisma } from "../prisma";
 
 export class PrismaManagementsRepository implements ManagementsRepository {
@@ -30,9 +31,4 @@ export class PrismaManagementsRepository implements ManagementsRepository {
 		return results.map(PrismaManagementMapper.toDomain);
 	}
 
-	async create(management: Management): Promise<void> {
-		const data = PrismaManagementMapper.toPrisma(management);
-
-		await prisma.management.create({ data });
-	}
 }

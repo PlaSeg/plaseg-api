@@ -1,7 +1,13 @@
+
 import { Entity } from "../../core/entities/entity";
 import { UniqueEntityID } from "../../core/entities/unique-entity-id";
 import { Optional } from "../../core/types/optional";
 import { getCurrentDate } from "../../core/utils/get-current-date";
+import { AllocationDepartment } from "./allocation-department";
+import { MaintenanceContract } from "./maintenance-contract";
+import { Management } from "./management";
+import { ProjectPartnership } from "./project-partnership";
+import { QualifiedStaff } from "./qualified-staff";
 import { UnitType } from "./value-objects/unit-type";
 
 export interface MunicipalityProps {
@@ -12,6 +18,11 @@ export interface MunicipalityProps {
 	trafficCount: number;
 	federativeUnit: string;
 	unitType: UnitType;
+	qualifiedStaff: QualifiedStaff[];
+	projectsPartnerships: ProjectPartnership[];
+	allocationDepartments: AllocationDepartment[];
+	managements: Management[];
+	maintenanceContracts: MaintenanceContract[];
 	userId: string;
 	createdAt: Date;
 	updatedAt?: Date | null;
@@ -44,6 +55,26 @@ export class Municipality extends Entity<MunicipalityProps> {
 
 	get unitType() {
 		return this.props.unitType;
+	}
+
+	get qualifiedStaff() {
+		return this.props.qualifiedStaff;
+	}
+
+	get projectsPartnerships() {
+		return this.props.projectsPartnerships;
+	}
+
+	get allocationDepartments() {
+		return this.props.allocationDepartments;
+	}
+
+	get managements() {
+		return this.props.managements;
+	}
+
+	get maintenanceContracts() {
+		return this.props.maintenanceContracts;
 	}
 
 	get userId() {

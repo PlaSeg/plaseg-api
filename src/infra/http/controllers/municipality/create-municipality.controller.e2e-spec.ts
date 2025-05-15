@@ -4,6 +4,12 @@ import { buildApp } from "../../app";
 import { prisma } from "../../../database/prisma/prisma";
 import { hash } from "bcrypt";
 import fastify, { FastifyInstance } from "fastify";
+import { makeMunicipality } from "../../../../../test/factories/make-municipality";
+import { makeQualifiedStaff } from "../../../../../test/factories/make-qualified-staff";
+import { makeProjectPartnership } from "../../../../../test/factories/make-project-partnership";
+import { makeAllocationDepartment } from "../../../../../test/factories/make-allocation-department";
+import { makeManagement } from "../../../../../test/factories/make-management";
+import { makeMaintenanceContract } from "../../../../../test/factories/make-maintenance-contract";
 
 describe("Create Municipality (e2e)", () => {
 	let app: FastifyInstance;
@@ -12,11 +18,6 @@ describe("Create Municipality (e2e)", () => {
 		app = fastify();
 		buildApp(app);
 		await app.ready();
-	});
-
-	beforeEach(async () => {
-		await prisma.user.deleteMany();
-		await prisma.municipality.deleteMany();
 	});
 
 	afterAll(async () => {
@@ -40,17 +41,76 @@ describe("Create Municipality (e2e)", () => {
 			role: user.role.toString(),
 		});
 
+		const municipality = makeMunicipality();
+		const qualifiedStaff = makeQualifiedStaff();
+		const projectPartnership = makeProjectPartnership();
+		const allocationDepartment = makeAllocationDepartment();
+		const management = makeManagement();
+		const maintenanceContract = makeMaintenanceContract();
+
 		const response = await request(app.server)
 			.post("/municipality")
 			.set("Authorization", `Bearer ${accessToken}`)
 			.send({
-				name: "São Paulo",
-				guardInitialDate: new Date(),
-				guardCount: 10,
-				trafficInitialDate: new Date(),
-				trafficCount: 5,
-				federativeUnit: "SP",
-				unitType: "MUNICIPALITY",
+				name: municipality.name,
+				guardInitialDate: municipality.guardInitialDate,
+				guardCount: municipality.guardCount,
+				trafficInitialDate: municipality.trafficInitialDate,
+				trafficCount: municipality.trafficCount,
+				federativeUnit: municipality.federativeUnit,
+				unitType: municipality.unitType.toPrisma(),
+				qualifiedStaff: [
+					{
+						name: qualifiedStaff.name,
+						sector: qualifiedStaff.sector,
+						education: qualifiedStaff.education,
+						experience: qualifiedStaff.experience,
+						employmentType: qualifiedStaff.employmentType.toPrisma(),
+						document: qualifiedStaff.document,
+						isResponsible: qualifiedStaff.isResponsible,
+					},
+				],
+				projectsPartnerships: [
+					{
+						term: projectPartnership.term,
+						agency: projectPartnership.agency,
+						objective: projectPartnership.objective,
+						status: projectPartnership.status,
+					},
+				],
+				allocationDepartments: [
+					{
+						description: allocationDepartment.description,
+						address: allocationDepartment.address,
+					},
+				],
+				managements: [
+					{
+						initialDate: management.initialDate,
+						endDate: management.endDate,
+						managerName: management.managerName,
+						managerCpf: management.managerCpf,
+						managerEmail: management.managerEmail.toString(),
+						managerAddress: management.managerAddress,
+						managerPhone: management.managerPhone,
+						adminManagerName: management.adminManagerName,
+						adminManagerCpf: management.adminManagerCpf,
+						adminManagerEmail: management.adminManagerEmail.toString(),
+						adminManagerAddress: management.adminManagerAddress,
+						adminManagerPhone: management.adminManagerPhone,
+						legislationName: management.legislationName,
+						legislationCpf: management.legislationCpf,
+						legislationEmail: management.legislationEmail.toString(),
+						legislationAddress: management.legislationAddress,
+						legislationPhone: management.legislationPhone,
+					},
+				],
+				maintenanceContracts: [
+					{
+						description: maintenanceContract.description,
+						attachment: maintenanceContract.attachment,
+					},
+				],
 				userId: user.id,
 			});
 
@@ -61,17 +121,29 @@ describe("Create Municipality (e2e)", () => {
 			data: null,
 		});
 
-		const municipality = await prisma.municipality.findFirst({
+		const municipalityInDatabase = await prisma.municipality.findFirst({
 			where: {
-				name: "São Paulo",
+				name: municipality.name,
+			},
+			include: {
+				qualifiedStaff: true,
+				projectsPartnerships: true,
+				allocationDepartments: true,
+				managements: true,
+				maintenanceContracts: true,
 			},
 		});
 
-		expect(municipality).toBeTruthy();
-		expect(municipality?.name).toEqual("São Paulo");
+		expect(municipalityInDatabase).toBeTruthy();
+		expect(municipalityInDatabase?.name).toEqual(municipality.name);
+		expect(municipalityInDatabase?.qualifiedStaff).toHaveLength(1);
+		expect(municipalityInDatabase?.projectsPartnerships).toHaveLength(1);
+		expect(municipalityInDatabase?.allocationDepartments).toHaveLength(1);
+		expect(municipalityInDatabase?.managements).toHaveLength(1);
+		expect(municipalityInDatabase?.maintenanceContracts).toHaveLength(1);
 	});
 
-	it("should not be able to create a municipality with existing user", async () => {
+	it("should not be able to create a municipality with duplicate documents", async () => {
 		const user = await prisma.user.create({
 			data: {
 				name: "Acme",
@@ -88,33 +160,255 @@ describe("Create Municipality (e2e)", () => {
 			role: user.role.toString(),
 		});
 
-		// First municipality creation
+		const municipality = makeMunicipality();
+		const qualifiedStaff = makeQualifiedStaff();
+
+		const response = await request(app.server)
+			.post("/municipality")
+			.set("Authorization", `Bearer ${accessToken}`)
+			.send({
+				name: municipality.name,
+				guardInitialDate: municipality.guardInitialDate,
+				guardCount: municipality.guardCount,
+				trafficInitialDate: municipality.trafficInitialDate,
+				trafficCount: municipality.trafficCount,
+				federativeUnit: municipality.federativeUnit,
+				unitType: municipality.unitType.toPrisma(),
+				qualifiedStaff: [
+					{
+						name: qualifiedStaff.name,
+						sector: qualifiedStaff.sector,
+						education: qualifiedStaff.education,
+						experience: qualifiedStaff.experience,
+						employmentType: qualifiedStaff.employmentType.toPrisma(),
+						document: qualifiedStaff.document,
+						isResponsible: qualifiedStaff.isResponsible,
+					},
+					{
+						name: qualifiedStaff.name,
+						sector: qualifiedStaff.sector,
+						education: qualifiedStaff.education,
+						experience: qualifiedStaff.experience,
+						employmentType: qualifiedStaff.employmentType.toPrisma(),
+						document: qualifiedStaff.document,
+						isResponsible: qualifiedStaff.isResponsible,
+					},
+				],
+				projectsPartnerships: [],
+				allocationDepartments: [],
+				managements: [],
+				maintenanceContracts: [],
+				userId: user.id,
+			});
+
+		expect(response.statusCode).toEqual(409);
+		expect(response.body).toEqual({
+			success: false,
+			errors: [
+				"Você está tentando cadastrar mais de um gestor qualificado com o mesmo CPF!",
+			],
+			data: null,
+		});
+
+		const municipalityInDatabase = await prisma.municipality.findFirst({
+			where: {
+				name: municipality.name,
+			},
+		});
+
+		expect(municipalityInDatabase).toBeFalsy();
+	});
+
+	it("should not be able to create a municipality with duplicate terms", async () => {
+		const user = await prisma.user.create({
+			data: {
+				name: "Acme",
+				email: "acme@gmail.com",
+				password: await hash("00000000", 6),
+				phone: "86988889999",
+				document: "11111111111",
+				role: "MUNICIPALITY",
+			},
+		});
+
+		const accessToken = app.jwt.sign({
+			sub: user.id.toString(),
+			role: user.role.toString(),
+		});
+
+		const municipality = makeMunicipality();
+		const projectPartnership = makeProjectPartnership();
+
+		const response = await request(app.server)
+			.post("/municipality")
+			.set("Authorization", `Bearer ${accessToken}`)
+			.send({
+				name: municipality.name,
+				guardInitialDate: municipality.guardInitialDate,
+				guardCount: municipality.guardCount,
+				trafficInitialDate: municipality.trafficInitialDate,
+				trafficCount: municipality.trafficCount,
+				federativeUnit: municipality.federativeUnit,
+				unitType: municipality.unitType.toPrisma(),
+				qualifiedStaff: [],
+				projectsPartnerships: [
+					{
+						term: projectPartnership.term,
+						agency: projectPartnership.agency,
+						objective: projectPartnership.objective,
+						status: projectPartnership.status,
+					},
+					{
+						term: projectPartnership.term,
+						agency: projectPartnership.agency,
+						objective: projectPartnership.objective,
+						status: projectPartnership.status,
+					},
+				],
+				allocationDepartments: [],
+				managements: [],
+				maintenanceContracts: [],
+				userId: user.id,
+			});
+
+		expect(response.statusCode).toEqual(409);
+		expect(response.body).toEqual({
+			success: false,
+			errors: [
+				"Você está tentando cadastrar mais de um projeto ou convênio com o mesmo Termo!",
+			],
+			data: null,
+		});
+
+		const municipalityInDatabase = await prisma.municipality.findFirst({
+			where: {
+				name: municipality.name,
+			},
+		});
+
+		expect(municipalityInDatabase).toBeFalsy();
+	});
+
+	it("should not be able to create a municipality with duplicate descriptions", async () => {
+		const user = await prisma.user.create({
+			data: {
+				name: "Acme",
+				email: "acme@gmail.com",
+				password: await hash("00000000", 6),
+				phone: "86988889999",
+				document: "11111111111",
+				role: "MUNICIPALITY",
+			},
+		});
+
+		const accessToken = app.jwt.sign({
+			sub: user.id.toString(),
+			role: user.role.toString(),
+		});
+
+		const municipality = makeMunicipality();
+		const allocationDepartment = makeAllocationDepartment();
+
+		const response = await request(app.server)
+			.post("/municipality")
+			.set("Authorization", `Bearer ${accessToken}`)
+			.send({
+				name: municipality.name,
+				guardInitialDate: municipality.guardInitialDate,
+				guardCount: municipality.guardCount,
+				trafficInitialDate: municipality.trafficInitialDate,
+				trafficCount: municipality.trafficCount,
+				federativeUnit: municipality.federativeUnit,
+				unitType: municipality.unitType.toPrisma(),
+				qualifiedStaff: [],
+				projectsPartnerships: [],
+				allocationDepartments: [
+					{
+						description: allocationDepartment.description,
+						address: allocationDepartment.address,
+					},
+					{
+						description: allocationDepartment.description,
+						address: allocationDepartment.address,
+					},
+				],
+				managements: [],
+				maintenanceContracts: [],
+				userId: user.id,
+			});
+
+		expect(response.statusCode).toEqual(409);
+		expect(response.body).toEqual({
+			success: false,
+			errors: [
+				"Você está tentando cadastrar mais de um setor de alocação com a mesma descrição!",
+			],
+			data: null,
+		});
+
+		const municipalityInDatabase = await prisma.municipality.findFirst({
+			where: {
+				name: municipality.name,
+			},
+		});
+
+		expect(municipalityInDatabase).toBeFalsy();
+	});
+
+	it("should not be able to create a municipality for a user that already has one", async () => {
+		const user = await prisma.user.create({
+			data: {
+				name: "Acme",
+				email: "acme@gmail.com",
+				password: await hash("00000000", 6),
+				phone: "86988889999",
+				document: "11111111111",
+				role: "MUNICIPALITY",
+			},
+		});
+
+		const accessToken = app.jwt.sign({
+			sub: user.id.toString(),
+			role: user.role.toString(),
+		});
+
+		const municipality = makeMunicipality();
+
 		await request(app.server)
 			.post("/municipality")
 			.set("Authorization", `Bearer ${accessToken}`)
 			.send({
-				name: "São Paulo",
-				guardInitialDate: new Date(),
-				guardCount: 10,
-				trafficInitialDate: new Date(),
-				trafficCount: 5,
-				federativeUnit: "SP",
-				unitType: "MUNICIPALITY",
+				name: municipality.name,
+				guardInitialDate: municipality.guardInitialDate,
+				guardCount: municipality.guardCount,
+				trafficInitialDate: municipality.trafficInitialDate,
+				trafficCount: municipality.trafficCount,
+				federativeUnit: municipality.federativeUnit,
+				unitType: municipality.unitType.toPrisma(),
+				qualifiedStaff: [],
+				projectsPartnerships: [],
+				allocationDepartments: [],
+				managements: [],
+				maintenanceContracts: [],
 				userId: user.id,
 			});
 
-		// Second municipality creation attempt
 		const response = await request(app.server)
 			.post("/municipality")
 			.set("Authorization", `Bearer ${accessToken}`)
 			.send({
 				name: "Rio de Janeiro",
-				guardInitialDate: new Date(),
-				guardCount: 10,
-				trafficInitialDate: new Date(),
-				trafficCount: 5,
+				guardInitialDate: municipality.guardInitialDate,
+				guardCount: municipality.guardCount,
+				trafficInitialDate: municipality.trafficInitialDate,
+				trafficCount: municipality.trafficCount,
 				federativeUnit: "RJ",
-				unitType: "MUNICIPALITY",
+				unitType: municipality.unitType.toPrisma(),
+				qualifiedStaff: [],
+				projectsPartnerships: [],
+				allocationDepartments: [],
+				managements: [],
+				maintenanceContracts: [],
 				userId: user.id,
 			});
 
@@ -124,17 +418,32 @@ describe("Create Municipality (e2e)", () => {
 			errors: ["Município já cadastrado para esse usuário!"],
 			data: null,
 		});
+
+		const municipalitiesInDatabase = await prisma.municipality.findMany({
+			where: {
+				userId: user.id,
+			},
+		});
+
+		expect(municipalitiesInDatabase).toHaveLength(1);
 	});
 
 	it("should not be able to create a municipality without token", async () => {
+		const municipality = makeMunicipality();
+
 		const response = await request(app.server).post("/municipality").send({
-			name: "São Paulo",
-			guardInitialDate: new Date(),
-			guardCount: 10,
-			trafficInitialDate: new Date(),
-			trafficCount: 5,
-			federativeUnit: "SP",
-			unitType: "MUNICIPALITY",
+			name: municipality.name,
+			guardInitialDate: municipality.guardInitialDate,
+			guardCount: municipality.guardCount,
+			trafficInitialDate: municipality.trafficInitialDate,
+			trafficCount: municipality.trafficCount,
+			federativeUnit: municipality.federativeUnit,
+			unitType: municipality.unitType.toPrisma(),
+			qualifiedStaff: [],
+			projectsPartnerships: [],
+			allocationDepartments: [],
+			managements: [],
+			maintenanceContracts: [],
 			userId: "any-user-id",
 		});
 
@@ -144,5 +453,13 @@ describe("Create Municipality (e2e)", () => {
 			errors: ["Não autorizado"],
 			data: null,
 		});
+
+		const municipalityInDatabase = await prisma.municipality.findFirst({
+			where: {
+				name: municipality.name,
+			},
+		});
+
+		expect(municipalityInDatabase).toBeFalsy();
 	});
 });

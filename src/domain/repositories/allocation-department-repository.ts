@@ -6,5 +6,4 @@ export interface AllocationDeparmentsRepository {
 	findByMunicipalityId(
 		municipalityId: string
 	): Promise<AllocationDepartment[] | null>;
-	create(municipality: AllocationDepartment): Promise<void>;
 }

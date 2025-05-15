@@ -57,7 +57,6 @@ export class PrismaOpportunityMapper {
 			minValue: opportunity.minValue,
 			maxValue: opportunity.maxValue,
 			initialDeadline: getCurrentDate(opportunity.initialDeadline),
-			createdAt: getCurrentDate(opportunity.createdAt),
 			finalDeadline: getCurrentDate(opportunity.finalDeadline),
 			requiresCounterpart: opportunity.requiresCounterpart,
 			counterpartPercentage: opportunity.counterpartPercentage,

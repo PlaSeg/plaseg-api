@@ -5,5 +5,4 @@ export interface MaintenanceContractsRepository {
 	findByMunicipalityId(
 		municipalityId: string
 	): Promise<MaintenanceContract[] | null>;
-	create(maintenanceContract: MaintenanceContract): Promise<void>;
 }

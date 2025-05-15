@@ -65,12 +65,4 @@ export class PrismaQualifiedStaffRepository implements QualifiedStaffsRepository
 
 		return PrismaQualifiedStaffMapper.toDomain(qualifiedStaff);
 	}
-
-	async create(qualifiedStaff: QualifiedStaff): Promise<void> {
-		const data = PrismaQualifiedStaffMapper.toPrisma(qualifiedStaff);
-
-		await prisma.qualifiedStaff.create({
-			data,
-		});
-	}
 }

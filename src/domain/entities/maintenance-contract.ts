@@ -6,7 +6,6 @@ import { getCurrentDate } from "../../core/utils/get-current-date";
 export interface MaintenanceContractProps {
 	description: string;
 	attachment: string;
-	municipalityId: string;
 	createdAt: Date;
 	updatedAt?: Date | null;
 }
@@ -19,11 +18,7 @@ export class MaintenanceContract extends Entity<MaintenanceContractProps> {
 	get attachment() {
 		return this.props.attachment;
 	}
-
-	get municipalityId() {
-		return this.props.municipalityId;
-	}
-
+	
 	get createdAt() {
 		return this.props.createdAt;
 	}

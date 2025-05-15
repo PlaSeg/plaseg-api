@@ -6,7 +6,6 @@ import { getCurrentDate } from "../../core/utils/get-current-date";
 export interface AllocationDepartmentProps {
 	description: string;
 	address: string;
-	municipalityId: string;
 	createdAt: Date;
 	updatedAt?: Date | null;
 }
@@ -18,10 +17,6 @@ export class AllocationDepartment extends Entity<AllocationDepartmentProps> {
 
 	get address() {
 		return this.props.address;
-	}
-
-	get municipalityId() {
-		return this.props.municipalityId;
 	}
 
 	get createdAt() {

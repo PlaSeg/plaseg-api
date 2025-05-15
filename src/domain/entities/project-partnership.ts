@@ -8,7 +8,6 @@ export interface ProjectPartnershipProps {
 	agency: string;
 	objective: string;
 	status: string;
-	municipalityId: string;
 	createdAt: Date;
 	updatedAt?: Date | null;
 }
@@ -28,10 +27,6 @@ export class ProjectPartnership extends Entity<ProjectPartnershipProps> {
 
 	get status() {
 		return this.props.status;
-	}
-
-	get municipalityId() {
-		return this.props.municipalityId;
 	}
 
 	get createdAt() {

@@ -4,6 +4,11 @@ import {
 } from "../../src/domain/entities/municipality";
 import { UnitType } from "../../src/domain/entities/value-objects/unit-type";
 import { UniqueEntityID } from "../../src/core/entities/unique-entity-id";
+import { makeQualifiedStaff } from "./make-qualified-staff";
+import { makeAllocationDepartment } from "./make-allocation-department";
+import { makeManagement } from "./make-management";
+import { makeMaintenanceContract } from "./make-maintenance-contract";
+import { makeProjectPartnership } from "./make-project-partnership";
 
 export function makeMunicipality(override: Partial<MunicipalityProps> = {}) {
 	const municipality = Municipality.create({
@@ -14,6 +19,11 @@ export function makeMunicipality(override: Partial<MunicipalityProps> = {}) {
 		trafficCount: 5,
 		federativeUnit: "SP",
 		unitType: UnitType.create("MUNICIPALITY"),
+		qualifiedStaff: [makeQualifiedStaff()],
+		allocationDepartments: [makeAllocationDepartment()],
+		managements: [makeManagement()],
+		maintenanceContracts: [makeMaintenanceContract()],
+		projectsPartnerships: [makeProjectPartnership()],
 		userId: new UniqueEntityID().toString(),
 		...override,
 	});

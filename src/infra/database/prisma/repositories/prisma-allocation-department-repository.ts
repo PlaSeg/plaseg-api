@@ -47,11 +47,4 @@ export class PrismaAllocationDepartmentsRepository
 
 		return PrismaAllocationDepartmentMapper.toDomain(allocationDepartment);
 	}
-
-	async create(allocationDepartment: AllocationDepartment): Promise<void> {
-		const data =
-			PrismaAllocationDepartmentMapper.toPrisma(allocationDepartment);
-
-		await prisma.allocationDepartment.create({ data });
-	}
 }
