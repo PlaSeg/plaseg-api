@@ -7,5 +7,4 @@ export interface QualifiedStaffsRepository {
 	findByMunicipalityId(
 		municipalityId: string
 	): Promise<QualifiedStaff[] | null>;
-	create(qualifiedStaff: QualifiedStaff): Promise<void>;
 }
