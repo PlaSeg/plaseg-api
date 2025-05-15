@@ -3,6 +3,7 @@ import { Role as PrismaRole } from "@prisma/client";
 export enum DomainRole {
 	ADMIN = "ADMIN",
 	MUNICIPALITY = "MUNICIPALITY",
+	COMPANY = "COMPANY",
 	ADMIN_MASTER = "ADMIN_MASTER",
 }
 
@@ -23,6 +24,8 @@ export class Role {
 				return PrismaRole.ADMIN;
 			case DomainRole.MUNICIPALITY:
 				return PrismaRole.MUNICIPALITY;
+			case DomainRole.COMPANY:
+				return PrismaRole.COMPANY;
 			case DomainRole.ADMIN_MASTER:
 				return PrismaRole.ADMIN_MASTER;
 			default:
@@ -37,6 +40,11 @@ export class Role {
 	public static member(): Role {
 		return new Role(DomainRole.MUNICIPALITY);
 	}
+
+	public static company(): Role {
+		return new Role(DomainRole.COMPANY);
+	}
+
 	public static adminMaster(): Role {
 		return new Role(DomainRole.ADMIN_MASTER);
 	}

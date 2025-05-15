@@ -10,6 +10,7 @@ datasource db {
 enum Role {
   ADMIN
   MUNICIPALITY
+  COMPANY
   ADMIN_MASTER
 }
 
@@ -40,6 +41,7 @@ model User {
   role     Role   @default(MUNICIPALITY)
 
   municipality Municipality? @relation("UserMunicipality")
+  Company      Company?      @relation("CompanyMunicipality")
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
@@ -63,7 +65,7 @@ model Municipality {
   allocationDepartments AllocationDepartment[]
   maintenanceContracts  MaintenanceContract[]
   qualifiedStaff        QualifiedStaff[]
-  projectsPartnerships   ProjectPartnership[]
+  projectsPartnerships  ProjectPartnership[]
   managements           Management[]
 
   createdAt DateTime  @default(now())
@@ -244,4 +246,23 @@ model BaseProduct {
   updatedAt DateTime? @updatedAt
 
   @@map("base_products")
+}
+
+model Company {
+  id String @id @default(uuid())
+
+  userId String @unique
+  user   User   @relation("CompanyMunicipality", fields: [userId], references: [id])
+
+  cnpj                 String
+  legalName            String
+  tradeName            String
+  address              String
+  email                String
+  phone                String
+  site                 String
+  portfolioDescription String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
