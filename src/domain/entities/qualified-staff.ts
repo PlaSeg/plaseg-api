@@ -12,7 +12,6 @@ export interface QualifiedStaffProps {
 	employmentType: EmploymentType;
 	document: string;
 	isResponsible: boolean;
-	municipalityId: string;
 	createdAt: Date;
 	updatedAt?: Date | null;
 }
@@ -44,10 +43,6 @@ export class QualifiedStaff extends Entity<QualifiedStaffProps> {
 
 	get isResponsible() {
 		return this.props.isResponsible;
-	}
-
-	get municipalityId() {
-		return this.props.municipalityId;
 	}
 
 	get createdAt() {
