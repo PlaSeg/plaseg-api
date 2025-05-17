@@ -35,6 +35,16 @@ export class InMemoryUsersRepository implements UsersRepository {
 		return user;
 	}
 
+	async findByPhone(phone: string): Promise<User | null> {
+		const user = this.items.find((user) => user.phone === phone);
+
+		if (!user) {
+			return null;
+		}
+
+		return user;
+	}
+
 	async findManyAdmins(): Promise<User[]> {
 		return this.items.filter(
 			(user) => user.role.getValue() === DomainRole.ADMIN

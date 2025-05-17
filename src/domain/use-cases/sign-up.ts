@@ -43,6 +43,13 @@ export class SignUpUseCase {
 			return left(new CustomError(409, "Documento já cadastrado"));
 		}
 
+		const doesPhoneAlreadyExist = await this.usersRepository.findByPhone(
+			request.phone
+		);
+
+		if (doesPhoneAlreadyExist) {
+			return left(new CustomError(409, "Telefone já cadastrado"));
+		}
 		const hashedPassword = await this.hashGenerator.hash(request.password);
 
 		const user = User.create({

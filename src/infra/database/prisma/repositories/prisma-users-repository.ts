@@ -46,6 +46,20 @@ export class PrismaUsersRepository implements UsersRepository {
 		return PrismaUserMapper.toDomain(user);
 	}
 
+	async findByPhone(phone: string): Promise<User | null> {
+		const user = await prisma.user.findUnique({
+			where: {
+				phone,
+			},
+		});
+
+		if (!user) {
+			return null;
+		}
+
+		return PrismaUserMapper.toDomain(user);
+	}
+
 	async findManyAdmins(): Promise<User[]> {
 		const admins = await prisma.user.findMany({
 			where: {
