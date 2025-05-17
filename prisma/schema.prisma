@@ -270,7 +270,7 @@ model Company {
 model PriceRegistrationRecord {
   id            String   @id @default(uuid())
   publicAgency  String
-  number        String
+  number        String   @unique
   year          DateTime
   effectiveDate DateTime
   status        String
