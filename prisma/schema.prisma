@@ -242,6 +242,8 @@ model BaseProduct {
   Type   Type   @relation(fields: [typeId], references: [id], onDelete: Cascade)
   typeId String
 
+  specificProducts SpecificProduct[]
+
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
@@ -265,6 +267,27 @@ model Company {
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
+}
+
+model SpecificProduct {
+  id             String   @id @default(uuid())
+  brand          String
+  model          String
+  description    String
+  unitValue      Decimal
+  warrantyMonths Int
+  budget         Decimal
+  budgetValidity DateTime
+
+  baseProduct   BaseProduct @relation(fields: [baseProductId], references: [id], onDelete: Cascade)
+  baseProductId String
+
+  priceRegistrationRecordItems PriceRegistrationRecordItem[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("specific_products")
 }
 
 model PriceRegistrationRecord {
@@ -292,6 +315,9 @@ model PriceRegistrationRecordItem {
 
   priceRegistrationRecordId String
   priceRegistrationRecord   PriceRegistrationRecord @relation(fields: [priceRegistrationRecordId], references: [id], onDelete: Cascade)
+
+  specificProductId String
+  specificProduct SpecificProduct @relation(fields: [specificProductId], references: [id], onDelete: Cascade)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
