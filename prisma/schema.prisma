@@ -252,7 +252,7 @@ model Company {
   id String @id @default(uuid())
 
   userId String @unique
-  user   User   @relation("CompanyMunicipality", fields: [userId], references: [id])
+  user   User   @relation("CompanyMunicipality", fields: [userId], references: [id], onDelete: Cascade)
 
   cnpj                 String
   legalName            String
