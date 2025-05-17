@@ -242,6 +242,8 @@ model BaseProduct {
   Type   Type   @relation(fields: [typeId], references: [id], onDelete: Cascade)
   typeId String
 
+  specificProducts SpecificProduct[]
+
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
@@ -252,7 +254,7 @@ model Company {
   id String @id @default(uuid())
 
   userId String @unique
-  user   User   @relation("CompanyMunicipality", fields: [userId], references: [id])
+  user   User   @relation("CompanyMunicipality", fields: [userId], references: [id], onDelete: Cascade)
 
   cnpj                 String
   legalName            String
@@ -263,8 +265,34 @@ model Company {
   site                 String
   portfolioDescription String
 
+  SpecificProduct SpecificProduct[]
+
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
+}
+
+model SpecificProduct {
+  id             String   @id @default(uuid())
+  brand          String
+  model          String
+  description    String
+  unitValue      Decimal
+  warrantyMonths Int
+  budget         Decimal
+  budgetValidity DateTime
+
+  baseProduct   BaseProduct @relation(fields: [baseProductId], references: [id], onDelete: Cascade)
+  baseProductId String
+
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId String
+
+  priceRegistrationRecordItems PriceRegistrationRecordItem[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("specific_products")
 }
 
 model PriceRegistrationRecord {
@@ -292,6 +320,9 @@ model PriceRegistrationRecordItem {
 
   priceRegistrationRecordId String
   priceRegistrationRecord   PriceRegistrationRecord @relation(fields: [priceRegistrationRecordId], references: [id], onDelete: Cascade)
+
+  specificProductId String
+  specificProduct   SpecificProduct @relation(fields: [specificProductId], references: [id], onDelete: Cascade)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
