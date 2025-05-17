@@ -2,6 +2,8 @@ import { PrismaClient, TypeGroup } from "@prisma/client";
 import { types } from "./seed/types";
 import { opportunities } from "./seed/opportunities";
 import { baseProducts } from "./seed/base-products";
+import { administrators } from "./seed/administrators";
+import { hash } from "bcrypt";
 
 const prisma = new PrismaClient();
 
@@ -9,6 +11,16 @@ async function seed() {
 	await prisma.opportunity.deleteMany();
 	await prisma.baseProduct.deleteMany();
 	await prisma.type.deleteMany();
+	await prisma.user.deleteMany();
+
+	administrators.forEach(async (administrator) => {
+		await prisma.user.create({
+			data: {
+				...administrator,
+				password: await hash(administrator.password, 6),
+			},
+		});
+	});
 
 	types().forEach(async (type) => {
 		await prisma.type.create({
