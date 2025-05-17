@@ -20,6 +20,8 @@ export class PrismaUserMapper {
 						? Role.adminMaster()
 						: raw.role === "ADMIN"
 						? Role.admin()
+						: raw.role === "COMPANY"
+						? Role.company()
 						: Role.member(),
 			},
 			new UniqueEntityID(raw.id)
