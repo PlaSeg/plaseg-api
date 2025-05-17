@@ -12,7 +12,7 @@ export async function getTypes(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().get(
 		"/types",
 		{
-			onRequest: [verifyUserRole("ADMIN")],
+			onRequest: [verifyUserRole(["ADMIN", "ADMIN_MASTER"])],
 			schema: {
 				tags: ["Types"],
 				operationId: "getTypes",

@@ -9,7 +9,7 @@ export async function getBaseProducts(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().get(
 		"/base-products",
 		{
-			onRequest: [verifyUserRole("ADMIN")],
+			onRequest: [verifyUserRole(["ADMIN", "ADMIN_MASTER"])],
 			schema: {
 				tags: ["Base Products"],
 				operationId: "getBaseProducts",

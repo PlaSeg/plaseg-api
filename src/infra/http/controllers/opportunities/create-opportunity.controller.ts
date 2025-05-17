@@ -10,7 +10,7 @@ export async function createOpportunity(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().post(
 		"/opportunities",
 		{
-			onRequest: [verifyUserRole("ADMIN")],
+			onRequest: [verifyUserRole(["ADMIN", "ADMIN_MASTER"])],
 			schema: {
 				tags: ["Opportunities"],
 				operationId: "createOpportunity",
