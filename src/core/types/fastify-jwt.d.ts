@@ -4,7 +4,7 @@ declare module "@fastify/jwt" {
 	export interface FastifyJWT {
 		user: {
 			sub: string;
-			role: "ADMIN" | "MUNICIPALITY" | "ADMIN_MASTER";
+			role: "ADMIN" | "MUNICIPALITY" | "ADMIN_MASTER" | "COMPANY";
 		};
 	}
 }

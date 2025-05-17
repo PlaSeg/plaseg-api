@@ -1,7 +1,7 @@
+import fastify, { FastifyInstance } from "fastify";
 import request from "supertest";
 import { describe, expect, it, beforeAll, beforeEach, afterAll } from "vitest";
 import { prisma } from "../../../database/prisma/prisma";
-import fastify, { FastifyInstance } from "fastify";
 import { buildApp } from "../../app";
 import { hash } from "bcrypt";
 import { Role } from "@prisma/client";
@@ -18,10 +18,8 @@ describe("Create Admin (e2e)", () => {
 	});
 
 	beforeEach(async () => {
-		// Limpar o banco de dados antes de cada teste
 		await prisma.user.deleteMany();
 
-		// Criar um usuário admin master para os testes
 		const adminMaster = await prisma.user.create({
 			data: {
 				name: "Admin Master",
@@ -49,7 +47,7 @@ describe("Create Admin (e2e)", () => {
 
 	it("should be able to create a new admin", async () => {
 		const response = await request(app.server)
-			.post("/admin/create")
+			.post("/admin")
 			.set("Authorization", `Bearer ${adminMasterToken}`)
 			.send({
 				name: "New Admin",
@@ -91,7 +89,7 @@ describe("Create Admin (e2e)", () => {
 		});
 
 		const response = await request(app.server)
-			.post("/admin/create")
+			.post("/admin")
 			.set("Authorization", `Bearer ${adminMasterToken}`)
 			.send({
 				name: "Duplicate Admin",
@@ -119,7 +117,7 @@ describe("Create Admin (e2e)", () => {
 		});
 
 		const response = await request(app.server)
-			.post("/admin/create")
+			.post("/admin")
 			.set("Authorization", `Bearer ${adminMasterToken}`)
 			.send({
 				name: "Document Admin",
@@ -146,15 +144,13 @@ describe("Create Admin (e2e)", () => {
 			},
 		});
 
-		// Gerar token JWT diretamente para o usuário comum
 		const regularUserToken = app.jwt.sign({
 			sub: regularUser.id,
 			role: regularUser.role.toString(),
 		});
 
-		// Tentar criar um admin com o token do usuário comum
 		const response = await request(app.server)
-			.post("/admin/create")
+			.post("/admin")
 			.set("Authorization", `Bearer ${regularUserToken}`)
 			.send({
 				name: "Unauthorized Admin",
