@@ -32,6 +32,7 @@ describe("Get Opportunity By Id (e2e)", () => {
 		});
 
 		const type = makeType();
+		
 		await prisma.type.create({
 			data: {
 				id: type.id.toString(),

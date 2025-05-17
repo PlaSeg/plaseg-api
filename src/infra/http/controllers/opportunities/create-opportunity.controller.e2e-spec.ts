@@ -36,6 +36,7 @@ describe("Create Opportunity (e2e)", () => {
 			description: "Test Type 1",
 			group: TypeGroup.opportunity(),
 		});
+
 		await prisma.type.create({
 			data: {
 				id: type.id.toString(),

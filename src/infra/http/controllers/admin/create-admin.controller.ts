@@ -2,16 +2,15 @@ import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { makeCreateAdminUseCase } from "../../../database/prisma/use-cases/make-create-admin-use-case";
 import { errorResponseSchema, successResponseSchema } from "../../schemas/http";
-
-import { z } from "zod";
 import { createAdminRequestBodySchema } from "../../schemas/admin";
 import { verifyUserRole } from "../../middleware/verify-user-role";
+import { z } from "zod";
 
 export async function createAdmin(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().post(
-		"/admin/create",
+		"/admin",
 		{
-			onRequest: [verifyUserRole("ADMIN_MASTER")],
+			onRequest: [verifyUserRole(["ADMIN_MASTER"])],
 			schema: {
 				tags: ["Admin"],
 				operationId: "createAdmin",
