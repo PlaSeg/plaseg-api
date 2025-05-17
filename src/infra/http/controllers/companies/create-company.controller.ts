@@ -2,7 +2,6 @@ import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { errorResponseSchema, successResponseSchema } from "../../schemas/http";
 import { z } from "zod";
-import { verifyJwt } from "../../middleware/auth";
 import { verifyUserRole } from "../../middleware/verify-user-role";
 import { createCompanyRequestBodySchema } from "../../schemas/company";
 import { makeCreateCompanyUseCase } from "../../../database/prisma/use-cases/make-create-company-use-case";
@@ -11,7 +10,7 @@ export async function createCompany(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().post(
 		"/company",
 		{
-			onRequest: [verifyJwt, verifyUserRole("COMPANY")],
+			onRequest: [verifyUserRole(["COMPANY"])],
 			schema: {
 				tags: ["Company"],
 				operationId: "createCompany",
