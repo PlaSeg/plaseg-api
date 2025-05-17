@@ -265,6 +265,8 @@ model Company {
   site                 String
   portfolioDescription String
 
+  SpecificProduct SpecificProduct[]
+
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 }
@@ -281,6 +283,9 @@ model SpecificProduct {
 
   baseProduct   BaseProduct @relation(fields: [baseProductId], references: [id], onDelete: Cascade)
   baseProductId String
+
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId String
 
   priceRegistrationRecordItems PriceRegistrationRecordItem[]
 
@@ -317,7 +322,7 @@ model PriceRegistrationRecordItem {
   priceRegistrationRecord   PriceRegistrationRecord @relation(fields: [priceRegistrationRecordId], references: [id], onDelete: Cascade)
 
   specificProductId String
-  specificProduct SpecificProduct @relation(fields: [specificProductId], references: [id], onDelete: Cascade)
+  specificProduct   SpecificProduct @relation(fields: [specificProductId], references: [id], onDelete: Cascade)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
