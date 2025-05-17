@@ -88,4 +88,35 @@ describe("Sign Up Use Case", () => {
 		}
 		expect(inMemoryUsersRepository.items).toHaveLength(1);
 	});
+
+	it("should not be able to sign up with existing phone", async () => {
+		const existingUser = makeUser({
+			phone: "12345678900",
+			email: Email.create("john@doe.com"),
+			document: "00000000001",
+		});
+		const newUser = makeUser({
+			phone: existingUser.phone,
+			email: Email.create("test@email.com"),
+			document: "00000000002",
+		});
+
+		await inMemoryUsersRepository.create(existingUser);
+
+		const result = await sut.execute({
+			name: newUser.name,
+			email: newUser.email.toString(),
+			phone: newUser.phone,
+			document: newUser.document,
+			password: newUser.password,
+		});
+
+		expect(result.isLeft()).toBeTruthy();
+		if (result.isLeft()) {
+			expect(result.value).toEqual(
+				new CustomError(409, ["Telefone já cadastrado"])
+			);
+		}
+		expect(inMemoryUsersRepository.items).toHaveLength(1);
+	});
 });
