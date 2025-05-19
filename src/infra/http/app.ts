@@ -9,7 +9,6 @@ import fastifyCors from "@fastify/cors";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUI from "@fastify/swagger-ui";
 import fastifyJwt from "@fastify/jwt";
-
 import { errorHandler } from "./error-handler";
 import { authRoutes } from "./controllers/auth/auth.routes";
 import { opportunitiesRoutes } from "./controllers/opportunities/opportunities.routes";
@@ -18,6 +17,8 @@ import { typesRoutes } from "./controllers/types/types.routes";
 import { municipalityRoutes } from "./controllers/municipality/municipality.routes";
 import { adminRoutes } from "./controllers/admin/admin.routes";
 import { companyRoutes } from "./controllers/companies/company.routes";
+import { priceRegistrationRecordRoutes } from "./controllers/price-registration-records/price-registration-records.routes";
+
 const version = "1.0.0 - Release 1";
 
 export function buildApp(app = fastify().withTypeProvider<ZodTypeProvider>()) {
@@ -58,6 +59,8 @@ export function buildApp(app = fastify().withTypeProvider<ZodTypeProvider>()) {
 	app.register(productsRoutes);
 	app.register(adminRoutes);
 	app.register(companyRoutes);
+	app.register(priceRegistrationRecordRoutes);
+
 	return app;
 }
 

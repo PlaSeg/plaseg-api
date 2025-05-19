@@ -40,11 +40,11 @@ model User {
   password String
   role     Role   @default(MUNICIPALITY)
 
-  municipality Municipality? @relation("UserMunicipality")
-  Company      Company?      @relation("CompanyMunicipality")
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
+  municipality             Municipality?             @relation("UserMunicipality")
+  Company                  Company?                  @relation("CompanyMunicipality")
+  priceRegistrationRecords PriceRegistrationRecord[] @relation("UserPriceRegistrationRecord")
+  createdAt                DateTime                  @default(now())
+  updatedAt                DateTime?                 @updatedAt
 
   @@map("users")
 }
@@ -299,9 +299,12 @@ model PriceRegistrationRecord {
   id            String   @id @default(uuid())
   publicAgency  String
   number        String   @unique
-  year          DateTime
+  year          Int
   effectiveDate DateTime
   status        String
+
+  userId String
+  user   User   @relation("UserPriceRegistrationRecord", fields: [userId], references: [id])
 
   priceRegistrationRecordItems PriceRegistrationRecordItem[]
 
