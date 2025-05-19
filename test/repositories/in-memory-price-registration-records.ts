@@ -1,8 +1,8 @@
 import { PriceRegistrationRecord } from "../../src/domain/entities/price-registration-record";
-import { PriceRegistrationRecordRepository } from "../../src/domain/repositories/price-registration-records-repository";
+import { PriceRegistrationRecordsRepository } from "../../src/domain/repositories/price-registration-records-repository";
 
 export class InMemoryPriceRegistrationRecordsRepository
-	implements PriceRegistrationRecordRepository
+	implements PriceRegistrationRecordsRepository
 {
 	public items: PriceRegistrationRecord[] = [];
 
