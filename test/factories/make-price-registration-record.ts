@@ -13,7 +13,7 @@ export function makePriceRegistrationRecord(
 			userId: new UniqueEntityID().toString(),
 			number: "1234567890",
 			publicAgency: "1234567890",
-			year: new Date(),
+			year: 2024,
 			effectiveDate: new Date(),
 			status: "active",
 			priceRegistrationRecordItems: [

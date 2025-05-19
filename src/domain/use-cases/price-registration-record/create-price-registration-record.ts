@@ -8,7 +8,7 @@ import { SpecificProductsRepository } from "../../repositories/specific-products
 type CreatePriceRegistrationRecordUseCaseRequest = {
 	number: string;
 	publicAgency: string;
-	year: Date;
+	year: number;
 	effectiveDate: Date;
 	status: string;
 	userId: string;

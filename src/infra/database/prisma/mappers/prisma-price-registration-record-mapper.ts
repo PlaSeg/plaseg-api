@@ -10,26 +10,9 @@ import { PriceRegistrationRecordItem } from "../../../../domain/entities/price-r
 export class PrismaPriceRegistrationRecordMapper {
 	static toDomain(
 		raw: PrismaPriceRegistrationRecord & {
-			priceRegistrationRecordItems: PrismaPriceRegistrationRecordItem[];
+			priceRegistrationRecordItems?: PrismaPriceRegistrationRecordItem[];
 		}
 	): PriceRegistrationRecord {
-		const priceRegistrationRecordItems = raw.priceRegistrationRecordItems.map(
-			(item) =>
-				PriceRegistrationRecordItem.create(
-					{
-						priceRegistrationRecordId: item.priceRegistrationRecordId,
-						specificProductId: item.specificProductId,
-						unitValue: Number(item.unitValue),
-						quantity: item.quantity,
-						minAdherenceQuantity: item.minAdherenceQuantity,
-						maxAdherenceQuantity: item.maxAdherenceQuantity,
-						createdAt: item.createdAt,
-						updatedAt: item.updatedAt,
-					},
-					new UniqueEntityID(item.id)
-				)
-		);
-
 		return PriceRegistrationRecord.create(
 			{
 				publicAgency: raw.publicAgency,
@@ -38,7 +21,19 @@ export class PrismaPriceRegistrationRecordMapper {
 				effectiveDate: raw.effectiveDate,
 				status: raw.status,
 				userId: raw.userId,
-				priceRegistrationRecordItems,
+				priceRegistrationRecordItems:
+					raw.priceRegistrationRecordItems?.map((item) =>
+						PriceRegistrationRecordItem.create({
+							priceRegistrationRecordId: item.priceRegistrationRecordId,
+							specificProductId: item.specificProductId,
+							unitValue: Number(item.unitValue),
+							quantity: item.quantity,
+							minAdherenceQuantity: item.minAdherenceQuantity,
+							maxAdherenceQuantity: item.maxAdherenceQuantity,
+							createdAt: item.createdAt,
+							updatedAt: item.updatedAt,
+						})
+					) ?? [],
 				createdAt: raw.createdAt,
 				updatedAt: raw.updatedAt,
 			},
@@ -47,29 +42,19 @@ export class PrismaPriceRegistrationRecordMapper {
 	}
 
 	static toPrisma(
-		priceRegistrationRecord: PriceRegistrationRecord
-	): Prisma.PriceRegistrationRecordUncheckedCreateInput {
+		record: PriceRegistrationRecord
+	): Omit<
+		Prisma.PriceRegistrationRecordUncheckedCreateInput,
+		"createdAt" | "updatedAt"
+	> {
 		return {
-			id: priceRegistrationRecord.id.toString(),
-			publicAgency: priceRegistrationRecord.publicAgency,
-			number: priceRegistrationRecord.number,
-			year: priceRegistrationRecord.year,
-			effectiveDate: priceRegistrationRecord.effectiveDate,
-			status: priceRegistrationRecord.status,
-			userId: priceRegistrationRecord.userId,
-			priceRegistrationRecordItems: {
-				create: priceRegistrationRecord.priceRegistrationRecordItems.map(
-					(item) => ({
-						id: item.id.toString(),
-						priceRegistrationRecordId: item.priceRegistrationRecordId,
-						specificProductId: item.specificProductId,
-						unitValue: item.unitValue,
-						quantity: item.quantity,
-						minAdherenceQuantity: item.minAdherenceQuantity,
-						maxAdherenceQuantity: item.maxAdherenceQuantity,
-					})
-				),
-			},
+			id: record.id.toString(),
+			publicAgency: record.publicAgency,
+			number: record.number,
+			year: record.year,
+			effectiveDate: record.effectiveDate,
+			status: record.status,
+			userId: record.userId,
 		};
 	}
 }

@@ -74,7 +74,7 @@ export class PrismaPriceRegistrationRecordsRepository
 	}
 
 	async findByUserId(userId: string): Promise<PriceRegistrationRecord | null> {
-		const record = await prisma.priceRegistrationRecord.findUnique({
+		const record = await prisma.priceRegistrationRecord.findFirst({
 			where: {
 				userId,
 			},
@@ -94,7 +94,19 @@ export class PrismaPriceRegistrationRecordsRepository
 		const data = PrismaPriceRegistrationRecordMapper.toPrisma(record);
 
 		await prisma.priceRegistrationRecord.create({
-			data,
+			data: {
+				...data,
+				priceRegistrationRecordItems: {
+					create: record.priceRegistrationRecordItems.map((item) => ({
+						id: item.id.toString(),
+						specificProductId: item.specificProductId,
+						unitValue: item.unitValue,
+						quantity: item.quantity,
+						minAdherenceQuantity: item.minAdherenceQuantity,
+						maxAdherenceQuantity: item.maxAdherenceQuantity,
+					})),
+				},
+			},
 		});
 	}
 

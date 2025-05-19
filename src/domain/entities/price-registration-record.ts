@@ -7,7 +7,7 @@ import { PriceRegistrationRecordItem } from "./price-registration-record-item";
 export interface PriceRegistrationRecordProps {
 	publicAgency: string;
 	number: string;
-	year: Date;
+	year: number;
 	effectiveDate: Date;
 	status: string;
 
