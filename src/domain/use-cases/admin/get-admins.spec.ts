@@ -30,7 +30,7 @@ describe("Get Admins Use Case", () => {
 
 		// Create a non-admin user
 		const member = makeUser({
-			role: Role.member(),
+			role: Role.municipality(),
 			email: Email.create("member@example.com"),
 			document: "12345678901",
 		});
@@ -58,7 +58,7 @@ describe("Get Admins Use Case", () => {
 	it("should return null when no admins are found", async () => {
 		// Create only non-admin users
 		const member = makeUser({
-			role: Role.member(),
+			role: Role.municipality(),
 			email: Email.create("member@example.com"),
 		});
 

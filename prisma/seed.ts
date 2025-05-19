@@ -1,8 +1,8 @@
-import { PrismaClient, TypeGroup } from "@prisma/client";
+import { PrismaClient, Role, TypeGroup } from "@prisma/client";
 import { types } from "./seed/types";
 import { opportunities } from "./seed/opportunities";
 import { baseProducts } from "./seed/base-products";
-import { administrators } from "./seed/administrators";
+import { users } from "./seed/users";
 import { hash } from "bcrypt";
 
 const prisma = new PrismaClient();
@@ -13,11 +13,11 @@ async function seed() {
 	await prisma.type.deleteMany();
 	await prisma.user.deleteMany();
 
-	administrators.forEach(async (administrator) => {
+	users.forEach(async (user) => {
 		await prisma.user.create({
 			data: {
-				...administrator,
-				password: await hash(administrator.password, 6),
+				...user,
+				password: await hash(user.password, 6),
 			},
 		});
 	});
@@ -60,7 +60,87 @@ async function seed() {
 		});
 	});
 
-	console.log("Seed complete");
+	const ceo = await prisma.user.create({
+		data: {
+			name: "Acme",
+			phone: "11990099999",
+			document: "44433322211",
+			email: "acme@gmail.com",
+			password: "00000000",
+			role: Role.COMPANY,
+		},
+	});
+
+	const company = await prisma.company.create({
+		data: {
+			cnpj: "12345678900000",
+			legalName: "Acme",
+			tradeName: "Acme",
+			address: "Rua 1",
+			email: "acme@gmail.com",
+			phone: "11990099999",
+			site: "https://acme.com",
+			portfolioDescription: "Descrição do portfólio",
+			userId: ceo.id,
+		},
+	});
+
+	const type = await prisma.type.create({
+		data: {
+			description: "Base Product",
+			group: TypeGroup.CATEGORY,
+		},
+	});
+
+	const baseProduct = await prisma.baseProduct.create({
+		data: {
+			code: "12345678900000",
+			name: "Base Product",
+			technicalDescription: "Descrição técnica do produto",
+			unitValue: 100,
+			typeId: type.id,
+			budget1: 100,
+			budget1Validity: new Date(),
+			budget2: 100,
+			budget2Validity: new Date(),
+			budget3: 100,
+			budget3Validity: new Date(),
+		},
+	});
+
+	const specificProduct = await prisma.specificProduct.create({
+		data: {
+			brand: "Brand",
+			model: "Model",
+			description: "Description",
+			unitValue: 100,
+			warrantyMonths: 12,
+			budget: 100,
+			budgetValidity: new Date(),
+			baseProductId: baseProduct.id,
+			companyId: company.id,
+		},
+	});
+
+	await prisma.priceRegistrationRecord.create({
+		data: {
+			number: "12345678900000",
+			publicAgency: "Public Agency",
+			year: 2025,
+			effectiveDate: new Date(),
+			status: "ACTIVE",
+			userId: ceo.id,
+			priceRegistrationRecordItems: {
+				create: {
+					specificProductId: specificProduct.id,
+					unitValue: 100,
+					quantity: 50,
+					minAdherenceQuantity: 40,
+					maxAdherenceQuantity: 60,
+				},
+			},
+		},
+	});
 }
 
 seed()

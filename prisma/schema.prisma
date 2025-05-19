@@ -253,9 +253,6 @@ model BaseProduct {
 model Company {
   id String @id @default(uuid())
 
-  userId String @unique
-  user   User   @relation("CompanyMunicipality", fields: [userId], references: [id], onDelete: Cascade)
-
   cnpj                 String
   legalName            String
   tradeName            String
@@ -264,6 +261,9 @@ model Company {
   phone                String
   site                 String
   portfolioDescription String
+
+  userId String @unique
+  user   User   @relation("CompanyMunicipality", fields: [userId], references: [id], onDelete: Cascade)
 
   SpecificProduct SpecificProduct[]
 

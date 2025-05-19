@@ -3,8 +3,8 @@ services:
     container_name: plaseg-api-postgres
     image: bitnami/postgresql
     ports:
-      - 5432:5432
+      - 15432:5432
     environment:
       POSTGRES_USER: plaseg
       POSTGRES_PASSWORD: plaseg
-      POSTGRES_DB: docker
+      POSTGRES_DB: plaseg-api
