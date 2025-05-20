@@ -41,7 +41,7 @@ model User {
   role     Role   @default(MUNICIPALITY)
 
   municipality Municipality? @relation("UserMunicipality")
-  Company      Company?      @relation("CompanyMunicipality")
+  Company      Company?      @relation("UserCompany")
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
@@ -254,14 +254,14 @@ model Company {
   id String @id @default(uuid())
 
   userId String @unique
-  user   User   @relation("CompanyMunicipality", fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation("UserCompany", fields: [userId], references: [id], onDelete: Cascade)
 
-  cnpj                 String
+  cnpj                 String @unique
   legalName            String
   tradeName            String
   address              String
-  email                String
-  phone                String
+  email                String @unique
+  phone                String @unique
   site                 String
   portfolioDescription String
 
@@ -269,6 +269,8 @@ model Company {
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
+
+  @@map("companies")
 }
 
 model SpecificProduct {
