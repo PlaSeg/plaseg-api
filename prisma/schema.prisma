@@ -38,13 +38,14 @@ model User {
   document String @unique
   phone    String @unique
   password String
-  role     Role   @default(MUNICIPALITY)
 
-  municipality             Municipality?             @relation("UserMunicipality")
-  Company                  Company?                  @relation("UserCompany")
-  priceRegistrationRecords PriceRegistrationRecord[] @relation("UserPriceRegistrationRecord")
-  createdAt                DateTime                  @default(now())
-  updatedAt                DateTime?                 @updatedAt
+  role Role @default(MUNICIPALITY)
+
+  municipality Municipality? @relation("UserMunicipality")
+  Company      Company?      @relation("UserCompany")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 
   @@map("users")
 }
@@ -172,6 +173,8 @@ model Management {
 model Opportunity {
   id                    String   @id @default(uuid()) @map("id")
   title                 String   @unique
+  slug                  String   @unique
+  resposibleAgency      String
   description           String
   availableValue        Decimal
   minValue              Decimal
@@ -267,6 +270,8 @@ model Company {
 
   SpecificProduct SpecificProduct[]
 
+  PriceRegistrationRecord PriceRegistrationRecord[]
+
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
@@ -305,13 +310,13 @@ model PriceRegistrationRecord {
   effectiveDate DateTime
   status        String
 
-  userId String
-  user   User   @relation("UserPriceRegistrationRecord", fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 
   priceRegistrationRecordItems PriceRegistrationRecordItem[]
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
+  Company   Company? @relation(fields: [companyId], references: [id])
+  companyId String?
 
   @@map("price_registration_records")
 }
