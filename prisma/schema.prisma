@@ -82,8 +82,9 @@ model AllocationDepartment {
   municipalityId String
   municipality   Municipality @relation(fields: [municipalityId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime?       @updatedAt
+  RequestedItem RequestedItem[]
 
   @@map("allocation_departments")
 }
@@ -96,8 +97,9 @@ model MaintenanceContract {
   municipalityId String
   municipality   Municipality @relation(fields: [municipalityId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime?       @updatedAt
+  RequestedItem RequestedItem[]
 
   @@map("maintenance_contracts")
 }
@@ -191,6 +193,7 @@ model Opportunity {
   requiredDocuments RequiredDocument[]
 
   @@map("opportunities")
+  Project Project[]
 }
 
 model RequiredDocument {
@@ -244,8 +247,9 @@ model BaseProduct {
 
   specificProducts SpecificProduct[]
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime?       @updatedAt
+  RequestedItem RequestedItem[]
 
   @@map("base_products")
 }
@@ -333,4 +337,81 @@ model PriceRegistrationRecordItem {
   updatedAt DateTime? @updatedAt
 
   @@map("price_registration_record_items")
+}
+
+model Field {
+  id       String  @id @default(uuid())
+  name     String
+  value    String?
+  parentId String?
+
+  parent   Field?  @relation("FieldHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  children Field[] @relation("FieldHierarchy")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  ProjectType   ProjectType? @relation(fields: [projectTypeId], references: [id])
+  projectTypeId String?
+
+  @@map("fields")
+}
+
+model ProjectType {
+  id   String @id @default(uuid())
+  name String
+
+  fields  Field[]
+  Project Project[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("project_types")
+}
+
+model RequestedItem {
+  id       String  @id @default(uuid())
+  quantity Decimal
+
+  baseProduct   BaseProduct @relation(fields: [baseProductId], references: [id], onDelete: Cascade)
+  baseProductId String
+
+  allocationDepartment   AllocationDepartment @relation(fields: [allocationDepartmentId], references: [id], onDelete: Cascade)
+  allocationDepartmentId String
+
+  maintenanceContract   MaintenanceContract @relation(fields: [maintenanceContractId], references: [id], onDelete: Cascade)
+  maintenanceContractId String
+
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("requested_itens")
+}
+
+model Project {
+  id               String  @id @default(uuid())
+  responsibleCpf   String 
+  responsibleName  String
+  responsibleEmail String
+  responsiblePhone String
+  totalValue       Decimal
+  requestedValue   Decimal
+  baseValue        Decimal
+
+  projectType   ProjectType     @relation(fields: [projectTypeId], references: [id], onDelete: Cascade)
+  projectTypeId String
+
+  opportunity   Opportunity     @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  opportunityId String
+
+  RequestedItem RequestedItem[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("projects")
 }
