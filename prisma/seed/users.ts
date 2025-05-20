@@ -1,6 +1,6 @@
 import { Role } from "@prisma/client";
 
-export const administrators = [
+export const users = [
 	{
 		name: "Acme",
 		phone: "11999999999",

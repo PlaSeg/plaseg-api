@@ -39,7 +39,7 @@ export class Role {
 		return new Role(DomainRole.ADMIN);
 	}
 
-	public static member(): Role {
+	public static municipality(): Role {
 		return new Role(DomainRole.MUNICIPALITY);
 	}
 
@@ -60,7 +60,7 @@ export class Role {
 			case DomainRole.ADMIN:
 				return Role.admin();
 			case DomainRole.MUNICIPALITY:
-				return Role.member();
+				return Role.municipality();
 			case DomainRole.COMPANY:
 				return Role.company();
 			case DomainRole.ADMIN_MASTER:
