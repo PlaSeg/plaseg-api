@@ -10,7 +10,10 @@ import { getCurrentDate } from "../../../../core/utils/get-current-date";
 
 export class PrismaOpportunityMapper {
 	static toDomain(
-		raw: PrismaOpportunity & { requiredDocuments: PrismaRequiredDocument[] }
+		raw: PrismaOpportunity & {
+			type: string;
+			requiredDocuments: PrismaRequiredDocument[];
+		}
 	): Opportunity {
 		const requiredDocuments = raw.requiredDocuments.map((doc) =>
 			RequiredDocument.create(
@@ -29,14 +32,16 @@ export class PrismaOpportunityMapper {
 			{
 				title: raw.title,
 				description: raw.description,
+				responsibleAgency: raw.responsibleAgency,
 				availableValue: raw.availableValue.toNumber(),
 				minValue: raw.minValue.toNumber(),
 				maxValue: raw.maxValue.toNumber(),
 				initialDeadline: raw.initialDeadline,
 				finalDeadline: raw.finalDeadline,
 				requiresCounterpart: raw.requiresCounterpart,
-				counterpartPercentage: raw.counterpartPercentage.toNumber(),
+				counterpartPercentage: raw.counterpartPercentage?.toNumber(),
 				isActive: raw.isActive,
+				type: raw.type,
 				typeId: raw.typeId,
 				requiredDocuments,
 				createdAt: raw.createdAt,
@@ -52,6 +57,8 @@ export class PrismaOpportunityMapper {
 		return {
 			id: opportunity.id.toString(),
 			title: opportunity.title,
+			slug: opportunity.slug.value,
+			responsibleAgency: opportunity.responsibleAgency,
 			description: opportunity.description,
 			availableValue: opportunity.availableValue,
 			minValue: opportunity.minValue,

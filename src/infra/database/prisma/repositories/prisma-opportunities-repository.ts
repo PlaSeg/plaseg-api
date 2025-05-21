@@ -1,6 +1,6 @@
-import { OpportunitiesRepository } from "../../../../domain/repositories/opportunities-repository";
 import { prisma } from "../prisma";
 import { Opportunity } from "../../../../domain/entities/opportunity";
+import { OpportunitiesRepository } from "../../../../domain/repositories/opportunities-repository";
 import { PrismaOpportunityMapper } from "../mappers/prisma-opportunity-mapper";
 
 export class PrismaOpportunitiesRepository implements OpportunitiesRepository {
@@ -11,6 +11,11 @@ export class PrismaOpportunitiesRepository implements OpportunitiesRepository {
 			},
 			include: {
 				requiredDocuments: true,
+				Type: {
+					select: {
+						description: true,
+					},
+				},
 			},
 		});
 
@@ -18,23 +23,10 @@ export class PrismaOpportunitiesRepository implements OpportunitiesRepository {
 			return null;
 		}
 
-		return PrismaOpportunityMapper.toDomain(opportunity);
-	}
-
-	async findMany(): Promise<Opportunity[] | null> {
-		const opportunities = await prisma.opportunity.findMany({
-			include: {
-				requiredDocuments: true,
-			},
+		return PrismaOpportunityMapper.toDomain({
+			...opportunity,
+			type: opportunity.Type.description,
 		});
-
-		if (opportunities.length === 0) {
-			return null;
-		}
-
-		return opportunities.map((opportunity) =>
-			PrismaOpportunityMapper.toDomain(opportunity)
-		);
 	}
 
 	async findByTitle(title: string): Promise<Opportunity | null> {
@@ -44,6 +36,11 @@ export class PrismaOpportunitiesRepository implements OpportunitiesRepository {
 			},
 			include: {
 				requiredDocuments: true,
+				Type: {
+					select: {
+						description: true,
+					},
+				},
 			},
 		});
 
@@ -51,7 +48,30 @@ export class PrismaOpportunitiesRepository implements OpportunitiesRepository {
 			return null;
 		}
 
-		return PrismaOpportunityMapper.toDomain(opportunity);
+		return PrismaOpportunityMapper.toDomain({
+			...opportunity,
+			type: opportunity.Type.description,
+		});
+	}
+
+	async findMany(): Promise<Opportunity[]> {
+		const opportunities = await prisma.opportunity.findMany({
+			include: {
+				requiredDocuments: true,
+				Type: {
+					select: {
+						description: true,
+					},
+				},
+			},
+		});
+
+		return opportunities.map((opportunity) =>
+			PrismaOpportunityMapper.toDomain({
+				...opportunity,
+				type: opportunity.Type.description,
+			})
+		);
 	}
 
 	async create(opportunity: Opportunity): Promise<void> {
@@ -59,42 +79,6 @@ export class PrismaOpportunitiesRepository implements OpportunitiesRepository {
 
 		await prisma.opportunity.create({
 			data,
-		});
-	}
-
-	async update(opportunity: Opportunity): Promise<void> {
-		const data = PrismaOpportunityMapper.toPrisma(opportunity);
-
-		await prisma.$transaction(async (tx) => {
-			await tx.opportunity.update({
-				where: {
-					id: opportunity.id.toString(),
-				},
-				data: {
-					...data,
-					requiredDocuments: undefined,
-				},
-			});
-
-			for (const doc of opportunity.requiredDocuments) {
-				await tx.requiredDocument.upsert({
-					where: {
-						id: doc.id.toString(),
-					},
-					create: {
-						id: doc.id.toString(),
-						name: doc.name,
-						description: doc.description,
-						model: doc.model,
-						opportunityId: opportunity.id.toString(),
-					},
-					update: {
-						name: doc.name,
-						description: doc.description,
-						model: doc.model,
-					},
-				});
-			}
 		});
 	}
 }

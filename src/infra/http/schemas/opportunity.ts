@@ -16,6 +16,8 @@ export const createOpportunityRequestBodySchema = z
 			.min(10, "A descrição deve ter no mínimo 10 caracteres"),
 		availableValue: z.number().positive("O valor disponível deve ser positivo"),
 		minValue: z.number().positive("O valor mínimo deve ser positivo"),
+		responsibleAgency: z.string().min(1, "A agência responsável é obrigatória"),
+		type: z.string().min(1, "O tipo é obrigatório"),
 		typeId: z.string().uuid("O tipo deve ser um UUID válido"),
 		maxValue: z.number().positive("O valor máximo deve ser positivo"),
 		initialDeadline: z.coerce.date({
@@ -67,6 +69,8 @@ export const createOpportunityRequestBodySchema = z
 export const opportunityResponseSchema = z.object({
 	id: z.string().uuid(),
 	title: z.string(),
+	slug: z.string(),
+	responsibleAgency: z.string(),
 	description: z.string(),
 	availableValue: z.number(),
 	minValue: z.number(),
@@ -74,8 +78,9 @@ export const opportunityResponseSchema = z.object({
 	initialDeadline: z.coerce.date(),
 	finalDeadline: z.coerce.date(),
 	requiresCounterpart: z.boolean(),
-	counterpartPercentage: z.number(),
-	typeDescription: z.string(),
+	counterpartPercentage: z.number().nullable().optional(),
+	type: z.string(),
+	typeId: z.string().uuid(),
 	isActive: z.boolean(),
 	createdAt: z.coerce.date(),
 	updatedAt: z.coerce.date().nullable().optional(),
@@ -95,25 +100,4 @@ export const getOpportunitiesResponseSchema = z
 	.array(opportunityResponseSchema)
 	.nullable();
 
-export const updateOpportunityRequestBodySchema = z.object({
-	title: z.string().min(1).optional(),
-	description: z.string().min(1).optional(),
-	availableValue: z.number().positive().optional(),
-	minValue: z.number().positive().optional(),
-	maxValue: z.number().positive().optional(),
-	initialDeadline: z.coerce.date().optional(),
-	finalDeadline: z.coerce.date().optional(),
-	requiresCounterpart: z.boolean().optional(),
-	counterpartPercentage: z.number().min(0).max(100).optional(),
-	isActive: z.boolean().optional(),
-	requiredDocuments: z
-		.array(
-			z.object({
-				id: z.string().uuid().optional(),
-				name: z.string().min(1).optional(),
-				description: z.string().min(1).optional(),
-				model: z.string().min(1).optional(),
-			})
-		)
-		.optional(),
-});
+export type OpportunityResponse = z.infer<typeof opportunityResponseSchema>;

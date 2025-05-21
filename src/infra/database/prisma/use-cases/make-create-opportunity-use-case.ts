@@ -1,5 +1,5 @@
 import { PrismaOpportunitiesRepository } from "../repositories/prisma-opportunities-repository";
-import { CreateOpportunityUseCase } from "../../../../domain/use-cases/create-opportunity";
+import { CreateOpportunityUseCase } from "../../../../domain/use-cases/opportunities/create-opportunity";
 import { PrismaTypesRepository } from "../repositories/prisma-types-repository";
 
 export function makeCreateOpportunityUseCase() {

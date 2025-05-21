@@ -1,4 +1,4 @@
-import { GetBaseProductUseCase } from "../../../../domain/use-cases/get-base-product";
+import { GetBaseProductUseCase } from "../../../../domain/use-cases/base-products/get-base-product";
 import { PrismaBaseProductsRepository } from "../repositories/prisma-base-product-repository";
 import { PrismaTypesRepository } from "../repositories/prisma-types-repository";
 

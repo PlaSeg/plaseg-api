@@ -174,7 +174,7 @@ model Opportunity {
   id                    String   @id @default(uuid()) @map("id")
   title                 String   @unique
   slug                  String   @unique
-  resposibleAgency      String
+  responsibleAgency     String
   description           String
   availableValue        Decimal
   minValue              Decimal
@@ -182,8 +182,9 @@ model Opportunity {
   initialDeadline       DateTime
   finalDeadline         DateTime
   requiresCounterpart   Boolean
-  counterpartPercentage Decimal
+  counterpartPercentage Decimal?
   isActive              Boolean  @default(true)
+  releasedForAll        Boolean  @default(false)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
@@ -198,7 +199,7 @@ model Opportunity {
 
 model RequiredDocument {
   id          String @id @default(uuid())
-  name        String @unique
+  name        String
   description String
   model       String
 

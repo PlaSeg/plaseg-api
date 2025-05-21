@@ -10,9 +10,10 @@ export function makeOpportunity(override: Partial<OpportunityProps> = {}) {
 	const opportunity = Opportunity.create({
 		title: "Opportunity Title",
 		description: "Opportunity Description",
-		availableValue: 1000,
-		minValue: 100,
-		maxValue: 5000,
+		responsibleAgency: "Responsible Agency",
+		availableValue: 500000,
+		minValue: 300000,
+		maxValue: 500000,
 		initialDeadline: getCurrentDate("2025-05-05T00:00:00.000Z"),
 		finalDeadline: getCurrentDate(),
 		requiresCounterpart: true,

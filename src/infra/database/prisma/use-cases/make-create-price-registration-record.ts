@@ -1,4 +1,4 @@
-import { CreatePriceRegistrationRecordUseCase } from "../../../../domain/use-cases/price-registration-record/create-price-registration-record";
+import { CreatePriceRegistrationRecordUseCase } from "../../../../domain/use-cases/price-registration-records/create-price-registration-record";
 import { PrismaPriceRegistrationRecordsRepository } from "../repositories/prisma-price-registration-records-repository";
 import { PrismaSpecificProductsRepository } from "../repositories/prisma-specific-product-repository";
 
