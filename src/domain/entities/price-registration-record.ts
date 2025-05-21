@@ -10,10 +10,8 @@ export interface PriceRegistrationRecordProps {
 	year: number;
 	effectiveDate: Date;
 	status: string;
-
-	userId: string;
+	companyId: string;
 	priceRegistrationRecordItems: PriceRegistrationRecordItem[];
-
 	createdAt: Date;
 	updatedAt?: Date | null;
 }
@@ -39,8 +37,8 @@ export class PriceRegistrationRecord extends Entity<PriceRegistrationRecordProps
 		return this.props.status;
 	}
 
-	get userId() {
-		return this.props.userId;
+	get companyId() {
+		return this.props.companyId;
 	}
 
 	get priceRegistrationRecordItems() {

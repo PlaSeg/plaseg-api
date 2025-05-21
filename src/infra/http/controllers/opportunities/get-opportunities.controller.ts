@@ -4,6 +4,7 @@ import { errorResponseSchema, successResponseSchema } from "../../schemas/http";
 import { getOpportunitiesResponseSchema } from "../../schemas/opportunity";
 import { verifyJwt } from "../../middleware/auth";
 import { makeGetOpportunitiesUseCase } from "../../../database/prisma/use-cases/make-get-opportunities-use-case";
+import { OpportunityPresenter } from "../../presenters/opportunity-presenter";
 
 export async function getOpportunities(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().get(
@@ -29,9 +30,9 @@ export async function getOpportunities(app: FastifyInstance) {
 			const result = await getOpportunitiesUseCase.execute();
 
 			if (result.isLeft()) {
-				return reply.status(result.value.statusCode).send({
+				return reply.status(500).send({
 					success: false,
-					errors: result.value.errors,
+					errors: ["Erro ao buscar oportunidades"],
 					data: null,
 				});
 			}
@@ -39,7 +40,7 @@ export async function getOpportunities(app: FastifyInstance) {
 			return reply.status(200).send({
 				success: true,
 				errors: null,
-				data: result.value.opportunities,
+				data: result.value.opportunities.map(OpportunityPresenter.toHTTP),
 			});
 		}
 	);

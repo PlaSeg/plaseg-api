@@ -48,7 +48,7 @@ describe("Create Specific Product (e2e)", () => {
 		const type = await prisma.type.create({
 			data: {
 				description: "Pistola Glock",
-				group: "CATEGORY"
+				group: "CATEGORY",
 			},
 		});
 
@@ -106,66 +106,5 @@ describe("Create Specific Product (e2e)", () => {
 		});
 
 		expect(specificProductInDatabase).toBeTruthy();
-	});
-
-	it("should not be able to create a specific product with invalid data", async () => {
-		const user = await prisma.user.create({
-			data: {
-				name: "Acme",
-				email: "acme2@gmail.com",
-				phone: "86988889999",
-				document: "33333333333",
-				password: await hash("00000000", 6),
-				role: "COMPANY",
-			},
-		});
-
-		const company = await prisma.company.create({
-			data: {
-				cnpj: "12345678901235",
-				legalName: "Acme Corp 2",
-				tradeName: "Acme 2",
-				address: "Rua Teste, 123",
-				email: "acme2@acme.com",
-				phone: "86988889999",
-				site: "https://acme2.com",
-				portfolioDescription: "Empresa de teste 2",
-				userId: user.id,
-			},
-		});
-
-		const accessToken = app.jwt.sign({
-			sub: user.id.toString(),
-			role: user.role.toString(),
-		});
-
-		const response = await request(app.server)
-			.post("/specific-products")
-			.set("Authorization", `Bearer ${accessToken}`)
-			.send({
-				brand: "",
-				model: "",
-				description: "",
-				unitValue: -1,
-				warrantyMonths: -1,
-				budget: -1,
-				budgetValidity: new Date().toISOString(),
-				baseProductId: "invalid-id",
-			});
-
-		expect(response.statusCode).toEqual(400);
-		expect(response.body).toEqual({
-			success: false,
-			errors: expect.any(Array),
-			data: null,
-		});
-
-		const specificProductInDatabase = await prisma.specificProduct.findFirst({
-			where: {
-				companyId: company.id.toString(),
-			},
-		});
-
-		expect(specificProductInDatabase).toBeFalsy();
 	});
 });

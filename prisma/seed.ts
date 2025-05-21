@@ -129,7 +129,7 @@ async function seed() {
 			year: 2025,
 			effectiveDate: new Date(),
 			status: "ACTIVE",
-			userId: ceo.id,
+			companyId: company.id,
 			priceRegistrationRecordItems: {
 				create: {
 					specificProductId: specificProduct.id,
