@@ -20,7 +20,7 @@ export class PrismaPriceRegistrationRecordMapper {
 				year: raw.year,
 				effectiveDate: raw.effectiveDate,
 				status: raw.status,
-				userId: raw.userId,
+				companyId: raw.companyId ?? "",
 				priceRegistrationRecordItems:
 					raw.priceRegistrationRecordItems?.map((item) =>
 						PriceRegistrationRecordItem.create({

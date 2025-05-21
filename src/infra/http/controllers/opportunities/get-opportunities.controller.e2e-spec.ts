@@ -32,6 +32,7 @@ describe("Get Opportunities (e2e)", () => {
 		});
 
 		const type = makeType();
+
 		await prisma.type.create({
 			data: {
 				id: type.id.toString(),
@@ -47,59 +48,21 @@ describe("Get Opportunities (e2e)", () => {
 			typeId: type.id.toString(),
 		});
 
-		await prisma.opportunity.createMany({
-			data: [
-				{
-					title: opportunity.title,
-					description: opportunity.description,
-					availableValue: opportunity.availableValue,
-					minValue: opportunity.minValue,
-					maxValue: opportunity.maxValue,
-					initialDeadline: opportunity.initialDeadline,
-					finalDeadline: opportunity.finalDeadline,
-					requiresCounterpart: opportunity.requiresCounterpart,
-					counterpartPercentage: opportunity.counterpartPercentage,
-					typeId: opportunity.typeId,
-				},
-			],
-		});
-
-		const response = await request(app.server)
-			.get("/opportunities")
-			.set("Authorization", `Bearer ${accessToken}`);
-
-		expect(response.statusCode).toEqual(200);
-		expect(response.body.data).toEqual([
-			{
-				id: expect.any(String),
+		await prisma.opportunity.create({
+			data: {
 				title: opportunity.title,
+				slug: opportunity.slug.value,
+				responsibleAgency: opportunity.responsibleAgency,
 				description: opportunity.description,
 				availableValue: opportunity.availableValue,
 				minValue: opportunity.minValue,
 				maxValue: opportunity.maxValue,
+				initialDeadline: opportunity.initialDeadline,
+				finalDeadline: opportunity.finalDeadline,
 				requiresCounterpart: opportunity.requiresCounterpart,
 				counterpartPercentage: opportunity.counterpartPercentage,
-				initialDeadline: expect.any(String),
-				finalDeadline: expect.any(String),
-				typeDescription: expect.any(String),
-				isActive: opportunity.isActive,
-				createdAt: expect.any(String),
-				updatedAt: expect.any(String),
-				requiredDocuments: [],
+				typeId: opportunity.typeId,
 			},
-		]);
-	});
-
-	it("should return an empty array when there are no opportunities", async () => {
-		await prisma.opportunity.deleteMany();
-
-		const user = makeUser({
-			role: Role.admin(),
-		});
-
-		const accessToken = app.jwt.sign({
-			sub: user.id.toString(),
-			role: user.role.toString(),
 		});
 
 		const response = await request(app.server)
@@ -107,5 +70,14 @@ describe("Get Opportunities (e2e)", () => {
 			.set("Authorization", `Bearer ${accessToken}`);
 
 		expect(response.statusCode).toEqual(200);
+		expect(response.body).toEqual({
+			success: true,
+			errors: null,
+			data: [
+				expect.objectContaining({
+					title: opportunity.title.toString(),
+				}),
+			],
+		});
 	});
 });

@@ -1,5 +1,5 @@
 import { PrismaMunicipalityRepository } from "../repositories/prisma-municipalities-repository";
-import { CreateMunicipalityUseCase } from "../../../../domain/use-cases/create-municipality";
+import { CreateMunicipalityUseCase } from "../../../../domain/use-cases/municipalities/create-municipality";
 
 export function makeCreateMunicipalityUseCase() {
 	const MunicipalitiesRepository = new PrismaMunicipalityRepository();

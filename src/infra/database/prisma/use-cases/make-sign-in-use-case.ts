@@ -1,6 +1,6 @@
 import { FastifyReply } from "fastify";
 import { PrismaUsersRepository } from "../repositories/prisma-users-repository";
-import { SignInUseCase } from "../../../../domain/use-cases/sign-in";
+import { SignInUseCase } from "../../../../domain/use-cases/auth/sign-in";
 import { JwtEncrypter } from "../../../adapters/jwt-encrypter.adapter";
 import { BcryptAdapter } from "../../../adapters/bcrypt-adapter";
 

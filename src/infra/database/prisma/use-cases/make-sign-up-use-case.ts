@@ -1,5 +1,5 @@
 import { PrismaUsersRepository } from "../repositories/prisma-users-repository";
-import { SignUpUseCase } from "../../../../domain/use-cases/sign-up";
+import { SignUpUseCase } from "../../../../domain/use-cases/auth/sign-up";
 import { BcryptAdapter } from "../../../adapters/bcrypt-adapter";
 
 export function makeSignUpUseCase() {
