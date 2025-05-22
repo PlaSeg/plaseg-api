@@ -195,9 +195,9 @@ model Opportunity {
   typeId String
 
   requiredDocuments RequiredDocument[]
+  Project           Project[]
 
   @@map("opportunities")
-  Project Project[]
 }
 
 model RequiredDocument {
@@ -399,19 +399,23 @@ model RequestedItem {
 }
 
 model Project {
-  id               String  @id @default(uuid())
-  responsibleCpf   String 
-  responsibleName  String
-  responsibleEmail String
-  responsiblePhone String
-  totalValue       Decimal
-  requestedValue   Decimal
-  baseValue        Decimal
+  id                            String  @id @default(uuid())
+  responsibleCpf                String
+  responsibleName               String
+  responsibleEmail              String
+  responsiblePhone              String
+  counterpartCapitalItem        String
+  counterpartCapitalValue       Decimal
+  counterpartOperatingCostCode  String
+  counterpartOperatingCostValue Decimal
+  totalValue                    Decimal
+  requestedValue                Decimal
+  baseValue                     Decimal
 
-  projectType   ProjectType     @relation(fields: [projectTypeId], references: [id], onDelete: Cascade)
+  projectType   ProjectType @relation(fields: [projectTypeId], references: [id], onDelete: Cascade)
   projectTypeId String
 
-  opportunity   Opportunity     @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
   opportunityId String
 
   RequestedItem RequestedItem[]
