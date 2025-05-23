@@ -7,7 +7,7 @@ export class PrismaPriceRegistrationRecordsRepository
 	implements PriceRegistrationRecordsRepository
 {
 	async findById(id: string): Promise<PriceRegistrationRecord | null> {
-		const record = await prisma.priceRegistrationRecord.findFirst({
+		const record = await prisma.priceRegistrationRecord.findUnique({
 			where: {
 				id,
 			},
