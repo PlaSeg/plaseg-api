@@ -10,7 +10,7 @@ export function makePriceRegistrationRecord(
 
 	const priceRegistrationRecord = PriceRegistrationRecord.create(
 		{
-			userId: new UniqueEntityID().toString(),
+			companyId: new UniqueEntityID().toString(),
 			number: "1234567890",
 			publicAgency: "1234567890",
 			year: 2024,

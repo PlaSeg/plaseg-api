@@ -56,7 +56,7 @@ export const priceRegistrationRecordResponseSchema = z.object({
 	year: z.number(),
 	effectiveDate: z.coerce.date(),
 	status: z.string(),
-	userId: z.string().uuid(),
+	companyId: z.string().uuid(),
 	items: z.array(priceRegistrationRecordItemResponseSchema),
 	createdAt: z.coerce.date(),
 	updatedAt: z.coerce.date().nullable(),
@@ -66,4 +66,8 @@ export const getPriceRegistrationRecordsResponseSchema = z.object({
 	priceRegistrationRecords: z
 		.array(priceRegistrationRecordResponseSchema)
 		.nullable(),
+});
+
+export const getPriceRegistrationRecordByIdResponseSchema = z.object({
+	priceRegistrationRecord: priceRegistrationRecordResponseSchema,
 });

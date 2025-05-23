@@ -54,7 +54,7 @@ export class PrismaPriceRegistrationRecordMapper {
 			year: record.year,
 			effectiveDate: record.effectiveDate,
 			status: record.status,
-			userId: record.userId,
+			companyId: record.companyId,
 		};
 	}
 }
