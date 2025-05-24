@@ -73,10 +73,12 @@ export class PrismaPriceRegistrationRecordsRepository
 		return records.map(PrismaPriceRegistrationRecordMapper.toDomain);
 	}
 
-	async findByUserId(userId: string): Promise<PriceRegistrationRecord | null> {
+	async findByCompanyId(
+		companyId: string
+	): Promise<PriceRegistrationRecord | null> {
 		const record = await prisma.priceRegistrationRecord.findFirst({
 			where: {
-				userId,
+				companyId,
 			},
 			include: {
 				priceRegistrationRecordItems: true,

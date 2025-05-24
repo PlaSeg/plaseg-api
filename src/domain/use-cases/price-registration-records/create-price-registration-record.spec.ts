@@ -32,7 +32,7 @@ describe("Create Price Registration Record Use Case", () => {
 			year: record.year,
 			effectiveDate: record.effectiveDate,
 			status: record.status,
-			userId: record.userId,
+			companyId: record.companyId,
 			items: record.priceRegistrationRecordItems.map((item) => ({
 				specificProductId: specificProduct.id.toString(),
 				unitValue: item.unitValue,
@@ -55,7 +55,7 @@ describe("Create Price Registration Record Use Case", () => {
 			year: record.year,
 			effectiveDate: record.effectiveDate,
 			status: record.status,
-			userId: record.userId,
+			companyId: record.companyId,
 			items: [],
 		});
 
@@ -72,7 +72,7 @@ describe("Create Price Registration Record Use Case", () => {
 			year: record.year,
 			effectiveDate: record.effectiveDate,
 			status: record.status,
-			userId: record.userId,
+			companyId: record.companyId,
 			items: [
 				{
 					specificProductId: "non-existent-product",

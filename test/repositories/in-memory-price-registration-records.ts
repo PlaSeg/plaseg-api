@@ -47,8 +47,10 @@ export class InMemoryPriceRegistrationRecordsRepository
 		return records;
 	}
 
-	async findByUserId(userId: string): Promise<PriceRegistrationRecord | null> {
-		const record = this.items.find((record) => record.userId === userId);
+	async findByCompanyId(
+		companyId: string
+	): Promise<PriceRegistrationRecord | null> {
+		const record = this.items.find((record) => record.companyId === companyId);
 
 		if (!record) {
 			return null;

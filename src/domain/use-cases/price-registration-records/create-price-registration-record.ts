@@ -11,7 +11,7 @@ type CreatePriceRegistrationRecordUseCaseRequest = {
 	year: number;
 	effectiveDate: Date;
 	status: string;
-	userId: string;
+	companyId: string;
 	items: {
 		specificProductId: string;
 		unitValue: number;
@@ -113,7 +113,7 @@ export class CreatePriceRegistrationRecordUseCase {
 			year: data.year,
 			effectiveDate: data.effectiveDate,
 			status: data.status,
-			userId: data.userId,
+			companyId: data.companyId,
 		});
 
 		const items = data.items.map((item) => {

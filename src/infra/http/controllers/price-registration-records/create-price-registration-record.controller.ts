@@ -37,9 +37,8 @@ export async function createPriceRegistrationRecord(app: FastifyInstance) {
 
 			const result = await createPriceRegistrationRecordUseCase.execute({
 				...body,
-				userId: request.user.sub,
+				companyId: request.user.sub,
 			});
-			
 
 			if (result.isLeft()) {
 				return reply.status(result.value.statusCode).send({

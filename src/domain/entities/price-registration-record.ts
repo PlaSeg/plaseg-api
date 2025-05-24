@@ -45,6 +45,14 @@ export class PriceRegistrationRecord extends Entity<PriceRegistrationRecordProps
 		return this.props.priceRegistrationRecordItems;
 	}
 
+	get createdAt() {
+		return this.props.createdAt;
+	}
+
+	get updatedAt() {
+		return this.props.updatedAt;
+	}
+
 	set priceRegistrationRecordItems(items: PriceRegistrationRecordItem[]) {
 		this.props.priceRegistrationRecordItems = items;
 	}
