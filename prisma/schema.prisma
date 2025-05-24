@@ -357,15 +357,15 @@ model Field {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
-  ProjectType   ProjectType? @relation(fields: [projectTypeId], references: [id])
-  projectTypeId String?
+  ProjectType   ProjectType @relation(fields: [projectTypeId], references: [id])
+  projectTypeId String
 
   @@map("fields")
 }
 
 model ProjectType {
   id   String @id @default(uuid())
-  name String
+  name String @unique
 
   fields  Field[]
   Project Project[]
