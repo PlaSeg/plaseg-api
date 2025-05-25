@@ -15,3 +15,20 @@ export const createProjectTypeBodySchema = z.object({
 export const getProjectTypesBodySchema = z
 	.array(createProjectTypeBodySchema)
 	.nullable();
+
+export const fieldResponseSchema = z.lazy(() =>
+	z.object({
+		id: z.string(),
+		name: z.string(),
+		value: z.string().optional(),
+		fields: z.array(fieldResponseSchema).optional(),
+	})
+);
+
+export const projectTypeResponseSchema = z.object({
+	name: z.string(),
+	fields: z.array(fieldResponseSchema),
+});
+
+export type FieldResponse = z.infer<typeof fieldResponseSchema>;
+export type ProjectTypeResponse = z.infer<typeof projectTypeResponseSchema>;
