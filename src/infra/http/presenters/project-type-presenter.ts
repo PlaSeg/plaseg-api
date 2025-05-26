@@ -5,6 +5,7 @@ import { ProjectTypeResponse, FieldResponse } from "../schemas/project-type";
 export class ProjectTypePresenter {
 	static toHTTP(projectType: ProjectType): ProjectTypeResponse {
 		return {
+			id: projectType.id.toString(),
 			name: projectType.name,
 			fields: projectType.fields.map((field) => ProjectTypePresenter.mapField(field)),
 		};

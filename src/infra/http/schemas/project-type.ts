@@ -26,6 +26,7 @@ export const fieldResponseSchema = z.lazy(() =>
 );
 
 export const projectTypeResponseSchema = z.object({
+	id: z.string(),
 	name: z.string(),
 	fields: z.array(fieldResponseSchema),
 });

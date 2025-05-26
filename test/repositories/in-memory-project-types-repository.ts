@@ -17,4 +17,18 @@ export class InMemoryProjectTypesRepository implements ProjectTypesRepository {
 
 		return projectType;
 	}
+
+	async findMany(): Promise<ProjectType[]> {
+		return this.items;
+	}
+
+	async findById(id: string): Promise<ProjectType | null> {
+		const projectType = this.items.find((item) => item.id.toString() === id);
+
+		if (!projectType) {
+			return null;
+		}
+
+		return projectType;
+	}
 }
