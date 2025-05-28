@@ -17,10 +17,10 @@ export class PrismaProjectTypesRepository implements ProjectTypesRepository {
 			});
 	}
 
-	async findByName(name: string): Promise<ProjectType | null> {
+	async findById(id: string): Promise<ProjectType | null> {
 		const data = await prisma.projectType.findUnique({
 			where: {
-				name,
+				id,
 			},
 			include: {
 				fields: true
@@ -33,6 +33,35 @@ export class PrismaProjectTypesRepository implements ProjectTypesRepository {
 
 		return PrismaProjectTypeMapper.toDomain({
 			...data
+		});
+	}
+
+	async findMany(): Promise<ProjectType[]> {
+		const data = await prisma.projectType.findMany({
+			include: {
+				fields: true,
+			},
+		});
+
+		return data.map(PrismaProjectTypeMapper.toDomain)
+	}
+
+	async findByName(name: string): Promise<ProjectType | null> {
+		const data = await prisma.projectType.findUnique({
+			where: {
+				name,
+			},
+			include: {
+				fields: true,
+			},
+		});
+
+		if (!data) {
+			return null;
+		}
+
+		return PrismaProjectTypeMapper.toDomain({
+			...data,
 		});
 	}
 }
