@@ -88,4 +88,30 @@ export class PrismaUsersRepository implements UsersRepository {
 
 		return users.map(PrismaUserMapper.toDomain);
 	}
+
+	async updateAllowed(userId: string): Promise<true | null> {
+		const currentUser = await prisma.user.findUnique({
+			where: {
+				id: userId,
+			},
+			select: {
+				allowed: true,
+			},
+		});
+
+		if (!currentUser) {
+			return null;
+		}
+
+		await prisma.user.update({
+			where: {
+				id: userId,
+			},
+			data: {
+				allowed: !currentUser.allowed,
+			},
+		});
+
+		return true;
+	}
 }

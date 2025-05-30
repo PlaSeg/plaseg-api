@@ -43,7 +43,11 @@ export class User extends Entity<UserProps> {
 	}
 
 	get allowed() {
-		return this.props.allowed;
+		return this.props.allowed ?? false;
+	}
+
+	set allowed(allowed: boolean) {
+		this.props.allowed = allowed;
 	}
 
 	get createdAt() {

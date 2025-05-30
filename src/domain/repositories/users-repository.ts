@@ -8,4 +8,5 @@ export interface UsersRepository {
 	findManyAdmins(): Promise<User[]>;
 	findManyMunicipalityUsers(): Promise<User[]>;
 	create(user: User): Promise<void>;
+	updateAllowed(userId: string): Promise<true | null>;
 }

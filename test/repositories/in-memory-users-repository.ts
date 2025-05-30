@@ -60,4 +60,16 @@ export class InMemoryUsersRepository implements UsersRepository {
 	async create(user: User): Promise<void> {
 		this.items.push(user);
 	}
+
+	async updateAllowed(userId: string): Promise<true | null> {
+		const user = this.items.find((user) => user.id.toString() === userId);
+
+		if (!user) {
+			return null;
+		}
+
+		user.allowed = !user.allowed;
+
+		return true;
+	}
 }
