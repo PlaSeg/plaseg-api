@@ -6,5 +6,7 @@ export interface UsersRepository {
 	findByDocument(document: string): Promise<User | null>;
 	findByPhone(phone: string): Promise<User | null>;
 	findManyAdmins(): Promise<User[]>;
+	findManyMunicipalityUsers(): Promise<User[]>;
 	create(user: User): Promise<void>;
+	updateAllowed(userId: string): Promise<true | null>;
 }

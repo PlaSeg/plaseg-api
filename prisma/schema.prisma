@@ -32,12 +32,13 @@ enum EmploymentType {
 }
 
 model User {
-  id       String @id @default(uuid())
+  id       String  @id @default(uuid())
   name     String
-  email    String @unique
-  document String @unique
-  phone    String @unique
+  email    String  @unique
+  document String  @unique
+  phone    String  @unique
   password String
+  allowed  Boolean @default(false)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
