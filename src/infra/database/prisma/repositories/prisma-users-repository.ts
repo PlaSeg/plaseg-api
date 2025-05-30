@@ -90,28 +90,32 @@ export class PrismaUsersRepository implements UsersRepository {
 	}
 
 	async updateAllowed(userId: string): Promise<true | null> {
-		const currentUser = await prisma.user.findUnique({
-			where: {
-				id: userId,
-			},
-			select: {
-				allowed: true,
-			},
+		const result = await prisma.$transaction(async (tx) => {
+			const currentUser = await tx.user.findUnique({
+				where: {
+					id: userId,
+				},
+				select: {
+					allowed: true,
+				},
+			});
+
+			if (!currentUser) {
+				return null;
+			}
+
+			await tx.user.update({
+				where: {
+					id: userId,
+				},
+				data: {
+					allowed: !currentUser.allowed,
+				},
+			});
+
+			return true;
 		});
 
-		if (!currentUser) {
-			return null;
-		}
-
-		await prisma.user.update({
-			where: {
-				id: userId,
-			},
-			data: {
-				allowed: !currentUser.allowed,
-			},
-		});
-
-		return true;
+		return result;
 	}
 }
