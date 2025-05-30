@@ -109,14 +109,33 @@ export const createMunicipalityRequestBodySchema = z.object({
 	unitType: z.enum(["UF", "MUNICIPALITY"], {
 		errorMap: () => ({ message: "Tipo de unidade inválido" }),
 	}),
-	qualifiedStaff: z
-		.array(createQualifiedStaffBodySchema),
-	projectsPartnerships: z
-		.array(createProjectPartnershipBodySchema),
-	allocationDepartments: z
-		.array(createAllocationDepartmentBodySchema),
-	managements: z
-		.array(createManagementBodySchema),
-	maintenanceContracts: z
-		.array(createMaintenanceContractRequestBodySchema)
+	qualifiedStaff: z.array(createQualifiedStaffBodySchema),
+	projectsPartnerships: z.array(createProjectPartnershipBodySchema),
+	allocationDepartments: z.array(createAllocationDepartmentBodySchema),
+	managements: z.array(createManagementBodySchema),
+	maintenanceContracts: z.array(createMaintenanceContractRequestBodySchema),
 });
+
+export const municipalityUserResponseSchema = z.object({
+	id: z.string().uuid(),
+	name: z.string(),
+	email: z.string().email(),
+	phone: z.string(),
+	document: z.string(),
+	role: z.string(),
+	allowed: z.boolean(),
+	createdAt: z.coerce.date(),
+	updatedAt: z.coerce.date().nullable(),
+});
+
+export type MunicipalityUserResponse = z.infer<
+	typeof municipalityUserResponseSchema
+>;
+
+export const getMunicipalityUsersResponseSchema = z
+	.array(municipalityUserResponseSchema)
+	.nullable();
+
+export type MunicipalityUsersResponse = z.infer<
+	typeof getMunicipalityUsersResponseSchema
+>;

@@ -15,6 +15,7 @@ export class PrismaUserMapper {
 				phone: raw.phone,
 				createdAt: raw.createdAt,
 				updatedAt: raw.updatedAt,
+				allowed: raw.allowed,
 				role:
 					raw.role === "ADMIN_MASTER"
 						? Role.adminMaster()
@@ -37,6 +38,7 @@ export class PrismaUserMapper {
 			name: user.name,
 			phone: user.phone,
 			role: user.role.toPrisma(),
+			allowed: user.allowed,
 		};
 	}
 }

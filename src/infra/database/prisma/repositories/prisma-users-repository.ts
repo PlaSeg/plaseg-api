@@ -2,6 +2,7 @@ import { UsersRepository } from "../../../../domain/repositories/users-repositor
 import { prisma } from "../prisma";
 import { User } from "../../../../domain/entities/user";
 import { PrismaUserMapper } from "../mappers/prisma-user-mapper";
+import { DomainRole } from "../../../../domain/entities/value-objects/role";
 
 export class PrismaUsersRepository implements UsersRepository {
 	async findById(id: string): Promise<User | null> {
@@ -63,7 +64,7 @@ export class PrismaUsersRepository implements UsersRepository {
 	async findManyAdmins(): Promise<User[]> {
 		const admins = await prisma.user.findMany({
 			where: {
-				role: "ADMIN",
+				role: DomainRole.ADMIN,
 			},
 		});
 
@@ -76,5 +77,45 @@ export class PrismaUsersRepository implements UsersRepository {
 		await prisma.user.create({
 			data,
 		});
+	}
+
+	async findManyMunicipalityUsers(): Promise<User[]> {
+		const users = await prisma.user.findMany({
+			where: {
+				role: DomainRole.MUNICIPALITY,
+			},
+		});
+
+		return users.map(PrismaUserMapper.toDomain);
+	}
+
+	async updateAllowed(userId: string): Promise<true | null> {
+		const result = await prisma.$transaction(async (tx) => {
+			const currentUser = await tx.user.findUnique({
+				where: {
+					id: userId,
+				},
+				select: {
+					allowed: true,
+				},
+			});
+
+			if (!currentUser) {
+				return null;
+			}
+
+			await tx.user.update({
+				where: {
+					id: userId,
+				},
+				data: {
+					allowed: !currentUser.allowed,
+				},
+			});
+
+			return true;
+		});
+
+		return result;
 	}
 }
