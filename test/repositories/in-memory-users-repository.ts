@@ -51,6 +51,12 @@ export class InMemoryUsersRepository implements UsersRepository {
 		);
 	}
 
+	async findManyMunicipalityUsers(): Promise<User[]> {
+		return this.items.filter(
+			(user) => user.role.getValue() === DomainRole.MUNICIPALITY
+		);
+	}
+
 	async create(user: User): Promise<void> {
 		this.items.push(user);
 	}
