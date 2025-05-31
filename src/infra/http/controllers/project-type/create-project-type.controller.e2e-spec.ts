@@ -4,8 +4,6 @@ import request from "supertest";
 import { buildApp } from "../../app";
 import { makeUser } from "../../../../../test/factories/make-user";
 import { Role } from "../../../../domain/entities/value-objects/role";
-import { makeRequiredDocument } from "../../../../../test/factories/make-required-document";
-
 describe("Create Project Type (e2e)", () => {
 	let app: FastifyInstance;
 
