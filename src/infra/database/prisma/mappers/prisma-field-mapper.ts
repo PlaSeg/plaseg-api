@@ -6,30 +6,29 @@ export class PrismaFieldMapper {
 	static toPrisma(
 		field: Field,
 		fieldParentId: string | null,
-		projectTypeId: string
+		documentId: string
 	): Prisma.FieldUncheckedCreateInput {
 		return {
 			id: field.id.toString(),
 			name: field.name,
 			value: field.value,
 			parentId: fieldParentId,
-			projectTypeId: projectTypeId,
+			documentId: documentId,
 			createdAt: field.createdAt,
 			updatedAt: field.updatedAt,
 		};
 	}
 
-	static toDomain(raw: PrismaField & { fields?: PrismaField[] }): Field {
-		const children =
-			raw.fields?.map((child) => PrismaFieldMapper.toDomain(child)) ?? [];
+	static toDomain(raw: PrismaField): Field {
 
 		return Field.create(
 			{
 				name: raw.name,
 				value: raw.value || "",
+				documentId: raw.documentId,
+				parentId: raw.parentId ?? undefined,
 				createdAt: raw.createdAt,
 				updatedAt: raw.updatedAt,
-				fields: children,
 			},
 			new UniqueEntityID(raw.id)
 		);

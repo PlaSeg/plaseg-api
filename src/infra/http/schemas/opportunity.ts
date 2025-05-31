@@ -8,6 +8,18 @@ export const requiredDocumentSchema = z.object({
 	model: z.string().min(1, "O modelo é obrigatório"),
 });
 
+export const fieldSchema = z.object({
+	id: z.string(),
+	name: z.string(),
+	value: z.string().optional(),
+	parentId: z.string().optional(),
+});
+
+export const documentsSchema = z.object({
+	name: z.string().min(3, "O nome deve ter no mínimo 3 caracteres"),
+	fields: z.array(fieldSchema)
+})
+
 export const createOpportunityRequestBodySchema = z
 	.object({
 		title: z.string().min(3, "O título deve ter no mínimo 3 caracteres"),
@@ -35,6 +47,7 @@ export const createOpportunityRequestBodySchema = z
 		requiredDocuments: z
 			.array(requiredDocumentSchema)
 			.min(1, "Pelo menos um documento é obrigatório"),
+		documents: z.array(documentsSchema).min(1, "Pelo menos um documento é obrigatório")
 	})
 	.refine(
 		(data) => {
@@ -94,6 +107,7 @@ export const opportunityResponseSchema = z.object({
 			updatedAt: z.coerce.date().nullable().optional(),
 		})
 	),
+	documents: z.array(documentsSchema)
 });
 
 export const getOpportunitiesResponseSchema = z

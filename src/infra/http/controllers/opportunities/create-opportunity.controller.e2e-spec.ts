@@ -74,7 +74,17 @@ describe("Create Opportunity (e2e)", () => {
 					description: doc.description,
 					model: doc.model,
 				})),
+				documents: [
+					{
+						name: "Document Example",
+						fields: [
+							{ id: "1", name: "Field 1", value: "Value 1" },
+							{ id: "2", name: "Field 2", value: "Value 2", parentId: "1" },
+						],
+					},
+				],
 			});
+
 
 		expect(response.statusCode).toEqual(201);
 		expect(response.body).toEqual({

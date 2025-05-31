@@ -5,6 +5,20 @@ import { OpportunitiesRepository } from "../../repositories/opportunities-reposi
 import { RequiredDocument } from "../../entities/required-document";
 import { TypesRepository } from "../../repositories/types-repository";
 import { TypeGroup } from "../../entities/value-objects/type-group";
+import { Document } from "../../entities/document";
+import { buildFieldTree } from "../../helpers/field-helper";
+
+type FieldRequest = {
+	id: string;
+	name: string;
+	value?: string;
+	parentId?: string;
+};
+
+type DocumentRequest = {
+	name: string;
+	fields: FieldRequest[];
+}
 
 type RequiredDocumentRequest = {
 	name: string;
@@ -27,6 +41,7 @@ type CreateOpportunityUseCaseRequest = {
 	type: string;
 	typeId: string;
 	requiredDocuments: RequiredDocumentRequest[];
+	documents: DocumentRequest[];
 };
 
 type CreateOpportunityUseCaseResponse = Either<
@@ -72,9 +87,17 @@ export class CreateOpportunityUseCase {
 			})
 		);
 
+		const documents = request.documents.map((doc) => 
+			Document.create({
+				name: doc.name,
+				fields: buildFieldTree(doc.fields)
+			})
+		)
+
 		const opportunity = Opportunity.create({
 			...request,
 			requiredDocuments,
+			documents
 		});
 
 		await this.opportunityRepository.create(opportunity);

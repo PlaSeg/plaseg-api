@@ -2,7 +2,7 @@ import { Either, left, right } from "../../core/types/either";
 import { CustomError } from "../../core/errors/custom-error";
 import { Field } from "../entities/field";
 import { PrismaFieldMapper } from "../../infra/database/prisma/mappers/prisma-field-mapper";
-import { prisma } from "../../infra/database/prisma/prisma";
+import { Prisma } from "@prisma/client";
 
 export type FlatField = {
 	id: string;
@@ -88,17 +88,18 @@ export function buildFieldTree(fields: FlatField[]): Field[] {
 
 export async function createFieldsRecursively(
 	fields: Field[],
-	projectTypeId: string,
-	parentId: string | null = null
+	documentId: string,
+	tx: Prisma.TransactionClient,
+	parentId: string | null = null,
 ) {
 	for (const field of fields) {
-		const data = PrismaFieldMapper.toPrisma(field, parentId, projectTypeId);
-		const created = await prisma.field.create({
+		const data = PrismaFieldMapper.toPrisma(field, parentId, documentId);
+		const created = await tx.field.create({
 			data,
 		});
 
 		if (field.fields && field.fields.length > 0) {
-			await createFieldsRecursively(field.fields, projectTypeId, created.id);
+			await createFieldsRecursively(field.fields, documentId, tx, created.id);
 		}
 	}
 }

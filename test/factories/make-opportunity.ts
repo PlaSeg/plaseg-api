@@ -19,6 +19,7 @@ export function makeOpportunity(override: Partial<OpportunityProps> = {}) {
 		requiresCounterpart: true,
 		counterpartPercentage: 10,
 		requiredDocuments: [makeRequiredDocument()],
+		documents: [],
 		typeId: new UniqueEntityID().toString(),
 		type: "OPPORTUNITY",
 		...override,
