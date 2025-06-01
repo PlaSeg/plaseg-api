@@ -360,6 +360,7 @@ model Field {
   name     String
   value    String?
   parentId String?
+  ready    Boolean?
 
   parent   Field?  @relation("FieldHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
   children Field[] @relation("FieldHierarchy")
@@ -424,17 +425,18 @@ model ProjectType {
 
 model Project {
   id                            String  @id @default(uuid())
-  responsibleCpf                String
-  responsibleName               String
-  responsibleEmail              String
-  responsiblePhone              String
-  counterpartCapitalItem        String
-  counterpartCapitalValue       Decimal
-  counterpartOperatingCostCode  String
-  counterpartOperatingCostValue Decimal
-  totalValue                    Decimal
-  requestedValue                Decimal
-  baseValue                     Decimal
+  title                         String  
+  responsibleCpf                String?
+  responsibleName               String?
+  responsibleEmail              String?
+  responsiblePhone              String?
+  counterpartCapitalItem        String?
+  counterpartCapitalValue       Decimal?
+  counterpartOperatingCostCode  String?
+  counterpartOperatingCostValue Decimal?
+  totalValue                    Decimal?
+  requestedValue                Decimal?
+  baseValue                     Decimal?
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
