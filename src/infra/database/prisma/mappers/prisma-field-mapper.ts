@@ -20,7 +20,6 @@ export class PrismaFieldMapper {
 	}
 
 	static toDomain(raw: PrismaField): Field {
-
 		return Field.create(
 			{
 				name: raw.name,

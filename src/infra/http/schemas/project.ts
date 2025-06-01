@@ -34,3 +34,11 @@ export const patchProjectGeneralInfoBodySchema = z.object({
 	requestedValue: z.number().positive().optional(),
 	baseValue: z.number().positive().optional(),
 });
+
+export const patchProjectDocumentFieldParamsSchema = z.object({
+	fieldId: z.string().uuid(),
+});
+
+export const patchProjectDocumentFieldBodySchema = z.object({
+	value: z.string().min(5, "O valor deve ter no mínimo 5 caracteres"),
+});
