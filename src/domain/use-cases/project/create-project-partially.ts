@@ -1,15 +1,12 @@
 import { CustomError } from "../../../core/errors/custom-error";
 import { Either, left, right } from "../../../core/types/either";
 import { Document } from "../../entities/document";
-import { randomUUID } from 'crypto'; // ou use UniqueEntityID() se você estiver usando esse padrão
 import { OpportunitiesRepository } from "../../repositories/opportunities-repository";
 import { ProjectsRepository } from "../../repositories/project-repository";
 import { ProjectTypesRepository } from "../../repositories/project-type-repository";
 import { Slug } from "../../entities/value-objects/slug";
 import { Project } from "../../entities/project";
-import { UniqueEntityID } from "../../../core/entities/unique-entity-id";
 import { buildFieldTree } from "../../helpers/field-helper";
-import { Field } from "../../entities/field";
 
 type CreateProjectPartiallyUseCaseRequest = {
     title: string;
