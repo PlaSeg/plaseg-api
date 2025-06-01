@@ -41,6 +41,6 @@ export class Document extends Entity<DocumentProps> {
 			id
 		);
 
-		return document;
+		return document;
 	}
 }
