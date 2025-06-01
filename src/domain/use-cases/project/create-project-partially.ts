@@ -9,87 +9,99 @@ import { Project } from "../../entities/project";
 import { buildFieldTree } from "../../helpers/field-helper";
 
 type CreateProjectPartiallyUseCaseRequest = {
-    title: string;
-    opportunityId: string;
-    projectTypeId: string;
+	title: string;
+	opportunityId: string;
+	projectTypeId: string;
 };
 
 type CreateProjectPartiallyUseCaseResponse = Either<CustomError, null>;
 
 export class CreateProjectPartiallyUseCase {
-    constructor(
-        private projectRepository: ProjectsRepository,
-        private opportunityRepository: OpportunitiesRepository,
-        private projectTypeRepository: ProjectTypesRepository
-    ) {}
+	constructor(
+		private projectRepository: ProjectsRepository,
+		private opportunityRepository: OpportunitiesRepository,
+		private projectTypeRepository: ProjectTypesRepository
+	) {}
 
-    private createProjectDocuments(opportunityDocuments: Document[], projectTypeDocuments: Document[]) {
+	private createProjectDocuments(
+		opportunityDocuments: Document[],
+		projectTypeDocuments: Document[]
+	) {
+		for (const opportunityDocument of opportunityDocuments) {
+			for (const projectTypeDocument of projectTypeDocuments) {
+				if (
+					Slug.createFromText(opportunityDocument.name).value ===
+					Slug.createFromText(projectTypeDocument.name).value
+				) {
+					for (const opportunityField of opportunityDocument.fields) {
+						for (const projectTypeField of projectTypeDocument.fields) {
+							if (
+								Slug.createFromText(opportunityField.name).value ===
+								Slug.createFromText(projectTypeField.name).value
+							) {
+								opportunityField.value = projectTypeField.value;
+							}
+						}
+					}
+				}
+			}
+		}
 
-        for(const opportunityDocument of opportunityDocuments) {
-            for(const projectTypeDocument of projectTypeDocuments) {
-                if(
-                    Slug.createFromText(opportunityDocument.name).value === 
-                    Slug.createFromText(projectTypeDocument.name).value
-                ) {
+		return opportunityDocuments;
+	}
 
-                    for(const opportunityField of opportunityDocument.fields) {
-                        for(const projectTypeField of projectTypeDocument.fields) {
-                            if(
-                                Slug.createFromText(opportunityField.name).value === 
-                                Slug.createFromText(projectTypeField.name).value
-                            ) {
-                                opportunityField.value = projectTypeField.value;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+	async execute(
+		request: CreateProjectPartiallyUseCaseRequest
+	): Promise<CreateProjectPartiallyUseCaseResponse> {
+		const opportunityExists = await this.opportunityRepository.findById(
+			request.opportunityId
+		);
 
-        return opportunityDocuments;
-    }
+		if (!opportunityExists) {
+			return left(new CustomError(409, "Essa oportunidade não existe!"));
+		}
 
-    async execute(
-        request: CreateProjectPartiallyUseCaseRequest
-    ): Promise<CreateProjectPartiallyUseCaseResponse> {
-        const opportunityExists = await this.opportunityRepository.findById(request.opportunityId);
+		const projectTypeExists = await this.projectTypeRepository.findById(
+			request.projectTypeId
+		);
 
-        if (!opportunityExists) {
-            return left(new CustomError(409, "Essa oportunidade não existe!"));
-        }
+		if (!projectTypeExists) {
+			return left(new CustomError(409, "Esse tipo de projeto não existe!"));
+		}
 
-        const projectTypeExists = await this.projectTypeRepository.findById(request.projectTypeId);
+		const projectDocumentsFlat = this.createProjectDocuments(
+			opportunityExists.documents,
+			projectTypeExists.documents
+		);
 
-        if (!projectTypeExists) {
-            return left(new CustomError(409, "Esse tipo de projeto não existe!"));
-        }
+		const projectDocuments = projectDocumentsFlat.map((doc) =>
+			Document.create({
+				name: doc.name,
+				fields: buildFieldTree(
+					doc.fields.map((field) => ({
+						id: field.id.toString(),
+						name: field.name,
+						value: field.value,
+						parentId: field.parentId?.toString(),
+						documentId: doc.id.toString(),
+						createdAt: field.createdAt,
+						updatedAt: field.updatedAt,
+					}))
+				),
+			})
+		);
 
-        const projectDocumentsFlat = this.createProjectDocuments(opportunityExists.documents, projectTypeExists.documents);
+		const projectPartially = Project.create({
+			title: request.title,
+			documents: projectDocuments,
+		});
 
-        const projectDocuments = projectDocumentsFlat.map((doc) =>
-            Document.create({
-                name: doc.name,
-                fields: buildFieldTree(
-                    doc.fields.map((field) => ({
-                        id: field.id.toString(),
-                        name: field.name,
-                        value: field.value,
-                        parentId: field.parentId?.toString(),
-                        documentId: doc.id.toString(),
-                        createdAt: field.createdAt,
-                        updatedAt: field.updatedAt,
-                    }))
-                )
-            })
-        );
+		await this.projectRepository.create(
+			projectPartially,
+			request.opportunityId,
+			request.projectTypeId
+		);
 
-        const projectPartially = Project.create({
-            title: request.title,
-            documents: projectDocuments
-        })
-
-        await this.projectRepository.create(projectPartially, request.opportunityId, request.projectTypeId);
-
-        return right(null);
-    }
+		return right(null);
+	}
 }
