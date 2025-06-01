@@ -1,4 +1,5 @@
 import { Slug } from "../../src/domain/entities/value-objects/slug";
+import { PrismaClient } from "@prisma/client";
 
 export const opportunities = (typeId: string) => {
 	return [
@@ -722,3 +723,15 @@ export const opportunities = (typeId: string) => {
 		},
 	];
 };
+
+export async function seedOpportunities(prisma: PrismaClient, typeId: string) {
+	console.log("🌱 Seeding opportunities...");
+
+	for (const opportunity of opportunities(typeId)) {
+		await prisma.opportunity.create({
+			data: opportunity,
+		});
+	}
+
+	console.log("✅ Opportunities seeded successfully");
+}
