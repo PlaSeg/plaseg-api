@@ -1,3 +1,5 @@
+import { PrismaClient } from "@prisma/client";
+
 export const baseProducts = (typeId: string) => {
 	return [
 		{
@@ -142,3 +144,15 @@ export const baseProducts = (typeId: string) => {
 		},
 	];
 };
+
+export async function seedBaseProducts(prisma: PrismaClient, typeId: string) {
+	console.log("🌱 Seeding base products...");
+
+	for (const baseProduct of baseProducts(typeId)) {
+		await prisma.baseProduct.create({
+			data: baseProduct,
+		});
+	}
+
+	console.log("✅ Base products seeded successfully");
+}

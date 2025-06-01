@@ -10,7 +10,7 @@ export class UserPresenter {
 			phone: user.phone,
 			document: user.document,
 			role: user.role.toString(),
-			allowed: user.allowed ?? false,
+			allowed: user.allowed,
 			createdAt: user.createdAt,
 			updatedAt: user.updatedAt ?? null,
 		};

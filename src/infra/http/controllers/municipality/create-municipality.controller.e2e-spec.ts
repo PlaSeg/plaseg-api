@@ -162,6 +162,10 @@ describe("Create Municipality (e2e)", () => {
 
 		const municipality = makeMunicipality();
 		const qualifiedStaff = makeQualifiedStaff();
+		const projectPartnership = makeProjectPartnership();
+		const allocationDepartment = makeAllocationDepartment();
+		const management = makeManagement();
+		const maintenanceContract = makeMaintenanceContract();
 
 		const response = await request(app.server)
 			.post("/municipality")
@@ -194,10 +198,47 @@ describe("Create Municipality (e2e)", () => {
 						isResponsible: qualifiedStaff.isResponsible,
 					},
 				],
-				projectsPartnerships: [],
-				allocationDepartments: [],
-				managements: [],
-				maintenanceContracts: [],
+				projectsPartnerships: [
+					{
+						term: projectPartnership.term,
+						agency: projectPartnership.agency,
+						objective: projectPartnership.objective,
+						status: projectPartnership.status,
+					},
+				],
+				allocationDepartments: [
+					{
+						description: allocationDepartment.description,
+						address: allocationDepartment.address,
+					},
+				],
+				managements: [
+					{
+						initialDate: management.initialDate,
+						endDate: management.endDate,
+						managerName: management.managerName,
+						managerCpf: management.managerCpf,
+						managerEmail: management.managerEmail.toString(),
+						managerAddress: management.managerAddress,
+						managerPhone: management.managerPhone,
+						adminManagerName: management.adminManagerName,
+						adminManagerCpf: management.adminManagerCpf,
+						adminManagerEmail: management.adminManagerEmail.toString(),
+						adminManagerAddress: management.adminManagerAddress,
+						adminManagerPhone: management.adminManagerPhone,
+						legislationName: management.legislationName,
+						legislationCpf: management.legislationCpf,
+						legislationEmail: management.legislationEmail.toString(),
+						legislationAddress: management.legislationAddress,
+						legislationPhone: management.legislationPhone,
+					},
+				],
+				maintenanceContracts: [
+					{
+						description: maintenanceContract.description,
+						attachment: maintenanceContract.attachment,
+					},
+				],
 				userId: user.id,
 			});
 

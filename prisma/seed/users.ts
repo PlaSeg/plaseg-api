@@ -1,4 +1,5 @@
-import { Role } from "@prisma/client";
+import { Role, PrismaClient } from "@prisma/client";
+import { hash } from "bcrypt";
 
 export const users = [
 	{
@@ -41,4 +42,59 @@ export const users = [
 		password: "hr123",
 		role: Role.ADMIN,
 	},
+	{
+		name: "Carlos Silva",
+		email: "saopaulo@municipality.com",
+		phone: "11944444444",
+		document: "11122233344",
+		password: "municipality123",
+		role: Role.MUNICIPALITY,
+	},
+	{
+		name: "Ana Santos",
+		email: "rio@municipality.com",
+		phone: "21944444444",
+		document: "22233344455",
+		password: "municipality123",
+		role: Role.MUNICIPALITY,
+	},
+	{
+		name: "João Oliveira",
+		email: "belohorizonte@municipality.com",
+		phone: "31944444444",
+		document: "33344455566",
+		password: "municipality123",
+		role: Role.MUNICIPALITY,
+	},
+	{
+		name: "Maria Costa",
+		email: "portoalegre@municipality.com",
+		phone: "51944444444",
+		document: "44455566677",
+		password: "municipality123",
+		role: Role.MUNICIPALITY,
+	},
+	{
+		name: "Pedro Ferreira",
+		email: "salvador@municipality.com",
+		phone: "71944444444",
+		document: "55566677788",
+		password: "municipality123",
+		role: Role.MUNICIPALITY,
+	},
 ];
+
+export async function seedUsers(prisma: PrismaClient) {
+	console.log("🌱 Seeding users...");
+
+	for (const user of users) {
+		await prisma.user.create({
+			data: {
+				...user,
+				password: await hash(user.password, 6),
+			},
+		});
+	}
+
+	console.log("✅ Users seeded successfully");
+}
