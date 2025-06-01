@@ -42,23 +42,37 @@ describe("Patch Project General Info (e2e)", () => {
 			},
 		});
 
-		// Criar Project Type com documentos que serão mesclados
 		const projectType = await prisma.projectType.create({
 			data: {
 				name: "Test Project Type",
 				documents: {
 					create: [
 						{
-							name: "Documento Comum",
+							name: "Proposta Técnica",
 							fields: {
 								create: [
 									{
-										name: "Campo Comum",
-										value: "Valor do Tipo de Projeto",
+										name: "Objetivos",
+										value: "Objetivos do Tipo de Projeto",
 									},
 									{
-										name: "Campo Específico do Tipo",
-										value: "Valor Específico do Tipo",
+										name: "Metodologia",
+										value: "Metodologia do Tipo de Projeto",
+									},
+								],
+							},
+						},
+						{
+							name: "Plano de Capacitação",
+							fields: {
+								create: [
+									{
+										name: "Cursos",
+										value: "Cursos do Tipo de Projeto",
+									},
+									{
+										name: "Carga Horária",
+										value: "Carga horária do Tipo de Projeto",
 									},
 								],
 							},
@@ -91,27 +105,31 @@ describe("Patch Project General Info (e2e)", () => {
 				documents: {
 					create: [
 						{
-							name: "Documento Comum",
+							name: "Proposta Técnica",
 							fields: {
 								create: [
 									{
-										name: "Campo Comum",
-										value: "Valor da Oportunidade",
+										name: "Objetivos",
+										value: "Objetivos da Oportunidade",
 									},
 									{
-										name: "Campo Específico da Oportunidade",
-										value: "Valor Específico da Oportunidade",
+										name: "Metodologia",
+										value: "Metodologia da Oportunidade",
 									},
 								],
 							},
 						},
 						{
-							name: "Documento Apenas da Oportunidade",
+							name: "Plano de Capacitação",
 							fields: {
 								create: [
 									{
-										name: "Campo Único",
-										value: "Valor Único",
+										name: "Cursos",
+										value: "Cursos da Oportunidade",
+									},
+									{
+										name: "Carga Horária",
+										value: "Carga horária da Oportunidade",
 									},
 								],
 							},
@@ -145,16 +163,38 @@ describe("Patch Project General Info (e2e)", () => {
 				createdAt: project.createdAt,
 				updatedAt: project.updatedAt,
 				documents: {
-					create: project.documents.map((doc) => ({
-						name: doc.name,
-						fields: {
-							create: doc.fields.map((field) => ({
-								name: field.name,
-								value: field.value,
-								parentId: field.parentId?.toString(),
-							})),
+					create: [
+						{
+							name: "Proposta Técnica",
+							fields: {
+								create: [
+									{
+										name: "Objetivos",
+										value: "Objetivos do Projeto",
+									},
+									{
+										name: "Metodologia",
+										value: "Metodologia do Projeto",
+									},
+								],
+							},
 						},
-					})),
+						{
+							name: "Plano de Capacitação",
+							fields: {
+								create: [
+									{
+										name: "Cursos",
+										value: "Cursos do Projeto",
+									},
+									{
+										name: "Carga Horária",
+										value: "Carga horária do Projeto",
+									},
+								],
+							},
+						},
+					],
 				},
 			},
 		});
