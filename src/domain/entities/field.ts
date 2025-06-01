@@ -19,7 +19,11 @@ export class Field extends Entity<FieldProps> {
 	}
 
 	get value() {
-		return this.props.value;
+		return this.props.value ?? "";
+	}
+
+	set value(newValue: string) {
+		this.props.value = newValue;
 	}
 
 	get parentId() {
