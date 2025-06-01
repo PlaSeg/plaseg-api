@@ -4,12 +4,15 @@ import { seedTypes } from "./seed/types";
 import { seedOpportunities } from "./seed/opportunities";
 import { seedBaseProducts } from "./seed/base-products";
 import { seedProjects } from "./seed/projects";
+import { seedRequestedItems } from "./seed/requested-items";
 
 const prisma = new PrismaClient();
 
 async function seed() {
 	console.log("🚀 Starting seed process...");
 	console.log("🧹 Cleaning existing data...");
+
+	await prisma.requestedItem.deleteMany();
 	await prisma.project.deleteMany();
 	await prisma.opportunity.deleteMany();
 	await prisma.baseProduct.deleteMany();
@@ -28,6 +31,8 @@ async function seed() {
 	await seedBaseProducts(prisma, weaponId);
 
 	await seedProjects(prisma, editalId);
+
+	await seedRequestedItems(prisma);
 
 	console.log("🎉 Seed process completed successfully!");
 }
