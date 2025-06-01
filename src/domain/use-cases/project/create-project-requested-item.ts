@@ -37,7 +37,7 @@ export class CreateProjectRequestedItemUseCase {
 		);
 
 		if (!projectExists) {
-			return left(new CustomError(409, "Este projeto não existe!"));
+			return left(new CustomError(404, "Este projeto não existe!"));
 		}
 
 		const baseProductExists = await this.baseProductRepository.findById(
@@ -45,7 +45,7 @@ export class CreateProjectRequestedItemUseCase {
 		);
 
 		if (!baseProductExists) {
-			return left(new CustomError(409, "Este produto base não existe!"));
+			return left(new CustomError(404, "Este produto base não existe!"));
 		}
 
 		if (request.allocationDepartmentId) {
@@ -56,7 +56,7 @@ export class CreateProjectRequestedItemUseCase {
 
 			if (!allocationDepartmentExists) {
 				return left(
-					new CustomError(409, "Este departamento de alocação não existe!")
+					new CustomError(404, "Este departamento de alocação não existe!")
 				);
 			}
 		}
@@ -69,7 +69,7 @@ export class CreateProjectRequestedItemUseCase {
 
 			if (!maintenanceContractExists) {
 				return left(
-					new CustomError(409, "Este contrato de manutenção não existe!")
+					new CustomError(404, "Este contrato de manutenção não existe!")
 				);
 			}
 		}

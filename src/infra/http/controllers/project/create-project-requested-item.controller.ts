@@ -28,7 +28,7 @@ export async function createProjectRequestedItem(app: FastifyInstance) {
 				response: {
 					201: successResponseSchema(z.null()).describe("Created"),
 					400: errorResponseSchema.describe("Bad Request"),
-					409: errorResponseSchema.describe("Conflict"),
+					404: errorResponseSchema.describe("Not Found"),
 				},
 			},
 		},
