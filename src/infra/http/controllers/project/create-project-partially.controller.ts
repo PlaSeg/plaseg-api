@@ -3,8 +3,6 @@ import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { errorResponseSchema, successResponseSchema } from "../../schemas/http";
 import { verifyUserRole } from "../../middleware/verify-user-role";
 import { z } from "zod";
-import { createProjectTypeRequestBodySchema } from "../../schemas/project-type";
-import { makeCreateProjectTypeUseCase } from "../../../database/prisma/use-cases/make-create-project-type-use-case";
 import { createProjectPartiallyRequestBodySchema } from "../../schemas/project";
 import { makeCreateProjectPartiallyUseCase } from "../../../database/prisma/use-cases/make-create-project-partially-use-case";
 

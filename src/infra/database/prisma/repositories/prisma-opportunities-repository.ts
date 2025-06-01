@@ -92,20 +92,24 @@ export class PrismaOpportunitiesRepository implements OpportunitiesRepository {
 	}
 
 	async create(opportunity: Opportunity): Promise<void> {
-		await prisma.$transaction(async tx => {
+		await prisma.$transaction(async (tx) => {
 			const data = PrismaOpportunityMapper.toPrisma(opportunity);
 			await tx.opportunity.create({ data });
 
 			for (const document of opportunity.documents) {
-				const docData = PrismaDocumentMapper.toPrisma(document, opportunity.id.toString(), "opportunityId")
+				const docData = PrismaDocumentMapper.toPrisma(
+					document,
+					opportunity.id.toString(),
+					"opportunityId"
+				);
 				await tx.document
 					.create({
-						data: docData
+						data: docData,
 					})
 					.then(async (doc) => {
 						await createFieldsRecursively(document.fields, doc.id, tx);
 					});
 			}
-  		})
+		});
 	}
 }

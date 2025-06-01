@@ -9,9 +9,6 @@ import { Opportunity } from "../../../../domain/entities/opportunity";
 import { UniqueEntityID } from "../../../../core/entities/unique-entity-id";
 import { RequiredDocument } from "../../../../domain/entities/required-document";
 import { getCurrentDate } from "../../../../core/utils/get-current-date";
-import { Document } from "../../../../domain/entities/document";
-import { Field } from "../../../../domain/entities/field";
-import { PrismaFieldMapper } from "./prisma-field-mapper";
 import { PrismaDocumentMapper } from "./prisma-document-mapper";
 
 export class PrismaOpportunityMapper {
