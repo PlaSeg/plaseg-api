@@ -356,11 +356,11 @@ model Opportunity {
 }
 
 model Field {
-  id       String  @id @default(uuid())
+  id       String   @id @default(uuid())
   name     String
   value    String?
   parentId String?
-  ready    Boolean?
+  ready    Boolean? @default(false)
 
   parent   Field?  @relation("FieldHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
   children Field[] @relation("FieldHierarchy")
@@ -424,8 +424,8 @@ model ProjectType {
 }
 
 model Project {
-  id                            String  @id @default(uuid())
-  title                         String  
+  id                            String   @id @default(uuid())
+  title                         String
   responsibleCpf                String?
   responsibleName               String?
   responsibleEmail              String?
