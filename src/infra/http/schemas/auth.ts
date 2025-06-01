@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const signUpRequestBodySchema = z.object({
 	name: z.string().min(3, "O Nome deve ter no mínimo 3 caracteres"),
-	email: z.string().email("O Email inválido"),
+	email: z.string().email("Email inválido"),
 	password: z.string().min(8, "A senha deve ter no mínimo 8 caracteres"),
 	phone: z.string().refine(
 		(val) => {

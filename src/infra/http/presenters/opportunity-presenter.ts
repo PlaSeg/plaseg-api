@@ -41,8 +41,8 @@ export class OpportunityPresenter {
 					updatedAt: field.updatedAt,
 				})),
 				createdAt: doc.createdAt,
-				updatedAt: doc.updatedAt
-			}))
+				updatedAt: doc.updatedAt,
+			})),
 		};
 	}
 }
