@@ -20,11 +20,14 @@ export class PrismaDocumentMapper {
 		);
 	}
 
-	static toPrisma(document: Document, opportunityId: string): Prisma.DocumentUncheckedCreateInput {
+	static toPrisma(
+		document: Document,
+		parentId: string, 
+		parentKey: "opportunityId" | "projectId"): Prisma.DocumentUncheckedCreateInput {
 		return {
 			id: document.id.toString(),
 			name: document.name,
-            opportunityId: opportunityId
+            [parentKey]: parentId
 		};
 	}
 }
