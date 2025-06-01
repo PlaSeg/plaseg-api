@@ -22,10 +22,15 @@ describe("Get Municipality Users (e2e)", () => {
 
 	it("should be able to get municipality users", async () => {
 		const admin = makeUser({
-			role: Role.admin(),
+			role: Role.adminMaster(),
 			email: Email.create("admin@example.com"),
 			document: "12345678900",
 			phone: "11999999999",
+		});
+
+		const accessToken = app.jwt.sign({
+			sub: admin.id.toString(),
+			role: admin.role.toString(),
 		});
 
 		const municipality1 = makeUser({
@@ -40,11 +45,6 @@ describe("Get Municipality Users (e2e)", () => {
 			email: Email.create("municipality2@example.com"),
 			document: "45678912300",
 			phone: "11977777777",
-		});
-
-		const accessToken = app.jwt.sign({
-			sub: admin.id.toString(),
-			role: admin.role.toString(),
 		});
 
 		await prisma.user.create({
