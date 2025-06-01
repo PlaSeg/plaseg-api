@@ -97,7 +97,7 @@ export class PrismaOpportunitiesRepository implements OpportunitiesRepository {
 			await tx.opportunity.create({ data });
 
 			for (const document of opportunity.documents) {
-				const docData = PrismaDocumentMapper.toPrisma(document, opportunity.id.toString())
+				const docData = PrismaDocumentMapper.toPrisma(document, opportunity.id.toString(), "opportunityId")
 				await tx.document
 					.create({
 						data: docData

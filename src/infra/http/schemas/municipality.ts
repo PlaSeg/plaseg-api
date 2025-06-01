@@ -109,11 +109,11 @@ export const createMunicipalityRequestBodySchema = z.object({
 	unitType: z.enum(["UF", "MUNICIPALITY"], {
 		errorMap: () => ({ message: "Tipo de unidade inválido" }),
 	}),
-	qualifiedStaff: z.array(createQualifiedStaffBodySchema),
-	projectsPartnerships: z.array(createProjectPartnershipBodySchema),
-	allocationDepartments: z.array(createAllocationDepartmentBodySchema),
-	managements: z.array(createManagementBodySchema),
-	maintenanceContracts: z.array(createMaintenanceContractRequestBodySchema),
+	qualifiedStaff: z.array(createQualifiedStaffBodySchema).min(1, "Você deve ter pelo menos um gestor qualificado."),
+	projectsPartnerships: z.array(createProjectPartnershipBodySchema).min(1, "Você deve ter pelo menos um projeto ou convênio realizado."),
+	allocationDepartments: z.array(createAllocationDepartmentBodySchema).min(1, "Você deve ter pelo menos um setor alocado."),
+	managements: z.array(createManagementBodySchema).min(1, "Você deve ter uma gestão."),
+	maintenanceContracts: z.array(createMaintenanceContractRequestBodySchema).min(1, "Você deve ter pelo menos um contrato de manutenção."),
 });
 
 export const municipalityUserResponseSchema = z.object({
