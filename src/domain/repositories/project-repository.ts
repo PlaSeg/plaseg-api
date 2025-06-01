@@ -25,4 +25,11 @@ export interface ProjectsRepository {
 			baseValue?: number;
 		}
 	): Promise<void>;
+	addRequestedItem(
+		projectId: string,
+		baseProductId: string,
+		allocationDepartmentId: string,
+		maintenanceContractId: string,
+		quantity: number
+	): Promise<void>;
 }

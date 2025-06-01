@@ -1,4 +1,5 @@
 import { Project } from "../../src/domain/entities/project";
+import { RequestedItem } from "../../src/domain/entities/requested-item";
 import { ProjectsRepository } from "../../src/domain/repositories/project-repository";
 
 export class InMemoryProjectsRepository implements ProjectsRepository {
@@ -71,11 +72,36 @@ export class InMemoryProjectsRepository implements ProjectsRepository {
 					totalValue: data.totalValue ?? project.totalValue,
 					requestedValue: data.requestedValue ?? project.requestedValue,
 					baseValue: data.baseValue ?? project.baseValue,
+					requestedItems: project.requestedItems,
 				},
 				project.id
 			);
 
 			this.items[projectIndex] = updatedProject;
+		}
+	}
+
+	async addRequestedItem(
+		projectId: string,
+		baseProductId: string,
+		allocationDepartmentId: string,
+		maintenanceContractId: string,
+		quantity: number
+	): Promise<void> {
+		const projectIndex = this.items.findIndex(
+			(project) => project.id.toString() === projectId
+		);
+
+		if (projectIndex >= 0) {
+			const project = this.items[projectIndex];
+			const requestedItem = RequestedItem.create({
+				projectId: project.id.toString(),
+				baseProductId,
+				quantity,
+				allocationDepartmentId,
+				maintenanceContractId,
+			});
+			project.requestedItems?.push(requestedItem);
 		}
 	}
 }

@@ -18,6 +18,7 @@ export class PrismaProjectsRepository implements ProjectsRepository {
 						fields: true,
 					},
 				},
+				requestedItems: true,
 			},
 		});
 
@@ -41,6 +42,7 @@ export class PrismaProjectsRepository implements ProjectsRepository {
 						fields: true,
 					},
 				},
+				requestedItems: true,
 			},
 		});
 
@@ -59,6 +61,7 @@ export class PrismaProjectsRepository implements ProjectsRepository {
 						fields: true,
 					},
 				},
+				requestedItems: true,
 			},
 		});
 
@@ -131,6 +134,28 @@ export class PrismaProjectsRepository implements ProjectsRepository {
 				totalValue: data.totalValue,
 				requestedValue: data.requestedValue,
 				baseValue: data.baseValue,
+			},
+		});
+	}
+
+	async addRequestedItem(
+		projectId: string,
+		baseProductId: string,
+		allocationDepartmentId: string,
+		maintenanceContractId: string,
+		quantity: number
+	): Promise<void> {
+		await prisma.project.update({
+			where: { id: projectId },
+			data: {
+				requestedItems: {
+					create: {
+						baseProductId,
+						quantity,
+						allocationDepartmentId,
+						maintenanceContractId,
+					},
+				},
 			},
 		});
 	}
