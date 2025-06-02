@@ -73,15 +73,11 @@ export class PrismaProjectsRepository implements ProjectsRepository {
 	}
 
 	async create(
-		project: Project,
-		opportunityId: string,
-		projectTypeId: string
+		project: Project
 	): Promise<void> {
 		await prisma.$transaction(async (tx) => {
 			const data = PrismaProjectMapper.toPrisma(
-				project,
-				opportunityId,
-				projectTypeId
+				project
 			);
 			await tx.project.create({ data });
 

@@ -93,13 +93,13 @@ export class CreateProjectPartiallyUseCase {
 
 		const projectPartially = Project.create({
 			title: request.title,
+			opportunityId: request.opportunityId,
+			projectTypeId: request.projectTypeId,
 			documents: projectDocuments,
 		});
 
 		await this.projectRepository.create(
-			projectPartially,
-			request.opportunityId,
-			request.projectTypeId
+			projectPartially
 		);
 
 		return right(null);

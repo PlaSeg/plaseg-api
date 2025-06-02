@@ -5,9 +5,7 @@ export interface ProjectsRepository {
 	findMany(): Promise<Project[]>;
 	findByTitle(title: string): Promise<Project[] | null>;
 	create(
-		project: Project,
-		opportunityId: string,
-		projectTypeId: string
+		project: Project
 	): Promise<void>;
 	updateGeneralInfo(
 		projectId: string,

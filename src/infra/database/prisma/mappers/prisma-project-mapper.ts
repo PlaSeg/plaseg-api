@@ -21,6 +21,8 @@ export class PrismaProjectMapper {
 			{
 				title: raw.title,
 				documents: raw.documents.map(PrismaDocumentMapper.toDomain),
+				opportunityId: raw.opportunityId,
+				projectTypeId: raw.projectTypeId,
 				createdAt: raw.createdAt,
 				updatedAt: raw.updatedAt,
 				requestedItems: raw.requestedItems.map(
@@ -32,14 +34,12 @@ export class PrismaProjectMapper {
 	}
 
 	static toPrisma(
-		project: Project,
-		opportunityId: string,
-		projectTypeId: string
+		project: Project
 	): Prisma.ProjectUncheckedCreateInput {
 		return {
 			id: project.id.toString(),
-			opportunityId: opportunityId,
-			projectTypeId: projectTypeId,
+			opportunityId: project.opportunityId,
+			projectTypeId: project.projectTypeId,
 			title: project.title,
 			createdAt: project.createdAt,
 			updatedAt: project.updatedAt,

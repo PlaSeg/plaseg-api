@@ -7,6 +7,8 @@ import { RequestedItem } from "./requested-item";
 
 export interface ProjectProps {
 	title: string;
+	opportunityId: string;
+	projectTypeId: string;
 	responsibleCpf?: string;
 	responsibleName?: string;
 	responsibleEmail?: string;
@@ -27,6 +29,14 @@ export interface ProjectProps {
 export class Project extends Entity<ProjectProps> {
 	get title() {
 		return this.props.title;
+	}
+
+	get opportunityId() {
+		return this.props.opportunityId;
+	}
+
+	get projectTypeId() {
+		return this.props.projectTypeId;
 	}
 
 	get responsibleCpf() {

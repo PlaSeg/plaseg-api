@@ -1,0 +1,47 @@
+import { FastifyInstance } from "fastify";
+import { ZodTypeProvider } from "fastify-type-provider-zod";
+import { errorResponseSchema, successResponseSchema } from "../../schemas/http";
+import { verifyJwt } from "../../middleware/auth";
+import { getProjectsResponseSchema } from "../../schemas/project";
+import { makeGetProjectsUseCase } from "../../../database/prisma/use-cases/make-get-projects-use-case";
+import { ProjectPresenter } from "../../presenters/project-presenter";
+
+export async function getProjects(app: FastifyInstance) {
+	app.withTypeProvider<ZodTypeProvider>().get(
+		"/projects",
+		{
+			onRequest: [verifyJwt],
+			schema: {
+				tags: ["Projects"],
+				operationId: "getProjects",
+				summary: "Get projects",
+				security: [{ bearerAuth: [] }],
+				response: {
+					200: successResponseSchema(getProjectsResponseSchema).describe(
+						"Success"
+					),
+					400: errorResponseSchema.describe("Bad Request"),
+				},
+			},
+		},
+		async (_, reply) => {
+			const getProjectsUseCase = makeGetProjectsUseCase();
+
+			const result = await getProjectsUseCase.execute();
+
+			if (result.isLeft()) {
+				return reply.status(500).send({
+					success: false,
+					errors: ["Erro ao buscar projetos"],
+					data: null,
+				});
+			}
+
+			return reply.status(200).send({
+				success: true,
+				errors: null,
+				data: result.value.projects.map(ProjectPresenter.toHTTP),
+			});
+		}
+	);
+}
