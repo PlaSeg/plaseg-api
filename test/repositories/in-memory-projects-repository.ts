@@ -22,9 +22,7 @@ export class InMemoryProjectsRepository implements ProjectsRepository {
 	}
 
 	async create(
-		project: Project,
-		_opportunityId: string,
-		_projectTypeId: string
+		project: Project
 	): Promise<void> {
 		this.items.push(project);
 	}
@@ -55,6 +53,8 @@ export class InMemoryProjectsRepository implements ProjectsRepository {
 				{
 					title: project.title,
 					documents: project.documents,
+					opportunityId: project.opportunityId,
+					projectTypeId: project.projectTypeId,
 					responsibleCpf: data.responsibleCpf ?? project.responsibleCpf,
 					responsibleName: data.responsibleName ?? project.responsibleName,
 					responsibleEmail: data.responsibleEmail ?? project.responsibleEmail,
