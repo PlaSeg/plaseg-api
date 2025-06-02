@@ -20,9 +20,7 @@ describe("Patch Project General Info Use Case", () => {
 		});
 
 		await inMemoryProjectsRepository.create(
-			project,
-			"opportunity-id",
-			"project-type-id"
+			project
 		);
 
 		const result = await sut.execute({

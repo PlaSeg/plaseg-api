@@ -50,9 +50,7 @@ describe("Create Project Requested Item Use Case", () => {
 	it("should be able to create a requested item", async () => {
 		const project = makeProject();
 		await inMemoryProjectsRepository.create(
-			project,
-			"opportunity-id",
-			"project-type-id"
+			project
 		);
 
 		const baseProduct = makeBaseProduct();
