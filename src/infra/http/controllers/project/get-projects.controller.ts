@@ -5,12 +5,13 @@ import { verifyJwt } from "../../middleware/auth";
 import { getProjectsResponseSchema } from "../../schemas/project";
 import { makeGetProjectsUseCase } from "../../../database/prisma/use-cases/make-get-projects-use-case";
 import { ProjectPresenter } from "../../presenters/project-presenter";
+import { verifyUserRole } from "../../middleware/verify-user-role";
 
 export async function getProjects(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().get(
 		"/projects",
 		{
-			onRequest: [verifyJwt],
+			onRequest: [verifyJwt, verifyUserRole(["ADMIN", "ADMIN_MASTER", "MUNICIPALITY"])],
 			schema: {
 				tags: ["Projects"],
 				operationId: "getProjects",
