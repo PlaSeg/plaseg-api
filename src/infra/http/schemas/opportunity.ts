@@ -17,8 +17,8 @@ export const fieldSchema = z.object({
 
 export const documentsSchema = z.object({
 	name: z.string().min(3, "O nome deve ter no mínimo 3 caracteres"),
-	fields: z.array(fieldSchema)
-})
+	fields: z.array(fieldSchema),
+});
 
 export const createOpportunityRequestBodySchema = z
 	.object({
@@ -29,7 +29,6 @@ export const createOpportunityRequestBodySchema = z
 		availableValue: z.number().positive("O valor disponível deve ser positivo"),
 		minValue: z.number().positive("O valor mínimo deve ser positivo"),
 		responsibleAgency: z.string().min(1, "A agência responsável é obrigatória"),
-		type: z.string().min(1, "O tipo é obrigatório"),
 		typeId: z.string().uuid("O tipo deve ser um UUID válido"),
 		maxValue: z.number().positive("O valor máximo deve ser positivo"),
 		initialDeadline: z.coerce.date({
@@ -43,11 +42,12 @@ export const createOpportunityRequestBodySchema = z
 			.number()
 			.min(0, "A porcentagem de contrapartida deve ser maior ou igual a 0")
 			.max(100, "A porcentagem de contrapartida deve ser menor ou igual a 100"),
-		isActive: z.boolean().default(true),
 		requiredDocuments: z
 			.array(requiredDocumentSchema)
 			.min(1, "Pelo menos um documento é obrigatório"),
-		documents: z.array(documentsSchema).min(1, "Pelo menos um documento é obrigatório")
+		documents: z
+			.array(documentsSchema)
+			.min(1, "Pelo menos um documento é obrigatório"),
 	})
 	.refine(
 		(data) => {
@@ -107,7 +107,7 @@ export const opportunityResponseSchema = z.object({
 			updatedAt: z.coerce.date().nullable().optional(),
 		})
 	),
-	documents: z.array(documentsSchema)
+	documents: z.array(documentsSchema),
 });
 
 export const getOpportunitiesResponseSchema = z

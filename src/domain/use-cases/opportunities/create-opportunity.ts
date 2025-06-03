@@ -18,7 +18,7 @@ type FieldRequest = {
 type DocumentRequest = {
 	name: string;
 	fields: FieldRequest[];
-}
+};
 
 type RequiredDocumentRequest = {
 	name: string;
@@ -37,8 +37,6 @@ type CreateOpportunityUseCaseRequest = {
 	finalDeadline: Date;
 	requiresCounterpart: boolean;
 	counterpartPercentage?: number;
-	releasedForAll?: boolean;
-	type: string;
 	typeId: string;
 	requiredDocuments: RequiredDocumentRequest[];
 	documents: DocumentRequest[];
@@ -87,17 +85,19 @@ export class CreateOpportunityUseCase {
 			})
 		);
 
-		const documents = request.documents.map((doc) => 
+		const documents = request.documents.map((doc) =>
 			Document.create({
 				name: doc.name,
-				fields: buildFieldTree(doc.fields)
+				fields: buildFieldTree(doc.fields),
 			})
-		)
+		);
 
 		const opportunity = Opportunity.create({
 			...request,
 			requiredDocuments,
-			documents
+			documents,
+			typeId: type.id.toString(),
+			type: type.description,
 		});
 
 		await this.opportunityRepository.create(opportunity);
