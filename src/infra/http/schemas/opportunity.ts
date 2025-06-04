@@ -42,6 +42,9 @@ export const createOpportunityRequestBodySchema = z
 			.number()
 			.min(0, "A porcentagem de contrapartida deve ser maior ou igual a 0")
 			.max(100, "A porcentagem de contrapartida deve ser menor ou igual a 100"),
+		projectTypeIds: z.array(
+			z.string().uuid("O tipo de projeto deve ser um UUID válido")
+		),
 		requiredDocuments: z
 			.array(requiredDocumentSchema)
 			.min(1, "Pelo menos um documento é obrigatório"),
@@ -97,6 +100,14 @@ export const opportunityResponseSchema = z.object({
 	isActive: z.boolean(),
 	createdAt: z.coerce.date(),
 	updatedAt: z.coerce.date().nullable().optional(),
+	projectTypes: z.array(
+		z.object({
+			id: z.string().uuid(),
+			name: z.string(),
+			createdAt: z.coerce.date(),
+			updatedAt: z.coerce.date().nullable().optional(),
+		})
+	),
 	requiredDocuments: z.array(
 		z.object({
 			id: z.string().uuid(),

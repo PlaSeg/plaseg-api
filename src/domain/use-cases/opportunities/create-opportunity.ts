@@ -7,6 +7,8 @@ import { TypesRepository } from "../../repositories/types-repository";
 import { TypeGroup } from "../../entities/value-objects/type-group";
 import { Document } from "../../entities/document";
 import { buildFieldTree } from "../../helpers/field-helper";
+import { ProjectTypesRepository } from "../../repositories/project-type-repository";
+import { ProjectType } from "../../entities/project-type";
 
 type FieldRequest = {
 	id: string;
@@ -38,6 +40,7 @@ type CreateOpportunityUseCaseRequest = {
 	requiresCounterpart: boolean;
 	counterpartPercentage?: number;
 	typeId: string;
+	projectTypeIds: string[];
 	requiredDocuments: RequiredDocumentRequest[];
 	documents: DocumentRequest[];
 };
@@ -52,7 +55,8 @@ type CreateOpportunityUseCaseResponse = Either<
 export class CreateOpportunityUseCase {
 	constructor(
 		private opportunityRepository: OpportunitiesRepository,
-		private typesRepository: TypesRepository
+		private typesRepository: TypesRepository,
+		private projectTypesRepository: ProjectTypesRepository
 	) {}
 
 	async execute(
@@ -77,6 +81,22 @@ export class CreateOpportunityUseCase {
 			);
 		}
 
+		const projectTypes: ProjectType[] = [];
+		for (const projectTypeId of request.projectTypeIds) {
+			const projectType = await this.projectTypesRepository.findById(
+				projectTypeId
+			);
+			if (!projectType) {
+				return left(
+					new CustomError(
+						404,
+						`Tipo de projeto ${projectTypeId} não encontrado`
+					)
+				);
+			}
+			projectTypes.push(projectType);
+		}
+
 		const requiredDocuments = request.requiredDocuments.map((document) =>
 			RequiredDocument.create({
 				name: document.name,
@@ -98,6 +118,7 @@ export class CreateOpportunityUseCase {
 			documents,
 			typeId: type.id.toString(),
 			type: type.description,
+			projectTypes,
 		});
 
 		await this.opportunityRepository.create(opportunity);

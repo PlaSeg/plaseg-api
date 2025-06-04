@@ -5,6 +5,7 @@ import { makeUser } from "../../../../../test/factories/make-user";
 import { Role } from "../../../../domain/entities/value-objects/role";
 import { makeOpportunity } from "../../../../../test/factories/make-opportunity";
 import { makeType } from "../../../../../test/factories/make-type";
+import { makeProjectType } from "../../../../../test/factories/make-project-type";
 import request from "supertest";
 import { prisma } from "../../../database/prisma/prisma";
 import { TypeGroup } from "../../../../domain/entities/value-objects/type-group";
@@ -48,6 +49,31 @@ describe("Create Opportunity (e2e)", () => {
 			},
 		});
 
+		const projectType1 = makeProjectType({
+			name: "Project Type 1",
+		});
+
+		const projectType2 = makeProjectType({
+			name: "Project Type 2",
+		});
+
+		await prisma.projectType.createMany({
+			data: [
+				{
+					id: projectType1.id.toString(),
+					name: projectType1.name,
+					createdAt: projectType1.createdAt,
+					updatedAt: projectType1.updatedAt,
+				},
+				{
+					id: projectType2.id.toString(),
+					name: projectType2.name,
+					createdAt: projectType2.createdAt,
+					updatedAt: projectType2.updatedAt,
+				},
+			],
+		});
+
 		const opportunity = makeOpportunity({
 			typeId: type.id.toString(),
 			type: type.description,
@@ -69,6 +95,10 @@ describe("Create Opportunity (e2e)", () => {
 				counterpartPercentage: opportunity.counterpartPercentage,
 				type: opportunity.type,
 				typeId: opportunity.typeId,
+				projectTypeIds: [
+					projectType1.id.toString(),
+					projectType2.id.toString(),
+				],
 				requiredDocuments: opportunity.requiredDocuments.map((doc) => ({
 					name: doc.name,
 					description: doc.description,
@@ -84,7 +114,6 @@ describe("Create Opportunity (e2e)", () => {
 					},
 				],
 			});
-
 
 		expect(response.statusCode).toEqual(201);
 		expect(response.body).toEqual({

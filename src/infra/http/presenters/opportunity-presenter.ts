@@ -21,6 +21,12 @@ export class OpportunityPresenter {
 			isActive: opportunity.isActive,
 			createdAt: opportunity.createdAt,
 			updatedAt: opportunity.updatedAt,
+			projectTypes: opportunity.projectTypes.map((pt) => ({
+				id: pt.id.toString(),
+				name: pt.name,
+				createdAt: pt.createdAt,
+				updatedAt: pt.updatedAt,
+			})),
 			requiredDocuments: opportunity.requiredDocuments.map((document) => ({
 				id: document.id.toString(),
 				name: document.name,
