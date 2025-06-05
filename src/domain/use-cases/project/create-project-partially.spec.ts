@@ -2,15 +2,18 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { CreateProjectPartiallyUseCase } from "./create-project-partially";
 import { InMemoryProjectsRepository } from "../../../../test/repositories/in-memory-projects-repository";
 import { InMemoryOpportunitiesRepository } from "../../../../test/repositories/in-memory-opportunities-repository";
-import { InMemoryProjectTypesRepository } from "../../../../test/repositories/in-memory-project-type-repository";
+import { InMemoryMunicipalitiesRepository } from "../../../../test/repositories/in-memory-municipalities-repository";
+import { makeMunicipality } from "../../../../test/factories/make-municipality";
 import { makeOpportunity } from "../../../../test/factories/make-opportunity";
 import { makeProjectType } from "../../../../test/factories/make-project-type";
-import { Field } from "../../entities/field";
-import { Document } from "../../entities/document";
+import { Document } from "../../../domain/entities/document";
+import { Field } from "../../../domain/entities/field";
+import { InMemoryProjectTypesRepository } from "../../../../test/repositories/in-memory-project-type-repository";
 
 let inMemoryProjectsRepository: InMemoryProjectsRepository;
 let inMemoryOpportunitiesRepository: InMemoryOpportunitiesRepository;
 let inMemoryProjectTypesRepository: InMemoryProjectTypesRepository;
+let inMemoryMunicipalitiesRepository: InMemoryMunicipalitiesRepository;
 let sut: CreateProjectPartiallyUseCase;
 
 describe("Create Project Partially Use Case", () => {
@@ -18,18 +21,39 @@ describe("Create Project Partially Use Case", () => {
 		inMemoryProjectsRepository = new InMemoryProjectsRepository();
 		inMemoryOpportunitiesRepository = new InMemoryOpportunitiesRepository();
 		inMemoryProjectTypesRepository = new InMemoryProjectTypesRepository();
+		inMemoryMunicipalitiesRepository = new InMemoryMunicipalitiesRepository();
+
 		sut = new CreateProjectPartiallyUseCase(
 			inMemoryProjectsRepository,
 			inMemoryOpportunitiesRepository,
-			inMemoryProjectTypesRepository
+			inMemoryProjectTypesRepository,
+			inMemoryMunicipalitiesRepository
+		);
+	});
+
+	it("should return error if user has no municipality", async () => {
+		const result = await sut.execute({
+			title: "Test Project",
+			opportunityId: "any",
+			projectTypeId: "any",
+			userId: "user-1",
+		});
+
+		expect(result.isLeft()).toBe(true);
+		expect(result.value?.message).toBe(
+			"É preciso ter um município cadastrado para criar um projeto!"
 		);
 	});
 
 	it("should return error if opportunity does not exist", async () => {
+		const municipality = makeMunicipality({ userId: "user-2" });
+		await inMemoryMunicipalitiesRepository.create(municipality);
+
 		const result = await sut.execute({
 			title: "Test Project",
-			opportunityId: "non-existent-id",
-			projectTypeId: "any-id",
+			opportunityId: "invalid-id",
+			projectTypeId: "any",
+			userId: municipality.userId,
 		});
 
 		expect(result.isLeft()).toBe(true);
@@ -37,67 +61,59 @@ describe("Create Project Partially Use Case", () => {
 	});
 
 	it("should return error if project type does not exist", async () => {
+		const municipality = makeMunicipality({ userId: "user-3" });
+		await inMemoryMunicipalitiesRepository.create(municipality);
+
 		const opportunity = makeOpportunity();
 		await inMemoryOpportunitiesRepository.create(opportunity);
 
 		const result = await sut.execute({
 			title: "Test Project",
 			opportunityId: opportunity.id.toString(),
-			projectTypeId: "non-existent-id",
+			projectTypeId: "invalid-id",
+			userId: municipality.userId,
 		});
 
 		expect(result.isLeft()).toBe(true);
 		expect(result.value?.message).toBe("Esse tipo de projeto não existe!");
 	});
 
-	it("should be able to create a partial project with merged documents", async () => {
-        const field1 = Field.create({
-            name: "Field A",
-            value: "",
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        });
+	it("should create a project partially with documents", async () => {
+		const municipality = makeMunicipality({ userId: "user-4" });
+		await inMemoryMunicipalitiesRepository.create(municipality);
 
-        const opportunityDocument = Document.create({
-            name: "Doc 1",
-            fields: [field1],
-        });
+		const fieldA = Field.create({ name: "Campo A", value: "Valor 1" });
+		const fieldB = Field.create({ name: "Campo A", value: "Valor Atualizado" });
 
-        const opportunity = makeOpportunity({
-            documents: [opportunityDocument],
-        });
+		const opportunityDoc = Document.create({
+			name: "Documento X",
+			fields: [fieldA],
+		});
+		const projectTypeDoc = Document.create({
+			name: "Documento X",
+			fields: [fieldB],
+		});
+
+		const opportunity = makeOpportunity({ documents: [opportunityDoc] });
+		const projectType = makeProjectType({ documents: [projectTypeDoc] });
 
 		await inMemoryOpportunitiesRepository.create(opportunity);
-
-		const field2 = Field.create({
-			name: "Field A",
-			value: "Default Value",
-			createdAt: new Date(),
-			updatedAt: new Date()
-		});
-
-		const projectTypeDocument = Document.create({
-			name: "Doc 1",
-			fields: [field2],
-		});
-
-		const projectType = makeProjectType({
-			documents: [projectTypeDocument],
-		});
-
 		await inMemoryProjectTypesRepository.create(projectType);
 
 		const result = await sut.execute({
-			title: "My Partial Project",
+			title: "Projeto Teste",
 			opportunityId: opportunity.id.toString(),
 			projectTypeId: projectType.id.toString(),
+			userId: municipality.userId,
 		});
 
 		expect(result.isRight()).toBe(true);
 		expect(inMemoryProjectsRepository.items.length).toBe(1);
 
 		const created = inMemoryProjectsRepository.items[0];
-		expect(created.title).toBe("My Partial Project");
-		expect(created.documents[0].fields[0].value).toBe("Default Value");
+		expect(created.title).toBe("Projeto Teste");
+		expect(created.opportunityId).toBe(opportunity.id.toString());
+		expect(created.projectTypeId).toBe(projectType.id.toString());
+		expect(created.documents[0].fields[0].value).toBe("Valor Atualizado");
 	});
 });
