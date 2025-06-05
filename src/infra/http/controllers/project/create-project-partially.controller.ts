@@ -31,7 +31,10 @@ export async function createProjectPartially(app: FastifyInstance) {
 
 			const createProjectPartiallyUseCase = makeCreateProjectPartiallyUseCase();
 
-			const result = await createProjectPartiallyUseCase.execute(body);
+			const result = await createProjectPartiallyUseCase.execute({
+				...body,
+				userId: request.user.sub
+			});
 
 			if (result.isLeft()) {
 				return reply.status(result.value.statusCode).send({

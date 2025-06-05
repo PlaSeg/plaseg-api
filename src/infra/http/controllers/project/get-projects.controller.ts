@@ -25,10 +25,14 @@ export async function getProjects(app: FastifyInstance) {
 				},
 			},
 		},
-		async (_, reply) => {
+		async (request, reply) => {
+			const userId = request.user.sub;
+
 			const getProjectsUseCase = makeGetProjectsUseCase();
 
-			const result = await getProjectsUseCase.execute();
+			const result = await getProjectsUseCase.execute({
+				userId
+			});
 
 			if (result.isLeft()) {
 				return reply.status(500).send({

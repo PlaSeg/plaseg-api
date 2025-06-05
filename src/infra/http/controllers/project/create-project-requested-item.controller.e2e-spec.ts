@@ -7,7 +7,10 @@ import request from "supertest";
 import { prisma } from "../../../database/prisma/prisma";
 import { Email } from "../../../../domain/entities/value-objects/email";
 import { makeProject } from "../../../../../test/factories/make-project";
-import { TypeGroup } from "@prisma/client";
+import { makeMunicipality } from "../../../../../test/factories/make-municipality";
+import { makeType } from "../../../../../test/factories/make-type";
+import { makeOpportunity } from "../../../../../test/factories/make-opportunity";
+import { TypeGroup } from "../../../../domain/entities/value-objects/type-group";
 
 describe("Create Project Requested Item (e2e)", () => {
 	let app: FastifyInstance;
@@ -23,35 +26,85 @@ describe("Create Project Requested Item (e2e)", () => {
 	});
 
 	it("should be able to create a requested item for a project", async () => {
-		const admin = makeUser({
-			role: Role.admin(),
-			email: Email.create("admin@example.com"),
-			document: "12345678900",
-			phone: "11999999999",
+		const municipalityUser = makeUser({
+			role: Role.municipality(),
+			email: Email.create("municipality@example.com"),
+			document: "98765432100",
+			phone: "11988888888",
 		});
 
-		await prisma.user.create({
+		const user = await prisma.user.create({
 			data: {
-				id: admin.id.toString(),
-				name: "Admin User",
-				email: admin.email.toString(),
-				document: admin.document,
-				phone: admin.phone,
-				password: "hashed-password",
-				role: admin.role.toPrisma(),
-				allowed: true,
+				id: municipalityUser.id.toString(),
+				name: municipalityUser.name,
+				email: municipalityUser.email.toString(),
+				document: municipalityUser.document,
+				phone: municipalityUser.phone,
+				password: municipalityUser.password,
+				role: municipalityUser.role.toPrisma(),
+				allowed: municipalityUser.allowed,
+				createdAt: municipalityUser.createdAt,
+				updatedAt: municipalityUser.updatedAt,
 			},
 		});
 
-		const accessToken = app.jwt.sign({
-			sub: admin.id.toString(),
-			role: admin.role.toString(),
+		// Criar o município
+		const municipality = makeMunicipality({
+			userId: user.id,
 		});
 
-		const type = await prisma.type.create({
+		await prisma.municipality.create({
 			data: {
-				description: "Test Type",
-				group: TypeGroup.OPPORTUNITY,
+				id: municipality.id.toString(),
+				name: municipality.name,
+				guardInitialDate: municipality.guardInitialDate,
+				guardCount: municipality.guardCount,
+				trafficInitialDate: municipality.trafficInitialDate,
+				trafficCount: municipality.trafficCount,
+				federativeUnit: municipality.federativeUnit,
+				unitType: municipality.unitType.toPrisma(),
+				userId: municipality.userId,
+				createdAt: municipality.createdAt,
+				updatedAt: municipality.updatedAt,
+			},
+		});
+
+		const type = makeType({
+			description: "Test Type",
+			group: TypeGroup.opportunity(),
+		});
+
+		await prisma.type.create({
+			data: {
+				id: type.id.toString(),
+				description: type.description,
+				group: type.group.toPrisma(),
+				parentId: type.parentId ?? null,
+				createdAt: type.createdAt,
+				updatedAt: type.updatedAt,
+			},
+		});
+
+		const opportunity = makeOpportunity({
+			typeId: type.id.toString(),
+			type: type.description,
+		});
+
+		await prisma.opportunity.create({
+			data: {
+				id: opportunity.id.toString(),
+				title: opportunity.title,
+				slug: opportunity.slug.value,
+				responsibleAgency: opportunity.responsibleAgency,
+				description: opportunity.description,
+				availableValue: opportunity.availableValue,
+				minValue: opportunity.minValue,
+				maxValue: opportunity.maxValue,
+				initialDeadline: opportunity.initialDeadline,
+				finalDeadline: opportunity.finalDeadline,
+				requiresCounterpart: opportunity.requiresCounterpart,
+				counterpartPercentage: opportunity.counterpartPercentage,
+				typeId: opportunity.typeId,
 			},
 		});
 
@@ -61,16 +114,18 @@ describe("Create Project Requested Item (e2e)", () => {
 				documents: {
 					create: [
 						{
-							name: "Proposta Técnica",
+							name: "Test Document",
 							fields: {
 								create: [
 									{
-										name: "Objetivos",
-										value: "Objetivos do Tipo de Projeto",
+										id: "1",
+										name: "Justificativa",
+										value: "No Brasil...",
 									},
 									{
-										name: "Metodologia",
-										value: "Metodologia do Tipo de Projeto",
+										id: "2",
+										name: "Objetivos",
+										value: "No Brasil...",
 									},
 								],
 							},
@@ -78,30 +133,8 @@ describe("Create Project Requested Item (e2e)", () => {
 					],
 				},
 			},
-			include: {
-				documents: {
-					include: {
-						fields: true,
-					},
-				},
-			},
 		});
 
-		const opportunity = await prisma.opportunity.create({
-			data: {
-				title: "Test Opportunity",
-				slug: "test-opportunity",
-				responsibleAgency: "Test Agency",
-				description: "Test Description",
-				availableValue: 10000,
-				minValue: 1000,
-				maxValue: 5000,
-				initialDeadline: new Date(),
-				finalDeadline: new Date(),
-				requiresCounterpart: false,
-				typeId: type.id,
-			},
-		});
 
 		const project = makeProject({
 			title: "Test Project",
@@ -112,7 +145,8 @@ describe("Create Project Requested Item (e2e)", () => {
 				id: project.id.toString(),
 				title: project.title,
 				projectTypeId: projectType.id,
-				opportunityId: opportunity.id,
+				opportunityId: opportunity.id.toString(),
+				municipalityId: municipality.id.toString(),
 				createdAt: project.createdAt,
 				updatedAt: project.updatedAt,
 			},
@@ -130,20 +164,7 @@ describe("Create Project Requested Item (e2e)", () => {
 				budget3: 100,
 				budget3Validity: new Date(),
 				unitValue: 100,
-				typeId: type.id,
-			},
-		});
-
-		const municipality = await prisma.municipality.create({
-			data: {
-				name: "Test Municipality",
-				guardInitialDate: new Date(),
-				guardCount: 10,
-				trafficInitialDate: new Date(),
-				trafficCount: 5,
-				federativeUnit: "SP",
-				unitType: "MUNICIPALITY",
-				userId: admin.id.toString(),
+				typeId: type.id.toString(),
 			},
 		});
 
@@ -151,7 +172,7 @@ describe("Create Project Requested Item (e2e)", () => {
 			data: {
 				description: "Test Department",
 				address: "Test Address",
-				municipalityId: municipality.id,
+				municipalityId: municipality.id.toString(),
 			},
 		});
 
@@ -159,8 +180,13 @@ describe("Create Project Requested Item (e2e)", () => {
 			data: {
 				description: "Test Contract",
 				attachment: "test-attachment",
-				municipalityId: municipality.id,
+				municipalityId: municipality.id.toString(),
 			},
+		});
+
+		const accessToken = app.jwt.sign({
+			sub: municipalityUser.id.toString(),
+			role: municipalityUser.role.toString(),
 		});
 
 		const response = await request(app.server)

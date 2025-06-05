@@ -2,6 +2,7 @@ import fastify, { FastifyInstance } from "fastify";
 import { afterAll, beforeAll, describe, it, expect } from "vitest";
 import { buildApp } from "../../app";
 import { makeUser } from "../../../../../test/factories/make-user";
+import { makeMunicipality } from "../../../../../test/factories/make-municipality";
 import { Role } from "../../../../domain/entities/value-objects/role";
 import request from "supertest";
 import { prisma } from "../../../database/prisma/prisma";
@@ -33,6 +34,50 @@ describe("Patch Project Document Field (e2e)", () => {
 		const accessToken = app.jwt.sign({
 			sub: admin.id.toString(),
 			role: admin.role.toString(),
+		});
+
+		// Criar usuário do município
+		const municipalityUser = makeUser({
+			role: Role.municipality(),
+			email: Email.create("municipality@example.com"),
+			document: "98765432100",
+			phone: "11988888888",
+		});
+
+		const user = await prisma.user.create({
+			data: {
+				id: municipalityUser.id.toString(),
+				name: municipalityUser.name,
+				email: municipalityUser.email.toString(),
+				document: municipalityUser.document,
+				phone: municipalityUser.phone,
+				password: municipalityUser.password,
+				role: municipalityUser.role.toPrisma(),
+				allowed: municipalityUser.allowed,
+				createdAt: municipalityUser.createdAt,
+				updatedAt: municipalityUser.updatedAt,
+			},
+		});
+
+		// Criar o município
+		const municipality = makeMunicipality({
+			userId: user.id,
+		});
+
+		const createdMunicipality = await prisma.municipality.create({
+			data: {
+				id: municipality.id.toString(),
+				name: municipality.name,
+				guardInitialDate: municipality.guardInitialDate,
+				guardCount: municipality.guardCount,
+				trafficInitialDate: municipality.trafficInitialDate,
+				trafficCount: municipality.trafficCount,
+				federativeUnit: municipality.federativeUnit,
+				unitType: municipality.unitType.toPrisma(),
+				userId: municipality.userId,
+				createdAt: municipality.createdAt,
+				updatedAt: municipality.updatedAt,
+			},
 		});
 
 		const type = await prisma.type.create({
@@ -118,14 +163,29 @@ describe("Patch Project Document Field (e2e)", () => {
 
 		const project = makeProject({
 			title: "Test Project",
+			municipalityId: createdMunicipality.id,
+			opportunityId: opportunity.id,
+			projectTypeId: projectType.id,
 		});
 
 		const createdProject = await prisma.project.create({
 			data: {
 				id: project.id.toString(),
 				title: project.title,
+				responsibleCpf: project.responsibleCpf,
+				responsibleName: project.responsibleName,
+				responsibleEmail: project.responsibleEmail,
+				responsiblePhone: project.responsiblePhone,
+				counterpartCapitalItem: project.counterpartCapitalItem,
+				counterpartCapitalValue: project.counterpartCapitalValue,
+				counterpartOperatingCostCode: project.counterpartOperatingCostCode,
+				counterpartOperatingCostValue: project.counterpartOperatingCostValue,
+				totalValue: project.totalValue,
+				requestedValue: project.requestedValue,
+				baseValue: project.baseValue,
 				projectTypeId: projectType.id,
 				opportunityId: opportunity.id,
+				municipalityId: createdMunicipality.id,
 				createdAt: project.createdAt,
 				updatedAt: project.updatedAt,
 				documents: {

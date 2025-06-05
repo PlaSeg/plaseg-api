@@ -4,6 +4,7 @@ import request from "supertest";
 
 import { buildApp } from "../../app";
 import { makeUser } from "../../../../../test/factories/make-user";
+import { makeMunicipality } from "../../../../../test/factories/make-municipality";
 import { makeOpportunity } from "../../../../../test/factories/make-opportunity";
 import { makeProjectType } from "../../../../../test/factories/make-project-type";
 import { makeProject } from "../../../../../test/factories/make-project";
@@ -11,6 +12,7 @@ import { makeProject } from "../../../../../test/factories/make-project";
 import { Role } from "../../../../domain/entities/value-objects/role";
 import { prisma } from "../../../database/prisma/prisma";
 import { makeType } from "../../../../../test/factories/make-type";
+import { Email } from "../../../../domain/entities/value-objects/email";
 
 describe("Get Projects (e2e)", () => {
 	let app: FastifyInstance;
@@ -26,12 +28,48 @@ describe("Get Projects (e2e)", () => {
 	});
 
 	it("should be able to get projects", async () => {
-		const user = makeUser({
-			role: Role.admin(),
+		// Criar o usuário (representante do município)
+		const municipalityUser = makeUser({
+			role: Role.municipality(),
+			email: Email.create("municipality@example.com"),
+			document: "98765432100",
+			phone: "11988888888",
 		});
-		const accessToken = app.jwt.sign({
-			sub: user.id.toString(),
-			role: user.role.toString(),
+
+		const user = await prisma.user.create({
+			data: {
+				id: municipalityUser.id.toString(),
+				name: municipalityUser.name,
+				email: municipalityUser.email.toString(),
+				document: municipalityUser.document,
+				phone: municipalityUser.phone,
+				password: municipalityUser.password,
+				role: municipalityUser.role.toPrisma(),
+				allowed: municipalityUser.allowed,
+				createdAt: municipalityUser.createdAt,
+				updatedAt: municipalityUser.updatedAt,
+			},
+		});
+
+		// Criar o município
+		const municipality = makeMunicipality({
+			userId: user.id, 
+		});
+
+		const createdMunicipality = await prisma.municipality.create({
+			data: {
+				id: municipality.id.toString(),
+				name: municipality.name,
+				guardInitialDate: municipality.guardInitialDate,
+				guardCount: municipality.guardCount,
+				trafficInitialDate: municipality.trafficInitialDate,
+				trafficCount: municipality.trafficCount,
+				federativeUnit: municipality.federativeUnit,
+				unitType: municipality.unitType.toPrisma(), 
+				userId: municipality.userId,
+				createdAt: municipality.createdAt,
+				updatedAt: municipality.updatedAt,
+			},
 		});
 
 		const type = makeType();
@@ -51,12 +89,12 @@ describe("Get Projects (e2e)", () => {
 			data: {
 				id: projectType.id.toString(),
 				name: projectType.name,
-				createdAt: projectType.createdAt
+				createdAt: projectType.createdAt,
 			},
 		});
 
 		const opportunity = makeOpportunity({
-			typeId: type.id.toString(), 
+			typeId: type.id.toString(),
 		});
 		await prisma.opportunity.create({
 			data: {
@@ -74,9 +112,15 @@ describe("Get Projects (e2e)", () => {
 				counterpartPercentage: opportunity.counterpartPercentage,
 				typeId: opportunity.typeId,
 			},
-        });
-        
-		const project = makeProject();
+		});
+
+		// Criar o projeto usando o ID correto do município
+		const project = makeProject({
+			municipalityId: createdMunicipality.id, // Usar o ID do município, não do usuário
+			opportunityId: opportunity.id.toString(),
+			projectTypeId: projectType.id.toString(),
+		});
+
 		await prisma.project.create({
 			data: {
 				id: project.id.toString(),
@@ -94,9 +138,15 @@ describe("Get Projects (e2e)", () => {
 				baseValue: project.baseValue,
 				opportunityId: opportunity.id.toString(),
 				projectTypeId: projectType.id.toString(),
+				municipalityId: createdMunicipality.id, // Usar o ID do município
 			},
-        });
-        
+		});
+
+		const accessToken = app.jwt.sign({
+			sub: municipalityUser.id.toString(),
+			role: municipalityUser.role.toString(),
+		});
+
 		const response = await request(app.server)
 			.get("/projects")
 			.set("Authorization", `Bearer ${accessToken}`);
