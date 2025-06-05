@@ -20,9 +20,10 @@ export function makeProject(
 			totalValue: 1500,
 			requestedValue: 1200,
 			baseValue: 1000,
-			opportunityId: new UniqueEntityID().toString(), // valor fake por padrão
-			projectTypeId: new UniqueEntityID().toString(), // valor fake por padrão
-			...override, // sobrescreve qualquer campo acima
+			opportunityId: new UniqueEntityID().toString(),
+			projectTypeId: new UniqueEntityID().toString(),
+			municipalityId: new UniqueEntityID().toString(),
+			...override,
 		},
 		id
 	);
