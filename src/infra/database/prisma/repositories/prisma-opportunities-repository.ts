@@ -23,6 +23,11 @@ export class PrismaOpportunitiesRepository implements OpportunitiesRepository {
 						fields: true,
 					},
 				},
+				OpportunityProjectType: {
+					include: {
+						projectType: true,
+					},
+				},
 			},
 		});
 
@@ -102,13 +107,21 @@ export class PrismaOpportunitiesRepository implements OpportunitiesRepository {
 					opportunity.id.toString(),
 					"opportunityId"
 				);
-				await tx.document
-					.create({
-						data: docData,
-					})
-					.then(async (doc) => {
-						await createFieldsRecursively(document.fields, doc.id, tx);
-					});
+
+				const createdDoc = await tx.document.create({
+					data: docData,
+				});
+
+				await createFieldsRecursively(document.fields, createdDoc.id, tx);
+			}
+
+			for (const projectType of opportunity.projectTypes) {
+				await tx.opportunityProjectType.create({
+					data: {
+						opportunityId: opportunity.id.toString(),
+						projectTypeId: projectType.id.toString(),
+					},
+				});
 			}
 		});
 	}

@@ -1,16 +1,16 @@
 import fastify, { FastifyInstance } from "fastify";
-import { afterAll, beforeAll, describe, it } from "vitest";
+import { afterAll, beforeAll, describe, it, expect } from "vitest";
+import request from "supertest";
 import { buildApp } from "../../app";
 import { makeUser } from "../../../../../test/factories/make-user";
 import { Role } from "../../../../domain/entities/value-objects/role";
+import { prisma } from "../../../database/prisma/prisma";
+import { makeProjectType } from "../../../../../test/factories/make-project-type";
 import { makeOpportunity } from "../../../../../test/factories/make-opportunity";
 import { makeType } from "../../../../../test/factories/make-type";
-import { makeProjectType } from "../../../../../test/factories/make-project-type";
-import request from "supertest";
-import { prisma } from "../../../database/prisma/prisma";
 import { TypeGroup } from "../../../../domain/entities/value-objects/type-group";
 
-describe("Create Opportunity (e2e)", () => {
+describe("Get Project Types By Opportunity ID (e2e)", () => {
 	let app: FastifyInstance;
 
 	beforeAll(async () => {
@@ -23,7 +23,7 @@ describe("Create Opportunity (e2e)", () => {
 		await app.close();
 	});
 
-	it("should be able to create an opportunity", async () => {
+	it("should be able to get project types by opportunity id", async () => {
 		const user = makeUser({
 			role: Role.admin(),
 		});
@@ -34,7 +34,7 @@ describe("Create Opportunity (e2e)", () => {
 		});
 
 		const type = makeType({
-			description: "Test Type 1",
+			description: "Test Type",
 			group: TypeGroup.opportunity(),
 		});
 
@@ -49,10 +49,35 @@ describe("Create Opportunity (e2e)", () => {
 			},
 		});
 
+		const opportunity = makeOpportunity({
+			typeId: type.id.toString(),
+			type: type.description,
+		});
+
+		await prisma.opportunity.create({
+			data: {
+				id: opportunity.id.toString(),
+				title: opportunity.title,
+				slug: opportunity.slug.value,
+				description: opportunity.description,
+				responsibleAgency: opportunity.responsibleAgency,
+				availableValue: opportunity.availableValue,
+				minValue: opportunity.minValue,
+				maxValue: opportunity.maxValue,
+				initialDeadline: opportunity.initialDeadline,
+				finalDeadline: opportunity.finalDeadline,
+				requiresCounterpart: opportunity.requiresCounterpart,
+				counterpartPercentage: opportunity.counterpartPercentage,
+				typeId: opportunity.typeId,
+				isActive: opportunity.isActive,
+				createdAt: opportunity.createdAt,
+				updatedAt: opportunity.updatedAt,
+			},
+		});
+
 		const projectType1 = makeProjectType({
 			name: "Project Type 1",
 		});
-
 		const projectType2 = makeProjectType({
 			name: "Project Type 2",
 		});
@@ -74,52 +99,27 @@ describe("Create Opportunity (e2e)", () => {
 			],
 		});
 
-		const opportunity = makeOpportunity({
-			typeId: type.id.toString(),
-			type: type.description,
+		await prisma.opportunityProjectType.create({
+			data: {
+				opportunityId: opportunity.id.toString(),
+				projectTypeId: projectType1.id.toString(),
+			},
 		});
 
 		const response = await request(app.server)
-			.post("/opportunities")
-			.set("Authorization", `Bearer ${accessToken}`)
-			.send({
-				title: opportunity.title,
-				description: opportunity.description,
-				responsibleAgency: opportunity.responsibleAgency,
-				availableValue: opportunity.availableValue,
-				minValue: opportunity.minValue,
-				maxValue: opportunity.maxValue,
-				initialDeadline: opportunity.initialDeadline,
-				finalDeadline: opportunity.finalDeadline,
-				requiresCounterpart: opportunity.requiresCounterpart,
-				counterpartPercentage: opportunity.counterpartPercentage,
-				type: opportunity.type,
-				typeId: opportunity.typeId,
-				projectTypeIds: [
-					projectType1.id.toString(),
-					projectType2.id.toString(),
-				],
-				requiredDocuments: opportunity.requiredDocuments.map((doc) => ({
-					name: doc.name,
-					description: doc.description,
-					model: doc.model,
-				})),
-				documents: [
-					{
-						name: "Document Example",
-						fields: [
-							{ id: "1", name: "Field 1", value: "Value 1" },
-							{ id: "2", name: "Field 2", value: "Value 2", parentId: "1" },
-						],
-					},
-				],
-			});
+			.get(`/project-types/${opportunity.id.toString()}`)
+			.set("Authorization", `Bearer ${accessToken}`);
 
-		expect(response.statusCode).toEqual(201);
+		expect(response.statusCode).toEqual(200);
 		expect(response.body).toEqual({
 			success: true,
 			errors: null,
-			data: null,
+			data: [
+				expect.objectContaining({
+					id: projectType1.id.toString(),
+					name: projectType1.name,
+				}),
+			],
 		});
 	});
 });

@@ -348,9 +348,10 @@ model Opportunity {
   type   Type   @relation(fields: [typeId], references: [id], onDelete: Cascade)
   typeId String
 
-  requiredDocuments RequiredDocument[]
-  projects          Project[]
-  documents         Document[]
+  requiredDocuments      RequiredDocument[]
+  projects               Project[]
+  documents              Document[]
+  OpportunityProjectType OpportunityProjectType[]
 
   @@map("opportunities")
 }
@@ -417,10 +418,25 @@ model ProjectType {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
-  projects  Project[]
-  documents Document[]
+  projects               Project[]
+  documents              Document[]
+  OpportunityProjectType OpportunityProjectType[]
 
   @@map("project_types")
+}
+
+model OpportunityProjectType {
+  id            String      @id @default(uuid())
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  opportunityId String
+  projectType   ProjectType @relation(fields: [projectTypeId], references: [id], onDelete: Cascade)
+  projectTypeId String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@unique([opportunityId, projectTypeId])
+  @@map("opportunity_project_types")
 }
 
 model Project {
