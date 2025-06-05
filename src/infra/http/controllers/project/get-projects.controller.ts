@@ -35,9 +35,9 @@ export async function getProjects(app: FastifyInstance) {
 			});
 
 			if (result.isLeft()) {
-				return reply.status(500).send({
+				return reply.status(result.value.statusCode).send({
 					success: false,
-					errors: ["Erro ao buscar projetos"],
+					errors: result.value.errors,
 					data: null,
 				});
 			}
