@@ -9,6 +9,7 @@ export interface ProjectProps {
 	title: string;
 	opportunityId: string;
 	projectTypeId: string;
+	municipalityId: string;
 	responsibleCpf?: string;
 	responsibleName?: string;
 	responsibleEmail?: string;
@@ -37,6 +38,10 @@ export class Project extends Entity<ProjectProps> {
 
 	get projectTypeId() {
 		return this.props.projectTypeId;
+	}
+
+	get municipalityId() {
+		return this.props.municipalityId;
 	}
 
 	get responsibleCpf() {

@@ -43,7 +43,7 @@ async function createProjectType(prisma: PrismaClient) {
 	});
 }
 
-export const projects = (projectTypeId: string, opportunityId: string) => {
+export const projects = (projectTypeId: string, opportunityId: string, municipalityId: string) => {
 	return [
 		{
 			title: "Modernização da Guarda Municipal de São Paulo",
@@ -55,6 +55,7 @@ export const projects = (projectTypeId: string, opportunityId: string) => {
 			counterpartCapitalValue: 800000,
 			projectTypeId: projectTypeId,
 			opportunityId: opportunityId,
+			municipalityId: municipalityId,
 			documents: {
 				create: [
 					{
@@ -102,6 +103,7 @@ export const projects = (projectTypeId: string, opportunityId: string) => {
 			counterpartCapitalValue: 250000,
 			projectTypeId: projectTypeId,
 			opportunityId: opportunityId,
+			municipalityId: municipalityId,
 			documents: {
 				create: [
 					{
@@ -146,6 +148,35 @@ export async function seedProjects(
 	opportunityId: string
 ) {
 	console.log("🌱 Seeding projects...");
+
+	const user = await prisma.user.create({
+		data: {
+			name: "João Silva Santos",
+			email: "joao.silva@prefeitura.gov.br",
+			document: "12345678901",
+			phone: "(11) 99999-8888",
+			password: "$2b$10$hashedPasswordExample123",
+			role: "ADMIN",
+			allowed: true,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+		},
+	});
+
+	const municipality = await prisma.municipality.create({
+		data: {
+			name: "São José dos Campos",
+			guardInitialDate: new Date("2024-01-15"),
+			guardCount: 150,
+			trafficInitialDate: new Date("2024-02-01"),
+			trafficCount: 45,
+			federativeUnit: "SP",
+			unitType: "MUNICIPALITY",
+			userId: user.id,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+		},
+	});
 
 	// Criar uma oportunidade de exemplo
 	const opportunity = await prisma.opportunity.create({
@@ -200,7 +231,7 @@ export async function seedProjects(
 
 	const projectType = await createProjectType(prisma);
 
-	for (const project of projects(projectType.id, opportunity.id)) {
+	for (const project of projects(projectType.id, opportunity.id, municipality.id)) {
 		await prisma.project.create({
 			data: project,
 		});

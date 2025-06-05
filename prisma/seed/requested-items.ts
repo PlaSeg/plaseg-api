@@ -73,14 +73,6 @@ export async function seedRequestedItems(prisma: PrismaClient) {
 		},
 	});
 
-	const project = await prisma.project.create({
-		data: {
-			title: "Projeto de Segurança Pública",
-			projectTypeId: projectType.id,
-			opportunityId: opportunity.id,
-		},
-	});
-
 	const municipalityUser = await prisma.user.findFirstOrThrow({
 		where: {
 			role: "MUNICIPALITY",
@@ -113,6 +105,15 @@ export async function seedRequestedItems(prisma: PrismaClient) {
 			description: "Contrato de Manutenção",
 			attachment: "contrato.pdf",
 			municipalityId: municipality.id,
+		},
+	});
+
+	const project = await prisma.project.create({
+		data: {
+			title: "Projeto de Segurança Pública",
+			projectTypeId: projectType.id,
+			opportunityId: opportunity.id,
+			municipalityId: municipality.id
 		},
 	});
 
