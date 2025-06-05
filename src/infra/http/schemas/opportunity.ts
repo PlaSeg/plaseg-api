@@ -100,14 +100,6 @@ export const opportunityResponseSchema = z.object({
 	isActive: z.boolean(),
 	createdAt: z.coerce.date(),
 	updatedAt: z.coerce.date().nullable().optional(),
-	projectTypes: z.array(
-		z.object({
-			id: z.string().uuid(),
-			name: z.string(),
-			createdAt: z.coerce.date(),
-			updatedAt: z.coerce.date().nullable().optional(),
-		})
-	),
 	requiredDocuments: z.array(
 		z.object({
 			id: z.string().uuid(),
