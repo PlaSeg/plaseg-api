@@ -42,4 +42,14 @@ export class InMemoryProjectTypesRepository implements ProjectTypesRepository {
 
 		return this.items.filter((pt) => projectTypeIds.includes(pt.id.toString()));
 	}
+
+	async createOpportunityProjectType(
+		opportunityId: string,
+		projectTypeId: string
+	): Promise<void> {
+		this.opportunityProjectTypes.push({
+			opportunityId,
+			projectTypeId,
+		});
+	}
 }

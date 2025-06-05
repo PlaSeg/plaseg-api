@@ -727,9 +727,33 @@ export const opportunities = (typeId: string) => {
 export async function seedOpportunities(prisma: PrismaClient, typeId: string) {
 	console.log("🌱 Seeding opportunities...");
 
-	for (const opportunity of opportunities(typeId)) {
-		await prisma.opportunity.create({
-			data: opportunity,
+	for (const opportunityData of opportunities(typeId)) {
+		// 1. Cria a oportunidade
+		const opportunity = await prisma.opportunity.create({
+			data: opportunityData,
+		});
+
+		// 2. Cria um ProjectType com o mesmo nome da oportunidade
+		const projectType = await prisma.projectType.create({
+			data: {
+				name: opportunityData.title,
+				// Cria documentos com o mesmo nome dos documentos da oportunidade
+				documents: {
+					create: (opportunityData.requiredDocuments?.create || []).map(
+						(doc: any) => ({
+							name: doc.name,
+						})
+					),
+				},
+			},
+		});
+
+		// 3. Associa na tabela intermediária
+		await prisma.opportunityProjectType.create({
+			data: {
+				opportunityId: opportunity.id,
+				projectTypeId: projectType.id,
+			},
 		});
 	}
 

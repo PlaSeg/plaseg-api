@@ -8,7 +8,6 @@ import { TypeGroup } from "../../entities/value-objects/type-group";
 import { Document } from "../../entities/document";
 import { buildFieldTree } from "../../helpers/field-helper";
 import { ProjectTypesRepository } from "../../repositories/project-type-repository";
-import { ProjectType } from "../../entities/project-type";
 
 type FieldRequest = {
 	id: string;
@@ -81,7 +80,6 @@ export class CreateOpportunityUseCase {
 			);
 		}
 
-		const projectTypes: ProjectType[] = [];
 		for (const projectTypeId of request.projectTypeIds) {
 			const projectType = await this.projectTypesRepository.findById(
 				projectTypeId
@@ -94,7 +92,6 @@ export class CreateOpportunityUseCase {
 					)
 				);
 			}
-			projectTypes.push(projectType);
 		}
 
 		const requiredDocuments = request.requiredDocuments.map((document) =>
@@ -118,10 +115,16 @@ export class CreateOpportunityUseCase {
 			documents,
 			typeId: type.id.toString(),
 			type: type.description,
-			projectTypes,
 		});
 
 		await this.opportunityRepository.create(opportunity);
+
+		for (const projectTypeId of request.projectTypeIds) {
+			await this.projectTypesRepository.createOpportunityProjectType(
+				opportunity.id.toString(),
+				projectTypeId
+			);
+		}
 
 		return right({
 			opportunity,

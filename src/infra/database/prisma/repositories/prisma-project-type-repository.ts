@@ -97,4 +97,16 @@ export class PrismaProjectTypesRepository implements ProjectTypesRepository {
 			data,
 		});
 	}
+
+	async createOpportunityProjectType(
+		opportunityId: string,
+		projectTypeId: string
+	): Promise<void> {
+		await prisma.opportunityProjectType.create({
+			data: {
+				opportunityId,
+				projectTypeId,
+			},
+		});
+	}
 }

@@ -5,7 +5,6 @@ import { getCurrentDate } from "../../core/utils/get-current-date";
 import { Document } from "./document";
 import { RequiredDocument } from "./required-document";
 import { Slug } from "./value-objects/slug";
-import { ProjectType } from "./project-type";
 
 export interface OpportunityProps {
 	title: string;
@@ -25,7 +24,6 @@ export interface OpportunityProps {
 	releasedForAll?: boolean;
 	type: string;
 	typeId: string;
-	projectTypes: ProjectType[];
 	createdAt: Date;
 	updatedAt?: Date | null;
 }
@@ -107,10 +105,6 @@ export class Opportunity extends Entity<OpportunityProps> {
 		return this.props.type;
 	}
 
-	get projectTypes() {
-		return this.props.projectTypes;
-	}
-
 	set requiredDocuments(requiredDocuments: RequiredDocument[]) {
 		this.props.requiredDocuments = requiredDocuments;
 	}
@@ -119,29 +113,10 @@ export class Opportunity extends Entity<OpportunityProps> {
 		this.props.requiredDocuments.push(requiredDocument);
 	}
 
-	set projectTypes(projectTypes: ProjectType[]) {
-		this.props.projectTypes = projectTypes;
-	}
-
-	addProjectType(projectType: ProjectType) {
-		this.props.projectTypes.push(projectType);
-	}
-
-	removeProjectType(projectTypeId: string) {
-		this.props.projectTypes = this.props.projectTypes.filter(
-			(pt) => pt.id.toString() !== projectTypeId
-		);
-	}
-
 	static create(
 		props: Optional<
 			OpportunityProps,
-			| "isActive"
-			| "slug"
-			| "createdAt"
-			| "updatedAt"
-			| "releasedForAll"
-			| "projectTypes"
+			"isActive" | "slug" | "createdAt" | "updatedAt" | "releasedForAll"
 		>,
 		id?: UniqueEntityID
 	) {
@@ -153,7 +128,6 @@ export class Opportunity extends Entity<OpportunityProps> {
 				createdAt: props.createdAt ?? getCurrentDate(),
 				updatedAt: props.updatedAt ?? null,
 				releasedForAll: props.releasedForAll ?? false,
-				projectTypes: props.projectTypes ?? [],
 			},
 			id
 		);

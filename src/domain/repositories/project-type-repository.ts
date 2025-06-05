@@ -6,4 +6,8 @@ export interface ProjectTypesRepository {
 	findByName(name: string): Promise<ProjectType | null>;
 	findByOpportunityId(opportunityId: string): Promise<ProjectType[]>;
 	create(projectType: ProjectType): Promise<void>;
+	createOpportunityProjectType(
+		opportunityId: string,
+		projectTypeId: string
+	): Promise<void>;
 }

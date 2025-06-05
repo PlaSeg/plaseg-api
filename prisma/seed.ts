@@ -5,6 +5,7 @@ import { seedOpportunities } from "./seed/opportunities";
 import { seedBaseProducts } from "./seed/base-products";
 import { seedProjects } from "./seed/projects";
 import { seedRequestedItems } from "./seed/requested-items";
+import { seedProjectTypes } from "./seed/project-types";
 
 const prisma = new PrismaClient();
 
@@ -26,13 +27,15 @@ async function seed() {
 
 	const { editalId, weaponId } = await seedTypes(prisma);
 
-	await seedOpportunities(prisma, editalId);
-
 	await seedBaseProducts(prisma, weaponId);
+
+	await seedProjectTypes(prisma);
 
 	await seedProjects(prisma, editalId);
 
 	await seedRequestedItems(prisma);
+
+	await seedOpportunities(prisma, editalId);
 
 	console.log("🎉 Seed process completed successfully!");
 }

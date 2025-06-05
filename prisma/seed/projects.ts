@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
 async function createProjectType(prisma: PrismaClient) {
-	await prisma.projectType.deleteMany();
+	// await prisma.projectType.deleteMany(); // Removido para não apagar outros tipos
 	return await prisma.projectType.create({
 		data: {
 			name: "Projeto de Segurança Pública",

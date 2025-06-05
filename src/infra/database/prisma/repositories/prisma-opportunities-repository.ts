@@ -114,15 +114,6 @@ export class PrismaOpportunitiesRepository implements OpportunitiesRepository {
 
 				await createFieldsRecursively(document.fields, createdDoc.id, tx);
 			}
-
-			for (const projectType of opportunity.projectTypes) {
-				await tx.opportunityProjectType.create({
-					data: {
-						opportunityId: opportunity.id.toString(),
-						projectTypeId: projectType.id.toString(),
-					},
-				});
-			}
 		});
 	}
 }
