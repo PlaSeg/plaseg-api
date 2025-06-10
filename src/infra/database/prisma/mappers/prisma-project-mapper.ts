@@ -23,6 +23,7 @@ export class PrismaProjectMapper {
 				documents: raw.documents.map(PrismaDocumentMapper.toDomain),
 				opportunityId: raw.opportunityId,
 				projectTypeId: raw.projectTypeId,
+				municipalityId: raw.municipalityId,
 				createdAt: raw.createdAt,
 				updatedAt: raw.updatedAt,
 				requestedItems: raw.requestedItems.map(
@@ -40,6 +41,7 @@ export class PrismaProjectMapper {
 			id: project.id.toString(),
 			opportunityId: project.opportunityId,
 			projectTypeId: project.projectTypeId,
+			municipalityId: project.municipalityId,
 			title: project.title,
 			createdAt: project.createdAt,
 			updatedAt: project.updatedAt,

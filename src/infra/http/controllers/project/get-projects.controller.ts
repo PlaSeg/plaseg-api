@@ -25,15 +25,19 @@ export async function getProjects(app: FastifyInstance) {
 				},
 			},
 		},
-		async (_, reply) => {
+		async (request, reply) => {
+			const userId = request.user.sub;
+
 			const getProjectsUseCase = makeGetProjectsUseCase();
 
-			const result = await getProjectsUseCase.execute();
+			const result = await getProjectsUseCase.execute({
+				userId
+			});
 
 			if (result.isLeft()) {
-				return reply.status(500).send({
+				return reply.status(result.value.statusCode).send({
 					success: false,
-					errors: ["Erro ao buscar projetos"],
+					errors: result.value.errors,
 					data: null,
 				});
 			}

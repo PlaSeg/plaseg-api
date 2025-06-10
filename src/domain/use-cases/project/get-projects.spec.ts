@@ -2,25 +2,36 @@ import { describe, it, beforeEach, expect } from "vitest";
 import { InMemoryProjectsRepository } from "../../../../test/repositories/in-memory-projects-repository";
 import { GetProjectsUseCase } from "./get-projects";
 import { makeProject } from "../../../../test/factories/make-project";
+import { InMemoryMunicipalitiesRepository } from "../../../../test/repositories/in-memory-municipalities-repository";
+import { makeMunicipality } from "../../../../test/factories/make-municipality";
 
 let inMemoryProjectsRepository: InMemoryProjectsRepository;
+let inMemoryMunicipalitiesRepository: InMemoryMunicipalitiesRepository;
 let sut: GetProjectsUseCase;
 
 describe("Get Projects Use Case", () => {
 	beforeEach(() => {
 		inMemoryProjectsRepository = new InMemoryProjectsRepository();
-		sut = new GetProjectsUseCase(inMemoryProjectsRepository);
+		inMemoryMunicipalitiesRepository = new InMemoryMunicipalitiesRepository();
+		sut = new GetProjectsUseCase(
+			inMemoryProjectsRepository,
+			inMemoryMunicipalitiesRepository
+		);
 	});
 
 	it("should be able to get projects", async () => {
+		const municipality = makeMunicipality();
+		await inMemoryMunicipalitiesRepository.create(municipality);
 
-		const project = makeProject();
+		const project = makeProject({
+			municipalityId: municipality.id.toString()
+		});
 
-		await inMemoryProjectsRepository.create(
-			project
-		);
+		await inMemoryProjectsRepository.create(project);
 
-		const result = await sut.execute();
+		const result = await sut.execute({
+			userId: municipality.userId.toString()
+		});
 
 		expect(result.isRight()).toBe(true);
 		if (result.isRight()) {

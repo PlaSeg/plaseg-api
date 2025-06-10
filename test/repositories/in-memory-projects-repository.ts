@@ -21,6 +21,12 @@ export class InMemoryProjectsRepository implements ProjectsRepository {
 		return this.items;
 	}
 
+	async findManyByMunicipality(municipalityId: string): Promise<Project[]> {
+		const projects = this.items.filter((project) => project.municipalityId === municipalityId);
+
+		return projects;
+	}
+
 	async create(
 		project: Project
 	): Promise<void> {
@@ -55,6 +61,7 @@ export class InMemoryProjectsRepository implements ProjectsRepository {
 					documents: project.documents,
 					opportunityId: project.opportunityId,
 					projectTypeId: project.projectTypeId,
+					municipalityId: project.municipalityId,
 					responsibleCpf: data.responsibleCpf ?? project.responsibleCpf,
 					responsibleName: data.responsibleName ?? project.responsibleName,
 					responsibleEmail: data.responsibleEmail ?? project.responsibleEmail,

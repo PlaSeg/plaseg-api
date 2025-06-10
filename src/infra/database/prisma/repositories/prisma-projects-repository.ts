@@ -72,6 +72,28 @@ export class PrismaProjectsRepository implements ProjectsRepository {
 		);
 	}
 
+	async findManyByMunicipality(municipalityId: string): Promise<Project[]> {
+		const projects = await prisma.project.findMany({
+			where: {
+				municipalityId,
+			},
+			include: {
+				documents: {
+					include: {
+						fields: true,
+					},
+				},
+				requestedItems: true,
+			},
+		});
+
+		return projects.map((project) =>
+			PrismaProjectMapper.toDomain({
+				...project,
+			})
+		);
+	}
+
 	async create(
 		project: Project
 	): Promise<void> {

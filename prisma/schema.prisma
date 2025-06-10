@@ -72,6 +72,7 @@ model Municipality {
   qualifiedStaff        QualifiedStaff[]
   projectsPartnerships  ProjectPartnership[]
   managements           Management[]
+  Project               Project[]
 
   @@map("municipalities")
 }
@@ -462,6 +463,9 @@ model Project {
 
   opportunity   Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
   opportunityId String
+
+  municipality   Municipality @relation(fields: [municipalityId], references: [id], onDelete: Cascade)
+  municipalityId String
 
   requestedItems RequestedItem[]
   documents      Document[]

@@ -7,11 +7,13 @@ import { ProjectTypesRepository } from "../../repositories/project-type-reposito
 import { Slug } from "../../entities/value-objects/slug";
 import { Project } from "../../entities/project";
 import { buildFieldTree } from "../../helpers/field-helper";
+import { MunicipalitiesRepository } from "../../repositories/municipalities-repository";
 
 type CreateProjectPartiallyUseCaseRequest = {
 	title: string;
 	opportunityId: string;
 	projectTypeId: string;
+	userId: string;
 };
 
 type CreateProjectPartiallyUseCaseResponse = Either<CustomError, null>;
@@ -20,7 +22,8 @@ export class CreateProjectPartiallyUseCase {
 	constructor(
 		private projectRepository: ProjectsRepository,
 		private opportunityRepository: OpportunitiesRepository,
-		private projectTypeRepository: ProjectTypesRepository
+		private projectTypeRepository: ProjectTypesRepository,
+		private municipalityRepository: MunicipalitiesRepository
 	) {}
 
 	private createProjectDocuments(
@@ -53,6 +56,12 @@ export class CreateProjectPartiallyUseCase {
 	async execute(
 		request: CreateProjectPartiallyUseCaseRequest
 	): Promise<CreateProjectPartiallyUseCaseResponse> {
+		const municipality = await this.municipalityRepository.findByUserId(request.userId);
+
+		if (!municipality) {
+			return left(new CustomError(409, "É preciso ter um município cadastrado para criar um projeto!"))
+		}
+ 
 		const opportunityExists = await this.opportunityRepository.findById(
 			request.opportunityId
 		);
@@ -96,6 +105,7 @@ export class CreateProjectPartiallyUseCase {
 			opportunityId: request.opportunityId,
 			projectTypeId: request.projectTypeId,
 			documents: projectDocuments,
+			municipalityId: municipality.id.toString()
 		});
 
 		await this.projectRepository.create(
