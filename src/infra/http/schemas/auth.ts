@@ -32,6 +32,12 @@ export const signInRequestBodySchema = z.object({
 
 export const signInResponseSchema = z.object({
 	accessToken: z.string(),
+	user: z.object({
+		id: z.string(),
+		name: z.string(),
+		email: z.string().email(),
+		role: z.string(),
+	}),
 });
 
 export const getProfileResponseSchema = z.object({

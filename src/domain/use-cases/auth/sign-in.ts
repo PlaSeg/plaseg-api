@@ -13,6 +13,12 @@ type SignInUseCaseResponse = Either<
 	CustomError,
 	{
 		accessToken: string;
+		user: {
+			id: string;
+			name: string;
+			email: string;
+			role: string;
+		};
 	}
 >;
 
@@ -49,6 +55,12 @@ export class SignInUseCase {
 
 		return right({
 			accessToken,
+			user: {
+				id: user.id.toString(),
+				name: user.name,
+				email: user.email.toString(),
+				role: user.role.toString(),
+			},
 		});
 	}
 }

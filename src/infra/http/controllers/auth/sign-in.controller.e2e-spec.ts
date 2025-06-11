@@ -41,6 +41,12 @@ describe("Sign In (e2e)", () => {
 				errors: null,
 				data: {
 					accessToken: expect.any(String),
+					user: {
+						id: expect.any(String),
+						name: "Acme",
+						email: "acme@gmail.com",
+						role: "MUNICIPALITY",
+					},
 				},
 			})
 		);
