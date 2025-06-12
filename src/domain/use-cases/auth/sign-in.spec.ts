@@ -36,6 +36,12 @@ describe("Sign In Use Case", () => {
 		if (result.isRight()) {
 			expect(result.value).toEqual({
 				accessToken: expect.any(String),
+				user: {
+					id: expect.any(String),
+					name: user.name,
+					email: user.email.toString(),
+					role: user.role.toString(),
+				},
 			});
 		}
 	});

@@ -43,7 +43,10 @@ export async function signIn(app: FastifyInstance) {
 			return reply.status(200).send({
 				success: true,
 				errors: null,
-				data: response.value,
+				data: {
+					accessToken: response.value.accessToken,
+					user: response.value.user,
+				},
 			});
 		}
 	);
