@@ -7,6 +7,7 @@
 		"dev": "tsx watch src/infra/http/server.ts",
 		"build": "tsup src --out-dir dist",
 		"start": "node dist/infra/http/server.js",
+		"docker": "docker compose up -d",
 		"migrate": "pnpm prisma migrate dev",
 		"generate": "pnpm prisma generate",
 		"studio": "pnpm prisma studio -b chrome -p 5174",
