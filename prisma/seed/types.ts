@@ -84,7 +84,6 @@ export const types = () => {
 export async function seedTypes(prisma: PrismaClient) {
 	console.log("🌱 Seeding types...");
 
-	// Seed the main types from the array
 	for (const type of types()) {
 		await prisma.type.create({
 			data: {
@@ -97,7 +96,6 @@ export async function seedTypes(prisma: PrismaClient) {
 		});
 	}
 
-	// Create special types needed by other seeds
 	const edital = await prisma.type.create({
 		data: {
 			description: "Edital",
