@@ -18,7 +18,7 @@ export async function getProjectById(app: FastifyInstance) {
 			],
 			schema: {
 				tags: ["Projects"],
-				operationId: "getProjects",
+				operationId: "getProjectById",
 				summary: "Get projects",
 				security: [{ bearerAuth: [] }],
 				params: z.object({
