@@ -18,9 +18,20 @@ export async function seedOpportunities(prisma: PrismaClient, typeId: string) {
 			initialDeadline: "2025-05-12T18:00:28.044Z",
 			finalDeadline: "2025-05-12T18:00:28.044Z",
 			requiresCounterpart: true,
-			counterpartPercentage: 100,
+			counterpartPercentage: 20,
 			isActive: true,
 			releasedForAll: false,
+			requiredDocuments: {
+				create: [
+					{
+						name: "Declaração de Contrapartida Municipal",
+						description:
+							"Documento oficial assinado pelo prefeito municipal declarando o comprometimento em aportar contrapartida financeira ou em bens e serviços equivalente a no mínimo 20% do valor total do projeto, conforme legislação vigente.",
+						model:
+							"https://www.gov.br/esporte/pt-br/noticias-e-conteudos/esporte/ministerio-lanca-edital-para-projetos-relativos-ao-programa-vida-saudavel/AnexoIIIModelodaDeclaraodeContrapartida.pdf",
+					},
+				],
+			},
 			documents: {
 				create: [
 					{
