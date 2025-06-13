@@ -8,10 +8,6 @@ type PatchProjectGeneralInfoUseCaseRequest = {
 	responsibleName?: string;
 	responsibleEmail?: string;
 	responsiblePhone?: string;
-	counterpartCapitalItem?: string;
-	counterpartCapitalValue?: number;
-	counterpartOperatingCostCode?: string;
-	counterpartOperatingCostValue?: number;
 	totalValue?: number;
 	requestedValue?: number;
 	baseValue?: number;
@@ -38,10 +34,6 @@ export class PatchProjectGeneralInfoUseCase {
 			responsibleName: request.responsibleName,
 			responsibleEmail: request.responsibleEmail,
 			responsiblePhone: request.responsiblePhone,
-			counterpartCapitalItem: request.counterpartCapitalItem,
-			counterpartCapitalValue: request.counterpartCapitalValue,
-			counterpartOperatingCostCode: request.counterpartOperatingCostCode,
-			counterpartOperatingCostValue: request.counterpartOperatingCostValue,
 			totalValue: request.totalValue,
 			requestedValue: request.requestedValue,
 			baseValue: request.baseValue,

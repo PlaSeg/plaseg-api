@@ -20,7 +20,7 @@ export class ProjectPresenter {
 			requestedValue: project.requestedValue,
 			baseValue: project.baseValue,
 			createdAt: project.createdAt,
-			updatedAt: project.updatedAt,
+			updatedAt: project.updatedAt ?? null,
 			requestedItems: project.requestedItems?.map((item) => ({
 				id: item.id.toString(),
 				quantity: item.quantity,
