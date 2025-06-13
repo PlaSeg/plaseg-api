@@ -12,12 +12,12 @@ type GetProjectByIdUseCaseResponse = Either<
 
 export class GetProjectByIdUseCase {
 	constructor(
-		private projectsRespository: ProjectsRepository
+		private projectsRepository: ProjectsRepository
 	) {}
 
 	async execute({ projectId }): Promise<GetProjectByIdUseCaseResponse> {
 
-		const project = await this.projectsRespository.findById(
+		const project = await this.projectsRepository.findById(
 			projectId
         );
         
