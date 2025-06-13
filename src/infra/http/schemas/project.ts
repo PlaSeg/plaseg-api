@@ -26,10 +26,6 @@ export const patchProjectGeneralInfoBodySchema = z.object({
 	responsibleName: z.string().optional(),
 	responsibleEmail: z.string().email().optional(),
 	responsiblePhone: z.string().optional(),
-	counterpartCapitalItem: z.string().optional(),
-	counterpartCapitalValue: z.number().positive().optional(),
-	counterpartOperatingCostCode: z.string().optional(),
-	counterpartOperatingCostValue: z.number().positive().optional(),
 	totalValue: z.number().positive().optional(),
 	requestedValue: z.number().positive().optional(),
 	baseValue: z.number().positive().optional(),
@@ -48,8 +44,8 @@ export const fieldSchema = z.object({
 
 export const documentsSchema = z.object({
 	name: z.string().min(3, "O nome deve ter no mínimo 3 caracteres"),
-	fields: z.array(fieldSchema)
-})
+	fields: z.array(fieldSchema),
+});
 
 export const requestedItemsSchema = z.object({
 	quantity: z.number(),
