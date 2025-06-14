@@ -114,6 +114,9 @@ export const projectWithMoreInfoResponseSchema = z.object({
 		title: z.string(),
 		counterpartPercentage: z.number().nullable().optional(),
 		requiresCounterpart: z.boolean(),
+		maxValue: z.number().nullable().optional(),
+		availableValue: z.number().nullable().optional(),
+		minValue: z.number().nullable().optional(),
 	}),
 	projectType: z.object({
 		id: z.string().uuid(),

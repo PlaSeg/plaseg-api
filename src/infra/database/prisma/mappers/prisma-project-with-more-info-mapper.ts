@@ -24,6 +24,9 @@ type PrismaProjectWithMoreInfo = PrismaProject & {
 		title: string;
 		requiresCounterpart: boolean;
 		counterpartPercentage: Decimal | null;
+		maxValue: Decimal | null;
+		availableValue: Decimal | null;
+		minValue: Decimal | null;
 	};
 	projectType: {
 		id: string;
@@ -67,6 +70,9 @@ export class PrismaProjectWithMoreInfoMapper {
 				requiresCounterpart: raw.opportunity.requiresCounterpart,
 				counterpartPercentage:
 					raw.opportunity.counterpartPercentage?.toNumber() ?? 0,
+				maxValue: raw.opportunity.maxValue?.toNumber() ?? 0,
+				availableValue: raw.opportunity.availableValue?.toNumber() ?? 0,
+				minValue: raw.opportunity.minValue?.toNumber() ?? 0,
 			},
 			projectType: {
 				id: new UniqueEntityID(raw.projectType.id),

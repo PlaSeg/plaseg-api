@@ -61,6 +61,9 @@ export class PrismaProjectsRepository implements ProjectsRepository {
 						title: true,
 						counterpartPercentage: true,
 						requiresCounterpart: true,
+						maxValue: true,
+						availableValue: true,
+						minValue: true,
 					},
 				},
 				projectType: {

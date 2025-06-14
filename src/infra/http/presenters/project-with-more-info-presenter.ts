@@ -40,6 +40,9 @@ export class ProjectWithMoreInfoPresenter {
 				requiresCounterpart: project.opportunity.requiresCounterpart,
 				counterpartPercentage:
 					project.opportunity.counterpartPercentage ?? null,
+				maxValue: project.opportunity.maxValue ?? null,
+				availableValue: project.opportunity.availableValue ?? null,
+				minValue: project.opportunity.minValue ?? null,
 			},
 			projectType: {
 				id: project.projectType.id.toString(),
