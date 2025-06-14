@@ -1,5 +1,7 @@
+import { AllocationDepartment } from "../../../../domain/entities/allocation-department";
 import { Municipality } from "../../../../domain/entities/municipality";
 import { MunicipalitiesRepository } from "../../../../domain/repositories/municipalities-repository";
+import { PrismaAllocationDepartmentMapper } from "../mappers/prisma-allocation-department-mapper";
 import { PrismaMunicipalityMapper } from "../mappers/prisma-municipality-mapper";
 import { prisma } from "../prisma";
 
@@ -65,6 +67,16 @@ export class PrismaMunicipalityRepository implements MunicipalitiesRepository {
 		}
 
 		return PrismaMunicipalityMapper.toDomain(municipality);
+	}
+
+	async findAllocationDepartments(municipalityId: string): Promise<AllocationDepartment[]> {
+		const allocationDepartments = await prisma.allocationDepartment.findMany({
+			where: {
+				municipalityId
+			}
+		})
+
+		return allocationDepartments.map(PrismaAllocationDepartmentMapper.toDomain);
 	}
 
 	async create(municipality: Municipality): Promise<void> {
