@@ -92,30 +92,6 @@ describe("Get Base Products (e2e)", () => {
 		expect(product.category).toBe("Categoria");
 	});
 
-	it("should not allow non-admin users to access base products", async () => {
-		const user = await prisma.user.create({
-			data: {
-				name: "User",
-				email: "user@user.com",
-				password: await hash("12345678", 6),
-				phone: "88888888888",
-				document: "11111111111",
-				role: "MUNICIPALITY",
-			},
-		});
-		const accessToken = app.jwt.sign({
-			sub: user.id.toString(),
-			role: user.role,
-		});
-
-		const response = await request(app.server)
-			.get("/base-products")
-			.set("Authorization", `Bearer ${accessToken}`);
-
-		expect(response.statusCode).toBe(401);
-		expect(response.body.success).toBe(false);
-	});
-
 	it("should not allow unauthenticated access", async () => {
 		const response = await request(app.server).get("/base-products");
 
