@@ -1,7 +1,9 @@
-import { AllocationDepartment } from "../../../../domain/entities/allocation-department";
 import { Municipality } from "../../../../domain/entities/municipality";
 import { MunicipalitiesRepository } from "../../../../domain/repositories/municipalities-repository";
+import { AllocationDepartment } from "../../../../domain/entities/allocation-department";
+import { MaintenanceContract } from "../../../../domain/entities/maintenance-contract";
 import { PrismaAllocationDepartmentMapper } from "../mappers/prisma-allocation-department-mapper";
+import { PrismaMaintenanceContractMapper } from "../mappers/prisma-maintenance-contract-mapper";
 import { PrismaMunicipalityMapper } from "../mappers/prisma-municipality-mapper";
 import { prisma } from "../prisma";
 
@@ -77,6 +79,16 @@ export class PrismaMunicipalityRepository implements MunicipalitiesRepository {
 		})
 
 		return allocationDepartments.map(PrismaAllocationDepartmentMapper.toDomain);
+	}
+
+	async findMaintenanceContracts(municipalityId: string): Promise<MaintenanceContract[]> {
+		const maintenanceContracts = await prisma.maintenanceContract.findMany({
+			where: {
+				municipalityId,
+			},
+		});
+
+		return maintenanceContracts.map(PrismaMaintenanceContractMapper.toDomain);	
 	}
 
 	async create(municipality: Municipality): Promise<void> {
