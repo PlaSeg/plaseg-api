@@ -1,4 +1,5 @@
 import { Municipality } from "../../src/domain/entities/municipality";
+import { AllocationDepartment } from "../../src/domain/entities/allocation-department";
 import { MunicipalitiesRepository } from "../../src/domain/repositories/municipalities-repository";
 
 export class InMemoryMunicipalitiesRepository
@@ -40,6 +41,20 @@ export class InMemoryMunicipalitiesRepository
 		}
 
 		return municipality;
+	}
+
+	async findAllocationDepartments(
+		municipalityId: string
+	): Promise<AllocationDepartment[]> {
+		const municipality = this.items.find(
+			(municipality) => municipality.id.toString() === municipalityId
+		);
+
+		if (!municipality) {
+			return [];
+		}
+		
+		return municipality.allocationDepartments || [];
 	}
 
 	async create(municipality: Municipality): Promise<void> {
