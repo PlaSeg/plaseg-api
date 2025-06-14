@@ -96,8 +96,6 @@ export class InMemoryProjectsRepository implements ProjectsRepository {
 			counterpartCapitalValue?: number;
 			counterpartOperatingCostCode?: string;
 			counterpartOperatingCostValue?: number;
-			totalValue?: number;
-			requestedValue?: number;
 			baseValue?: number;
 		}
 	): Promise<void> {
@@ -128,8 +126,6 @@ export class InMemoryProjectsRepository implements ProjectsRepository {
 					counterpartOperatingCostValue:
 						data.counterpartOperatingCostValue ??
 						project.counterpartOperatingCostValue,
-					totalValue: data.totalValue ?? project.totalValue,
-					requestedValue: data.requestedValue ?? project.requestedValue,
 					baseValue: data.baseValue ?? project.baseValue,
 					requestedItems: project.requestedItems,
 				},
