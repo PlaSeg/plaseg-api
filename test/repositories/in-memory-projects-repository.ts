@@ -2,7 +2,7 @@ import { Project } from "../../src/domain/entities/project";
 import { RequestedItem } from "../../src/domain/entities/requested-item";
 import { ProjectsRepository } from "../../src/domain/repositories/project-repository";
 import { ProjectWithMoreInfo } from "../../src/domain/entities/value-objects/project-with-more-info";
-import { UniqueEntityID } from "../../src/core/entities/unique-entity-id";
+import { makeProjectWithMoreInfo } from "../factories/make-project-with-more-info";
 
 export class InMemoryProjectsRepository implements ProjectsRepository {
 	public items: Project[] = [];
@@ -20,47 +20,7 @@ export class InMemoryProjectsRepository implements ProjectsRepository {
 			return null;
 		}
 
-		return ProjectWithMoreInfo.create({
-			id: project.id,
-			title: project.title,
-			responsibleCpf: project.responsibleCpf,
-			responsibleName: project.responsibleName,
-			responsibleEmail: project.responsibleEmail,
-			responsiblePhone: project.responsiblePhone,
-			counterpartCapitalItem: project.counterpartCapitalItem,
-			counterpartCapitalValue: project.counterpartCapitalValue,
-			counterpartOperatingCostCode: project.counterpartOperatingCostCode,
-			counterpartOperatingCostValue: project.counterpartOperatingCostValue,
-			totalValue: project.totalValue,
-			requestedValue: project.requestedValue,
-			baseValue: project.baseValue,
-			createdAt: project.createdAt,
-			updatedAt: project.updatedAt,
-			documents: project.documents,
-			municipality: {
-				id: new UniqueEntityID(project.municipalityId),
-				name: "Test Municipality",
-			},
-			opportunity: {
-				id: new UniqueEntityID(project.opportunityId),
-				title: "Test Opportunity",
-				counterpartPercentage: 0,
-				requiresCounterpart: false,
-			},
-			projectType: {
-				id: new UniqueEntityID(project.projectTypeId),
-				name: "Test Project Type",
-			},
-			requestedItems: project.requestedItems?.map((item) => ({
-				id: item.id,
-				quantity: item.quantity,
-				baseProduct: {
-					id: new UniqueEntityID(item.baseProductId),
-					name: "Test Base Product",
-					unitValue: 100,
-				},
-			})),
-		});
+		return makeProjectWithMoreInfo(project);
 	}
 
 	async findByTitle(title: string): Promise<Project[] | null> {
