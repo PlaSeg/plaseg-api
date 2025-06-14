@@ -2,6 +2,7 @@ import { describe, it, beforeEach, expect } from "vitest";
 import { InMemoryProjectsRepository } from "../../../../test/repositories/in-memory-projects-repository";
 import { GetProjectByIdUseCase } from "./get-project-by-id";
 import { makeProject } from "../../../../test/factories/make-project";
+import { ProjectWithMoreInfo } from "../../entities/value-objects/project-with-more-info";
 
 let inMemoryProjectsRepository: InMemoryProjectsRepository;
 let sut: GetProjectByIdUseCase;
@@ -14,6 +15,7 @@ describe("Get Project By Id Use Case", () => {
 
 	it("should be able to get a project by id", async () => {
 		const project = makeProject();
+
 		await inMemoryProjectsRepository.create(project);
 
 		const result = await sut.execute({
@@ -22,7 +24,8 @@ describe("Get Project By Id Use Case", () => {
 
 		expect(result.isRight()).toBe(true);
 		if (result.isRight()) {
-			expect(result.value.project).toEqual(project);
+			expect(result.value.project).toBeInstanceOf(ProjectWithMoreInfo);
+			expect(result.value.project.id.toString()).toEqual(project.id.toString());
 		}
 	});
 

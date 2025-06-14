@@ -5,6 +5,8 @@ import { createFieldsRecursively } from "../../../../domain/helpers/field-helper
 import { ProjectsRepository } from "../../../../domain/repositories/project-repository";
 import { Project } from "../../../../domain/entities/project";
 import { PrismaProjectMapper } from "../mappers/prisma-project-mapper";
+import { ProjectWithMoreInfo } from "../../../../domain/entities/value-objects/project-with-more-info";
+import { PrismaProjectWithMoreInfoMapper } from "../mappers/prisma-project-with-more-info-mapper";
 
 export class PrismaProjectsRepository implements ProjectsRepository {
 	async findById(id: string): Promise<Project | null> {
@@ -29,6 +31,58 @@ export class PrismaProjectsRepository implements ProjectsRepository {
 		return PrismaProjectMapper.toDomain({
 			...project,
 		});
+	}
+
+	async findByIdWithMoreInfo(id: string): Promise<ProjectWithMoreInfo | null> {
+		const project = await prisma.project.findUnique({
+			where: {
+				id,
+			},
+			include: {
+				documents: {
+					include: {
+						fields: true,
+					},
+				},
+				requestedItems: {
+					include: {
+						baseProduct: {
+							select: {
+								id: true,
+								name: true,
+								unitValue: true,
+							},
+						},
+					},
+				},
+				opportunity: {
+					select: {
+						id: true,
+						title: true,
+						counterpartPercentage: true,
+						requiresCounterpart: true,
+					},
+				},
+				projectType: {
+					select: {
+						id: true,
+						name: true,
+					},
+				},
+				municipality: {
+					select: {
+						id: true,
+						name: true,
+					},
+				},
+			},
+		});
+
+		if (!project) {
+			return null;
+		}
+
+		return PrismaProjectWithMoreInfoMapper.toDomain(project);
 	}
 
 	async findByTitle(title: string): Promise<Project[] | null> {
@@ -94,13 +148,9 @@ export class PrismaProjectsRepository implements ProjectsRepository {
 		);
 	}
 
-	async create(
-		project: Project
-	): Promise<void> {
+	async create(project: Project): Promise<void> {
 		await prisma.$transaction(async (tx) => {
-			const data = PrismaProjectMapper.toPrisma(
-				project
-			);
+			const data = PrismaProjectMapper.toPrisma(project);
 			await tx.project.create({ data });
 
 			for (const document of project.documents) {
