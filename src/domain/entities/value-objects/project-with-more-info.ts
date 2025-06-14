@@ -28,6 +28,9 @@ export interface ProjectWithMoreInfoProps {
 		title: string;
 		counterpartPercentage: number;
 		requiresCounterpart: boolean;
+		maxValue: number | null;
+		availableValue: number | null;
+		minValue: number | null;
 	};
 	projectType: {
 		id: UniqueEntityID;

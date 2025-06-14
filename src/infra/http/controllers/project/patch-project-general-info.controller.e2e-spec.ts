@@ -263,7 +263,7 @@ describe("Patch Project General Info (e2e)", () => {
 			.send({
 				responsibleName: "New Name",
 				responsibleEmail: "new@email.com",
-				totalValue: 1000,
+				baseValue: 1000,
 			});
 
 		expect(response.statusCode).toEqual(200);
@@ -281,6 +281,6 @@ describe("Patch Project General Info (e2e)", () => {
 
 		expect(updatedProject?.responsibleName).toBe("New Name");
 		expect(updatedProject?.responsibleEmail).toBe("new@email.com");
-		expect(updatedProject?.totalValue?.toNumber()).toBe(1000);
+		expect(updatedProject?.baseValue?.toNumber()).toBe(1000);
 	});
 });

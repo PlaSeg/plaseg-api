@@ -26,8 +26,6 @@ export const patchProjectGeneralInfoBodySchema = z.object({
 	responsibleName: z.string().optional(),
 	responsibleEmail: z.string().email().optional(),
 	responsiblePhone: z.string().optional(),
-	totalValue: z.number().positive().optional(),
-	requestedValue: z.number().positive().optional(),
 	baseValue: z.number().positive().optional(),
 });
 
@@ -43,6 +41,7 @@ export const fieldSchema = z.object({
 });
 
 export const documentsSchema = z.object({
+	id: z.string().uuid(),
 	name: z.string().min(3, "O nome deve ter no mínimo 3 caracteres"),
 	fields: z.array(fieldSchema),
 });
@@ -114,6 +113,9 @@ export const projectWithMoreInfoResponseSchema = z.object({
 		title: z.string(),
 		counterpartPercentage: z.number().nullable().optional(),
 		requiresCounterpart: z.boolean(),
+		maxValue: z.number().nullable().optional(),
+		availableValue: z.number().nullable().optional(),
+		minValue: z.number().nullable().optional(),
 	}),
 	projectType: z.object({
 		id: z.string().uuid(),

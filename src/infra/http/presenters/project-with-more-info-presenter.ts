@@ -22,6 +22,7 @@ export class ProjectWithMoreInfoPresenter {
 			createdAt: project.createdAt,
 			updatedAt: project.updatedAt ?? null,
 			documents: project.documents.map((doc) => ({
+				id: doc.id.toString(),
 				name: doc.name,
 				fields: doc.fields.map((field) => ({
 					id: field.id.toString(),
@@ -40,6 +41,9 @@ export class ProjectWithMoreInfoPresenter {
 				requiresCounterpart: project.opportunity.requiresCounterpart,
 				counterpartPercentage:
 					project.opportunity.counterpartPercentage ?? null,
+				maxValue: project.opportunity.maxValue ?? null,
+				availableValue: project.opportunity.availableValue ?? null,
+				minValue: project.opportunity.minValue ?? null,
 			},
 			projectType: {
 				id: project.projectType.id.toString(),
