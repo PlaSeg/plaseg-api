@@ -26,8 +26,6 @@ export const patchProjectGeneralInfoBodySchema = z.object({
 	responsibleName: z.string().optional(),
 	responsibleEmail: z.string().email().optional(),
 	responsiblePhone: z.string().optional(),
-	totalValue: z.number().positive().optional(),
-	requestedValue: z.number().positive().optional(),
 	baseValue: z.number().positive().optional(),
 });
 

@@ -184,8 +184,6 @@ export class PrismaProjectsRepository implements ProjectsRepository {
 			counterpartCapitalValue?: number;
 			counterpartOperatingCostCode?: string;
 			counterpartOperatingCostValue?: number;
-			totalValue?: number;
-			requestedValue?: number;
 			baseValue?: number;
 		}
 	): Promise<void> {
@@ -202,8 +200,6 @@ export class PrismaProjectsRepository implements ProjectsRepository {
 				counterpartCapitalValue: data.counterpartCapitalValue,
 				counterpartOperatingCostCode: data.counterpartOperatingCostCode,
 				counterpartOperatingCostValue: data.counterpartOperatingCostValue,
-				totalValue: data.totalValue,
-				requestedValue: data.requestedValue,
 				baseValue: data.baseValue,
 			},
 		});

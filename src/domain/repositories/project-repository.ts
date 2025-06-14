@@ -19,8 +19,6 @@ export interface ProjectsRepository {
 			counterpartCapitalValue?: number;
 			counterpartOperatingCostCode?: string;
 			counterpartOperatingCostValue?: number;
-			totalValue?: number;
-			requestedValue?: number;
 			baseValue?: number;
 		}
 	): Promise<void>;
