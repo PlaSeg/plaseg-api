@@ -19,7 +19,7 @@ export async function getProjectById(app: FastifyInstance) {
 			schema: {
 				tags: ["Projects"],
 				operationId: "getProjectById",
-				summary: "Get projects",
+				summary: "Get project by id",
 				security: [{ bearerAuth: [] }],
 				params: z.object({
 					projectId: z.string().uuid("ID do projeto inválido"),
