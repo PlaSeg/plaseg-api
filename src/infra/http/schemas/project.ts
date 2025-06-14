@@ -87,3 +87,53 @@ export const getProjectsResponseSchema = z
 	.nullable();
 
 export type ProjectResponse = z.infer<typeof projectResponseSchema>;
+
+export const projectWithMoreInfoResponseSchema = z.object({
+	id: z.string().uuid(),
+	title: z.string(),
+	responsibleCpf: z.string().nullable().optional(),
+	responsibleName: z.string().nullable().optional(),
+	responsibleEmail: z.string().nullable().optional(),
+	responsiblePhone: z.string().nullable().optional(),
+	counterpartCapitalItem: z.string().nullable().optional(),
+	counterpartCapitalValue: z.number().nullable().optional(),
+	counterpartOperatingCostCode: z.string().nullable().optional(),
+	counterpartOperatingCostValue: z.number().nullable().optional(),
+	totalValue: z.number().nullable().optional(),
+	requestedValue: z.number().nullable().optional(),
+	baseValue: z.number().nullable().optional(),
+	createdAt: z.coerce.date(),
+	updatedAt: z.coerce.date().nullable().optional(),
+	documents: z.array(documentsSchema),
+	municipality: z.object({
+		id: z.string().uuid(),
+		name: z.string(),
+	}),
+	opportunity: z.object({
+		id: z.string().uuid(),
+		title: z.string(),
+		counterpartPercentage: z.number().nullable().optional(),
+		requiresCounterpart: z.boolean(),
+	}),
+	projectType: z.object({
+		id: z.string().uuid(),
+		name: z.string(),
+	}),
+	requestedItems: z
+		.array(
+			z.object({
+				id: z.string().uuid(),
+				quantity: z.number(),
+				baseProduct: z.object({
+					id: z.string().uuid(),
+					name: z.string(),
+					unitValue: z.number(),
+				}),
+			})
+		)
+		.optional(),
+});
+
+export type ProjectWithMoreInfoResponse = z.infer<
+	typeof projectWithMoreInfoResponseSchema
+>;

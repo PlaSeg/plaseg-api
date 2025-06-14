@@ -2,8 +2,8 @@ import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { errorResponseSchema, successResponseSchema } from "../../schemas/http";
 import { verifyJwt } from "../../middleware/auth";
-import { projectResponseSchema } from "../../schemas/project";
-import { ProjectPresenter } from "../../presenters/project-presenter";
+import { projectWithMoreInfoResponseSchema } from "../../schemas/project";
+import { ProjectWithMoreInfoPresenter } from "../../presenters/project-with-more-info-presenter";
 import { verifyUserRole } from "../../middleware/verify-user-role";
 import { z } from "zod";
 import { makeGetProjectByIdUseCase } from "../../../database/prisma/use-cases/make-get-project-by-id-use-case";
@@ -25,7 +25,9 @@ export async function getProjectById(app: FastifyInstance) {
 					projectId: z.string().uuid("ID do projeto inválido"),
 				}),
 				response: {
-					200: successResponseSchema(projectResponseSchema).describe("Success"),
+					200: successResponseSchema(
+						projectWithMoreInfoResponseSchema
+					).describe("Success"),
 					400: errorResponseSchema.describe("Bad Request"),
 				},
 			},
@@ -50,7 +52,7 @@ export async function getProjectById(app: FastifyInstance) {
 			return reply.status(200).send({
 				success: true,
 				errors: null,
-				data: ProjectPresenter.toHTTP(result.value.project),
+				data: ProjectWithMoreInfoPresenter.toHTTP(result.value.project),
 			});
 		}
 	);
