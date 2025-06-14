@@ -22,6 +22,7 @@ export class ProjectWithMoreInfoPresenter {
 			createdAt: project.createdAt,
 			updatedAt: project.updatedAt ?? null,
 			documents: project.documents.map((doc) => ({
+				id: doc.id.toString(),
 				name: doc.name,
 				fields: doc.fields.map((field) => ({
 					id: field.id.toString(),

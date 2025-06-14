@@ -43,6 +43,7 @@ export const fieldSchema = z.object({
 });
 
 export const documentsSchema = z.object({
+	id: z.string().uuid(),
 	name: z.string().min(3, "O nome deve ter no mínimo 3 caracteres"),
 	fields: z.array(fieldSchema),
 });
