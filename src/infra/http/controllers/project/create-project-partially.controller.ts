@@ -10,7 +10,7 @@ export async function createProjectPartially(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().post(
 		"/projects",
 		{
-			onRequest: [verifyUserRole(["ADMIN", "ADMIN_MASTER", "MUNICIPALITY"])],
+			onRequest: [verifyUserRole(["MUNICIPALITY"])],
 			schema: {
 				tags: ["Projects"],
 				operationId: "createProjectPartially",
@@ -20,7 +20,11 @@ export async function createProjectPartially(app: FastifyInstance) {
 					"Create project partially request body"
 				),
 				response: {
-					201: successResponseSchema(z.null()).describe("Created"),
+					201: successResponseSchema(
+						z.object({
+							projectId: z.string().uuid(),
+						})
+					).describe("Created"),
 					400: errorResponseSchema.describe("Bad Request"),
 					409: errorResponseSchema.describe("Conflict"),
 				},
@@ -33,7 +37,7 @@ export async function createProjectPartially(app: FastifyInstance) {
 
 			const result = await createProjectPartiallyUseCase.execute({
 				...body,
-				userId: request.user.sub
+				userId: request.user.sub,
 			});
 
 			if (result.isLeft()) {
@@ -47,7 +51,9 @@ export async function createProjectPartially(app: FastifyInstance) {
 			return reply.status(201).send({
 				success: true,
 				errors: null,
-				data: null,
+				data: {
+					projectId: result.value.projectId,
+				},
 			});
 		}
 	);

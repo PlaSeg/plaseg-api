@@ -33,6 +33,22 @@ export async function seedProjects(
 		},
 	});
 
+	await prisma.allocationDepartment.create({
+		data: {
+			description: "Departamento de Segurança Pública",
+			address: "Rua da Segurança, 123 - Centro, Teresina - PI",
+			municipalityId: municipality.id,
+		},
+	});
+
+	await prisma.maintenanceContract.create({
+		data: {
+			description: "Contrato de Manutenção de Equipamentos de Segurança",
+			attachment: "contrato_manutencao_equipamentos_2024.pdf",
+			municipalityId: municipality.id,
+		},
+	});
+
 	await prisma.project.create({
 		data: {
 			title: "Combate à Violência Contra a Mulher em Teresina",

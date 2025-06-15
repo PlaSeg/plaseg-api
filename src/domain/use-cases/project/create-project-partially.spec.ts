@@ -40,9 +40,11 @@ describe("Create Project Partially Use Case", () => {
 		});
 
 		expect(result.isLeft()).toBe(true);
-		expect(result.value?.message).toBe(
-			"É preciso ter um município cadastrado para criar um projeto!"
-		);
+		if (result.isLeft()) {
+			expect(result.value.message).toBe(
+				"É preciso ter um município cadastrado para criar um projeto!"
+			);
+		}
 	});
 
 	it("should return error if opportunity does not exist", async () => {
@@ -57,7 +59,9 @@ describe("Create Project Partially Use Case", () => {
 		});
 
 		expect(result.isLeft()).toBe(true);
-		expect(result.value?.message).toBe("Essa oportunidade não existe!");
+		if (result.isLeft()) {
+			expect(result.value.message).toBe("Essa oportunidade não existe!");
+		}
 	});
 
 	it("should return error if project type does not exist", async () => {
@@ -75,7 +79,9 @@ describe("Create Project Partially Use Case", () => {
 		});
 
 		expect(result.isLeft()).toBe(true);
-		expect(result.value?.message).toBe("Esse tipo de projeto não existe!");
+		if (result.isLeft()) {
+			expect(result.value.message).toBe("Esse tipo de projeto não existe!");
+		}
 	});
 
 	it("should create a project partially with documents", async () => {

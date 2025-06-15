@@ -1,5 +1,4 @@
 import { prisma } from "../prisma";
-
 import { PrismaDocumentMapper } from "../mappers/prisma-document-mapper";
 import { createFieldsRecursively } from "../../../../domain/helpers/field-helper";
 import { ProjectsRepository } from "../../../../domain/repositories/project-repository";
@@ -88,10 +87,14 @@ export class PrismaProjectsRepository implements ProjectsRepository {
 		return PrismaProjectWithMoreInfoMapper.toDomain(project);
 	}
 
-	async findByTitle(title: string): Promise<Project[] | null> {
+	async findByTitle(
+		title: string,
+
+	): Promise<Project[] | null> {
 		const projects = await prisma.project.findMany({
 			where: {
 				title,
+				
 			},
 			include: {
 				documents: {

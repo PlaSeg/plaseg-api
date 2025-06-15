@@ -1,7 +1,6 @@
+import request from "supertest";
 import fastify, { FastifyInstance } from "fastify";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import request from "supertest";
-
 import { buildApp } from "../../app";
 import { makeUser } from "../../../../../test/factories/make-user";
 import { Role } from "../../../../domain/entities/value-objects/role";
@@ -48,7 +47,6 @@ describe("Create Project Partially (e2e)", () => {
 			},
 		});
 
-		// Criar o município
 		const municipality = makeMunicipality({
 			userId: user.id,
 		});
@@ -153,7 +151,9 @@ describe("Create Project Partially (e2e)", () => {
 		expect(response.body).toEqual({
 			success: true,
 			errors: null,
-			data: null,
+			data: {
+				projectId: expect.any(String),
+			},
 		});
 	});
 });

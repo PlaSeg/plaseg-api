@@ -22,7 +22,7 @@ type CreateProjectRequestedItemUseCaseResponse = Either<
 
 export class CreateProjectRequestedItemUseCase {
 	constructor(
-		private projectRepository: ProjectsRepository,
+		private projectsRepository: ProjectsRepository,
 		private baseProductRepository: BaseProductsRepository,
 		private allocationDepartmentRepository: AllocationDeparmentsRepository,
 		private maintenanceContractRepository: MaintenanceContractsRepository,
@@ -32,7 +32,7 @@ export class CreateProjectRequestedItemUseCase {
 	async execute(
 		request: CreateProjectRequestedItemUseCaseRequest
 	): Promise<CreateProjectRequestedItemUseCaseResponse> {
-		const projectExists = await this.projectRepository.findById(
+		const projectExists = await this.projectsRepository.findById(
 			request.projectId
 		);
 

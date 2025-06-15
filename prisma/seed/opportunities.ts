@@ -36,42 +36,97 @@ export async function seedOpportunities(prisma: PrismaClient, typeId: string) {
 				create: [
 					{
 						name: "Justificativa Completa do Projeto",
-						fields: {
-							create: [
-								{
-									name: "Informações gerais",
-									value: null,
-								},
-							],
-						},
 					},
 				],
 			},
 		},
+		include: {
+			documents: true,
+		},
 	});
 
-	const projectType = await prisma.projectType.upsert({
-		where: { name: opportunity.title },
-		update: {},
-		create: {
+	const document = opportunity.documents[0];
+
+	const justificativaField = await prisma.field.create({
+		data: {
+			name: "Justificativa",
+			value: null,
+			documentId: document.id,
+		},
+	});
+
+	await prisma.field.createMany({
+		data: [
+			{
+				name: "Informações gerais",
+				value: null,
+				documentId: document.id,
+			},
+			{
+				name: "Caracterização dos interesses recíprocos",
+				value: null,
+				documentId: document.id,
+				parentId: justificativaField.id,
+			},
+			{
+				name: "Relação entre a proposta e os objetivos e diretrizes do programa federal",
+				value: null,
+				documentId: document.id,
+				parentId: justificativaField.id,
+			},
+		],
+	});
+
+	const projectType = await prisma.projectType.create({
+		data: {
 			name: opportunity.title,
 			documents: {
 				create: [
 					{
 						name: "Justificativa Completa do Projeto",
-						fields: {
-							create: [
-								{
-									name: "Informações gerais",
-									value:
-										"No Brasil, a violência contra a mulher é uma triste realidade. Segundo o Atlas da Violência 2021, elaborado pelo IPEA (Instituto de Pesquisa Econômica Aplicada) em parceria com o Fórum Brasileiro de Segurança Pública, em 2019 foram registrados mais de 180 mil casos de violência doméstica e familiar contra a mulher, sendo que cerca de 85% das vítimas conheciam o agressor.",
-								},
-							],
-						},
 					},
 				],
 			},
 		},
+		include: {
+			documents: true,
+		},
+	});
+
+	const projectTypeDocument = projectType.documents[0];
+
+	const projectTypeJustificativaField = await prisma.field.create({
+		data: {
+			name: "Justificativa",
+			value: null,
+			documentId: projectTypeDocument.id,
+		},
+	});
+
+	await prisma.field.createMany({
+		data: [
+			{
+				name: "Informações gerais",
+				value:
+					"No Brasil, a violência contra a mulher é uma triste realidade. Segundo o Atlas da Violência 2021, elaborado pelo IPEA (Instituto de Pesquisa Econômica Aplicada) em parceria com o Fórum Brasileiro de Segurança Pública, em 2019 foram registrados mais de 180 mil casos de violência doméstica e familiar contra a mulher, sendo que cerca de 85% das vítimas conheciam o agressor.",
+				documentId: projectTypeDocument.id,
+				parentId: projectTypeJustificativaField.id,
+			},
+			{
+				name: "Caracterização dos interesses recíprocos",
+				value:
+					"O objeto da presente proposta está em consonância com preceitos constitucionais e demais normativos vigentes que preconizam a integração e a atuação coordenada dos órgãos de segurança pública na prevenção e no combate à violência, especialmente a violência contra a mulher.",
+				documentId: projectTypeDocument.id,
+				parentId: projectTypeJustificativaField.id,
+			},
+			{
+				name: "Relação entre a proposta e os objetivos e diretrizes do programa federal",
+				value:
+					"Ação 21BQ - Implementação de Políticas de Segurança Pública, Prevenção, e Enfrentamento à Criminalidade",
+				documentId: projectTypeDocument.id,
+				parentId: projectTypeJustificativaField.id,
+			},
+		],
 	});
 
 	await prisma.opportunityProjectType.create({
