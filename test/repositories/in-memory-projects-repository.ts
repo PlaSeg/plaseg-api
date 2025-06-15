@@ -23,8 +23,14 @@ export class InMemoryProjectsRepository implements ProjectsRepository {
 		return makeProjectWithMoreInfo(project);
 	}
 
-	async findByTitle(title: string): Promise<Project[] | null> {
-		const projects = this.items.filter((project) => project.title === title);
+	async findByTitle(
+		title: string,
+		municipalityId: string
+	): Promise<Project[] | null> {
+		const projects = this.items.filter(
+			(project) =>
+				project.title === title && project.municipalityId === municipalityId
+		);
 
 		return projects.length > 0 ? projects : null;
 	}

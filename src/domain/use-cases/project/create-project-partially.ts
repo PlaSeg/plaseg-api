@@ -16,11 +16,16 @@ type CreateProjectPartiallyUseCaseRequest = {
 	userId: string;
 };
 
-type CreateProjectPartiallyUseCaseResponse = Either<CustomError, null>;
+type CreateProjectPartiallyUseCaseResponse = Either<
+	CustomError,
+	{
+		projectId: string;
+	}
+>;
 
 export class CreateProjectPartiallyUseCase {
 	constructor(
-		private projectRepository: ProjectsRepository,
+		private projectsRepository: ProjectsRepository,
 		private opportunityRepository: OpportunitiesRepository,
 		private projectTypeRepository: ProjectTypesRepository,
 		private municipalityRepository: MunicipalitiesRepository
@@ -56,12 +61,19 @@ export class CreateProjectPartiallyUseCase {
 	async execute(
 		request: CreateProjectPartiallyUseCaseRequest
 	): Promise<CreateProjectPartiallyUseCaseResponse> {
-		const municipality = await this.municipalityRepository.findByUserId(request.userId);
+		const municipality = await this.municipalityRepository.findByUserId(
+			request.userId
+		);
 
 		if (!municipality) {
-			return left(new CustomError(409, "É preciso ter um município cadastrado para criar um projeto!"))
+			return left(
+				new CustomError(
+					409,
+					"É preciso ter um município cadastrado para criar um projeto!"
+				)
+			);
 		}
- 
+
 		const opportunityExists = await this.opportunityRepository.findById(
 			request.opportunityId
 		);
@@ -105,13 +117,11 @@ export class CreateProjectPartiallyUseCase {
 			opportunityId: request.opportunityId,
 			projectTypeId: request.projectTypeId,
 			documents: projectDocuments,
-			municipalityId: municipality.id.toString()
+			municipalityId: municipality.id.toString(),
 		});
 
-		await this.projectRepository.create(
-			projectPartially
-		);
+		await this.projectsRepository.create(projectPartially);
 
-		return right(null);
+		return right({ projectId: projectPartially.id.toString() });
 	}
 }

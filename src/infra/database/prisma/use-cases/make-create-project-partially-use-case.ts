@@ -5,16 +5,16 @@ import { PrismaProjectTypesRepository } from "../repositories/prisma-project-typ
 import { PrismaMunicipalityRepository } from "../repositories/prisma-municipalities-repository";
 
 export function makeCreateProjectPartiallyUseCase() {
-	const ProjectsRepository = new PrismaProjectsRepository();
-	const OpportunitiesRepository = new PrismaOpportunitiesRepository();
-	const ProjectTypesRepository = new PrismaProjectTypesRepository();
-	const MunicipalitiesRepository = new PrismaMunicipalityRepository();
+	const projectsRepository = new PrismaProjectsRepository();
+	const opportunitiesRepository = new PrismaOpportunitiesRepository();
+	const projectTypesRepository = new PrismaProjectTypesRepository();
+	const municipalitiesRepository = new PrismaMunicipalityRepository();
 
 	const useCase = new CreateProjectPartiallyUseCase(
-		ProjectsRepository,
-		OpportunitiesRepository,
-		ProjectTypesRepository,
-		MunicipalitiesRepository
+		projectsRepository,
+		opportunitiesRepository,
+		projectTypesRepository,
+		municipalitiesRepository
 	);
 
 	return useCase;

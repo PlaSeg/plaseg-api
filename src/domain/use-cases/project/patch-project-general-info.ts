@@ -14,12 +14,12 @@ type PatchProjectGeneralInfoUseCaseRequest = {
 type PatchProjectGeneralInfoUseCaseResponse = Either<CustomError, null>;
 
 export class PatchProjectGeneralInfoUseCase {
-	constructor(private projectRepository: ProjectsRepository) {}
+	constructor(private projectsRepository: ProjectsRepository) {}
 
 	async execute(
 		request: PatchProjectGeneralInfoUseCaseRequest
 	): Promise<PatchProjectGeneralInfoUseCaseResponse> {
-		const projectExists = await this.projectRepository.findById(
+		const projectExists = await this.projectsRepository.findById(
 			request.projectId
 		);
 
@@ -27,7 +27,7 @@ export class PatchProjectGeneralInfoUseCase {
 			return left(new CustomError(404, "Projeto não encontrado!"));
 		}
 
-		await this.projectRepository.updateGeneralInfo(request.projectId, {
+		await this.projectsRepository.updateGeneralInfo(request.projectId, {
 			responsibleCpf: request.responsibleCpf,
 			responsibleName: request.responsibleName,
 			responsibleEmail: request.responsibleEmail,
