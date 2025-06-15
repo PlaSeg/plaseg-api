@@ -147,13 +147,13 @@ describe("Create Project Partially (e2e)", () => {
 				projectTypeId: projectType.id,
 			});
 
-		console.log(response.body);
-
 		expect(response.statusCode).toEqual(201);
 		expect(response.body).toEqual({
 			success: true,
 			errors: null,
-			data: null,
+			data: {
+				projectId: expect.any(String),
+			},
 		});
 	});
 });

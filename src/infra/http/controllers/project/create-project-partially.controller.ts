@@ -40,8 +40,6 @@ export async function createProjectPartially(app: FastifyInstance) {
 				userId: request.user.sub,
 			});
 
-			console.log(result);
-
 			if (result.isLeft()) {
 				return reply.status(result.value.statusCode).send({
 					success: false,
