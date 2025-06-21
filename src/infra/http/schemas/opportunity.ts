@@ -45,6 +45,9 @@ export const createOpportunityRequestBodySchema = z
 		projectTypeIds: z.array(
 			z.string().uuid("O tipo de projeto deve ser um UUID válido")
 		),
+		baseProductIds: z.array(
+			z.string().uuid("O produto base deve ser um UUID válido")
+		),
 		requiredDocuments: z
 			.array(requiredDocumentSchema)
 			.min(1, "Pelo menos um documento é obrigatório"),

@@ -3,6 +3,10 @@ import { BaseProductsRepository } from "../../src/domain/repositories/base-produ
 
 export class InMemoryBaseProductsRepository implements BaseProductsRepository {
 	public items: BaseProduct[] = [];
+	public opportunityBaseProducts: {
+		opportunityId: string;
+		baseProductId: string;
+	}[] = [];
 
 	async findById(id: string): Promise<BaseProduct | null> {
 		const baseProduct = this.items.find(
@@ -40,6 +44,13 @@ export class InMemoryBaseProductsRepository implements BaseProductsRepository {
 
 	async findMany(): Promise<BaseProduct[] | null> {
 		return this.items.length > 0 ? this.items : null;
+	}
+
+	async createOpportunityBaseProduct(opportunityId: string, baseProductId: string): Promise<void> {
+		this.opportunityBaseProducts.push({
+			opportunityId,
+			baseProductId
+		})
 	}
 
 	async create(baseProduct: BaseProduct): Promise<void> {
