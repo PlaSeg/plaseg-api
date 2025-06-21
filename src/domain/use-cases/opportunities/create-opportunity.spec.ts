@@ -8,10 +8,13 @@ import { InMemoryTypesRepository } from "../../../../test/repositories/in-memory
 
 import { ProjectType } from "../../entities/project-type";
 import { InMemoryProjectTypesRepository } from "../../../../test/repositories/in-memory-project-type-repository";
+import { InMemoryBaseProductsRepository } from "../../../../test/repositories/in-memory-base-products-repository";
+import { makeBaseProduct } from "../../../../test/factories/make-base-product";
 
 let inMemoryOpportunitiesRepository: InMemoryOpportunitiesRepository;
 let inMemoryTypesRepository: InMemoryTypesRepository;
 let inMemoryProjectTypesRepository: InMemoryProjectTypesRepository;
+let inMemoryBaseProductRepository: InMemoryBaseProductsRepository;
 let sut: CreateOpportunityUseCase;
 
 describe("Create Opportunity Use Case", () => {
@@ -19,10 +22,12 @@ describe("Create Opportunity Use Case", () => {
 		inMemoryOpportunitiesRepository = new InMemoryOpportunitiesRepository();
 		inMemoryTypesRepository = new InMemoryTypesRepository();
 		inMemoryProjectTypesRepository = new InMemoryProjectTypesRepository();
+		inMemoryBaseProductRepository = new InMemoryBaseProductsRepository();
 		sut = new CreateOpportunityUseCase(
 			inMemoryOpportunitiesRepository,
 			inMemoryTypesRepository,
-			inMemoryProjectTypesRepository
+			inMemoryProjectTypesRepository,
+			inMemoryBaseProductRepository
 		);
 	});
 
@@ -40,8 +45,11 @@ describe("Create Opportunity Use Case", () => {
 			documents: [],
 		});
 
+		const baseProduct = makeBaseProduct();
+
 		await inMemoryTypesRepository.create(type);
 		await inMemoryProjectTypesRepository.create(projectType);
+		await inMemoryBaseProductRepository.create(baseProduct);
 
 		const result = await sut.execute({
 			title: opportunityData.title,
@@ -56,6 +64,7 @@ describe("Create Opportunity Use Case", () => {
 			counterpartPercentage: opportunityData.counterpartPercentage,
 			typeId: type.id.toString(),
 			projectTypeIds: [projectType.id.toString()],
+			baseProductIds: [baseProduct.id.toString()],
 			requiredDocuments: [
 				{
 					name: requiredDocument.name,

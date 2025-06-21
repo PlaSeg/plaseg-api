@@ -22,6 +22,7 @@ export interface OpportunityProps {
 	documents: Document[];
 	isActive: boolean;
 	releasedForAll?: boolean;
+	allBaseProducts: boolean;
 	type: string;
 	typeId: string;
 	createdAt: Date;
@@ -103,6 +104,10 @@ export class Opportunity extends Entity<OpportunityProps> {
 
 	get type() {
 		return this.props.type;
+	}
+
+	get allBaseProducts() {
+		return this.props.allBaseProducts;
 	}
 
 	set requiredDocuments(requiredDocuments: RequiredDocument[]) {

@@ -8,6 +8,7 @@ import { TypeGroup } from "../../entities/value-objects/type-group";
 import { Document } from "../../entities/document";
 import { buildFieldTree } from "../../helpers/field-helper";
 import { ProjectTypesRepository } from "../../repositories/project-type-repository";
+import { BaseProductsRepository } from "../../repositories/base-products-repository";
 
 type FieldRequest = {
 	id: string;
@@ -40,6 +41,7 @@ type CreateOpportunityUseCaseRequest = {
 	counterpartPercentage?: number;
 	typeId: string;
 	projectTypeIds: string[];
+	baseProductIds: string[];
 	requiredDocuments: RequiredDocumentRequest[];
 	documents: DocumentRequest[];
 };
@@ -55,7 +57,8 @@ export class CreateOpportunityUseCase {
 	constructor(
 		private opportunityRepository: OpportunitiesRepository,
 		private typesRepository: TypesRepository,
-		private projectTypesRepository: ProjectTypesRepository
+		private projectTypesRepository: ProjectTypesRepository,
+		private baseProductsRepository: BaseProductsRepository
 	) {}
 
 	async execute(
@@ -94,6 +97,26 @@ export class CreateOpportunityUseCase {
 			}
 		}
 
+		let allBaseProducts = false;
+
+		if (request.baseProductIds.length === 0 || !request.baseProductIds) {
+			allBaseProducts = true;
+		}
+
+		if (!allBaseProducts) {
+			for (const baseProductId of request.baseProductIds) {
+				const baseProduct = await this.baseProductsRepository.findById(
+					baseProductId
+				);
+
+				if (!baseProduct) {
+					return left(
+						new CustomError(404, `Produto base ${baseProductId} não encontrado`)
+					);
+				}
+			}
+		}
+
 		const requiredDocuments = request.requiredDocuments.map((document) =>
 			RequiredDocument.create({
 				name: document.name,
@@ -113,6 +136,7 @@ export class CreateOpportunityUseCase {
 			...request,
 			requiredDocuments,
 			documents,
+			allBaseProducts,
 			typeId: type.id.toString(),
 			type: type.description,
 		});
@@ -124,6 +148,15 @@ export class CreateOpportunityUseCase {
 				opportunity.id.toString(),
 				projectTypeId
 			);
+		}
+
+		if (!allBaseProducts) {
+			for (const baseProductId of request.baseProductIds) {
+				await this.baseProductsRepository.createOpportunityBaseProduct(
+					opportunity.id.toString(),
+					baseProductId
+				);
+			}	
 		}
 
 		return right({
