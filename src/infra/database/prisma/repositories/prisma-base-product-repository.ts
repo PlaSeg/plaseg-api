@@ -32,6 +32,15 @@ export class PrismaBaseProductsRepository implements BaseProductsRepository {
 		return baseProductsDomain;
 	}
 
+	async createOpportunityBaseProduct(opportunityId: string, baseProductId: string): Promise<void> {
+		await prisma.opportunityBaseProduct.create({
+			data: {
+				opportunityId,
+				baseProductId
+			}
+		})
+	}
+
 	async create(baseProduct: BaseProduct): Promise<void> {
 		const data = PrismaBaseProductMapper.toPrisma(baseProduct);
 
