@@ -4,6 +4,7 @@ import { getBaseProducts } from "./get-base-products.controller";
 import { getBaseProductById } from "./get-base-product-by-id.controller";
 import { createSpecificProduct } from "./create-specific-product.controller";
 import { getSpecificProducts } from "./get-specific-product.controller";
+import { getBaseProductsByOpportunityId } from "./get-base-products-by-opportunity-id.controller";
 
 export async function productsRoutes(app: FastifyInstance) {
 	app.register(createBaseProduct);
@@ -11,4 +12,5 @@ export async function productsRoutes(app: FastifyInstance) {
 	app.register(getBaseProductById);
 	app.register(createSpecificProduct);
 	app.register(getSpecificProducts);
+	app.register(getBaseProductsByOpportunityId);
 }
