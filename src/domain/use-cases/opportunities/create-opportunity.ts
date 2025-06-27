@@ -99,7 +99,7 @@ export class CreateOpportunityUseCase {
 
 		let allBaseProducts = false;
 
-		if (request.baseProductIds.length === 0 || !request.baseProductIds) {
+		if (!request.baseProductIds || request.baseProductIds.length === 0) {
 			allBaseProducts = true;
 		}
 
