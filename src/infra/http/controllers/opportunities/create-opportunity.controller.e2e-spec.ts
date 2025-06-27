@@ -9,6 +9,7 @@ import { makeProjectType } from "../../../../../test/factories/make-project-type
 import request from "supertest";
 import { prisma } from "../../../database/prisma/prisma";
 import { TypeGroup } from "../../../../domain/entities/value-objects/type-group";
+import { makeBaseProduct } from "../../../../../test/factories/make-base-product";
 
 describe("Create Opportunity (e2e)", () => {
 	let app: FastifyInstance;
@@ -38,6 +39,11 @@ describe("Create Opportunity (e2e)", () => {
 			group: TypeGroup.opportunity(),
 		});
 
+		const typeBaseProduct = makeType({
+			description: "Test Type 2",
+			group: TypeGroup.category(),
+		});
+
 		await prisma.type.create({
 			data: {
 				id: type.id.toString(),
@@ -46,6 +52,17 @@ describe("Create Opportunity (e2e)", () => {
 				parentId: type.parentId ?? null,
 				createdAt: type.createdAt,
 				updatedAt: type.updatedAt,
+			},
+		});
+
+		await prisma.type.create({
+			data: {
+				id: typeBaseProduct.id.toString(),
+				description: typeBaseProduct.description,
+				group: typeBaseProduct.group.toPrisma(),
+				parentId: typeBaseProduct.parentId ?? null,
+				createdAt: typeBaseProduct.createdAt,
+				updatedAt: typeBaseProduct.updatedAt,
 			},
 		});
 
@@ -74,6 +91,53 @@ describe("Create Opportunity (e2e)", () => {
 			],
 		});
 
+		const baseProduct1 = makeBaseProduct({
+			name: "Base Product 1",
+			code: "Code 1"
+		});
+
+		const baseProduct2 = makeBaseProduct({
+			name: "Base Product 2",
+			code: "Code 2"
+		});
+
+		await prisma.baseProduct.createMany({
+			data: [
+				{
+					id: baseProduct1.id.toString(),
+					name: baseProduct1.name,
+					budget1: baseProduct1.budget1,
+					budget1Validity: baseProduct1.budget1Validity,
+					budget2: baseProduct1.budget2,
+					budget2Validity: baseProduct1.budget2Validity,
+					budget3: baseProduct1.budget3,
+					budget3Validity: baseProduct1.budget3Validity,
+					code: baseProduct1.code,
+					technicalDescription: baseProduct1.technicalDescription,
+					typeId: typeBaseProduct.id.toString(),
+					unitValue: baseProduct1.unitValue,
+					createdAt: baseProduct1.createdAt,
+					updatedAt: baseProduct1.updatedAt,
+				},
+				{
+					id: baseProduct2.id.toString(),
+					name: baseProduct2.name,
+					budget1: baseProduct2.budget1,
+					budget1Validity: baseProduct2.budget1Validity,
+					budget2: baseProduct2.budget2,
+					budget2Validity: baseProduct2.budget2Validity,
+					budget3: baseProduct2.budget3,
+					budget3Validity: baseProduct2.budget3Validity,
+					code: baseProduct2.code,
+					technicalDescription: baseProduct2.technicalDescription,
+					typeId: typeBaseProduct.id.toString(),
+					unitValue: baseProduct2.unitValue,
+					createdAt: baseProduct2.createdAt,
+					updatedAt: baseProduct2.updatedAt,
+				},
+			],
+		});
+
 		const opportunity = makeOpportunity({
 			typeId: type.id.toString(),
 			type: type.description,
@@ -98,6 +162,10 @@ describe("Create Opportunity (e2e)", () => {
 				projectTypeIds: [
 					projectType1.id.toString(),
 					projectType2.id.toString(),
+				],
+				baseProductIds: [
+					baseProduct1.id.toString(),
+					baseProduct2.id.toString()
 				],
 				requiredDocuments: opportunity.requiredDocuments.map((doc) => ({
 					name: doc.name,

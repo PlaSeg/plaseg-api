@@ -21,6 +21,7 @@ export function makeOpportunity(override: Partial<OpportunityProps> = {}) {
 		requiredDocuments: [makeRequiredDocument()],
 		documents: [],
 		typeId: new UniqueEntityID().toString(),
+		allBaseProducts: false,
 		type: "OPPORTUNITY",
 		...override,
 	});

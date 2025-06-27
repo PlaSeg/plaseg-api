@@ -219,8 +219,9 @@ model BaseProduct {
   type   Type   @relation(fields: [typeId], references: [id], onDelete: Cascade)
   typeId String
 
-  specificProducts SpecificProduct[]
-  requestedItems   RequestedItem[]
+  specificProducts       SpecificProduct[]
+  requestedItems         RequestedItem[]
+  OpportunityBaseProduct OpportunityBaseProduct[]
 
   @@map("base_products")
 }
@@ -309,6 +310,20 @@ model RequestedItem {
   @@map("requested_itens")
 }
 
+model OpportunityBaseProduct {
+  id            String      @id @default(uuid())
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  opportunityId String
+  baseProduct   BaseProduct @relation(fields: [baseProductId], references: [id], onDelete: Cascade)
+  baseProductId String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@unique([opportunityId, baseProductId])
+  @@map("opportunity_base_products")
+}
+
 model Type {
   id          String    @id @default(uuid())
   description String    @unique
@@ -342,6 +357,7 @@ model Opportunity {
   counterpartPercentage Decimal?
   isActive              Boolean  @default(true)
   releasedForAll        Boolean  @default(false)
+  allBaseProducts       Boolean  @default(false)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
@@ -353,6 +369,7 @@ model Opportunity {
   projects               Project[]
   documents              Document[]
   OpportunityProjectType OpportunityProjectType[]
+  OpportunityBaseProduct OpportunityBaseProduct[]
 
   @@map("opportunities")
 }
