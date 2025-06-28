@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 
 export async function seedProjectType(prisma: PrismaClient) {
+	console.log("🌱 Seeding project type...");
+
 	await prisma.projectType.create({
 		data: {
 			name: "Combate à Violência Contra a Mulher",
@@ -83,4 +85,6 @@ export async function seedProjectType(prisma: PrismaClient) {
 			},
 		},
 	});
+
+	console.log("✅ Project type seeded successfully");
 }
