@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
 export async function seedOpportunityProjectType(prisma: PrismaClient) {
-	console.log("🌱 Seeding types...");
+	console.log("🌱 Seeding opportunity–project-type...");
 
 	const opportunityType = await prisma.projectType.findFirst({
 		where: {
