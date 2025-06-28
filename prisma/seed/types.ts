@@ -31,10 +31,12 @@ export async function seedTypes(prisma: PrismaClient) {
 			description: "Veículos",
 			group: TypeGroup.CATEGORY,
 			children: {
-				create: {
-					description: "Viaturas",
-					group: TypeGroup.CATEGORY,
-				},
+				create: [
+					{
+						description: "Viaturas",
+						group: TypeGroup.CATEGORY,
+					},
+				],
 			},
 		},
 	});
