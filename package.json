@@ -19,12 +19,14 @@
 		"test:watch": "vitest",
 		"test:e2e": "vitest run -c ./vitest.config.e2e.mts",
 		"test:e2e:watch": "vitest -c ./vitest.config.e2e.mts",
-		"test:cov": "vitest run --coverage -c ./vitest.config.coverage.mts"
+		"test:cov": "vitest run --coverage -c ./vitest.config.coverage.mts",
+		"health": "pnpm tsc --noEmit"
 	},
 	"prisma": {
 		"seed": "tsx prisma/seed.ts"
 	},
 	"devDependencies": {
+		"@eslint/js": "^9.30.0",
 		"@mermaid-js/mermaid-cli": "^11.4.2",
 		"@types/bcrypt": "^5.0.2",
 		"@types/node": "^22.7.0",

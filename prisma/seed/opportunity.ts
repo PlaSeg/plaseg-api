@@ -1,96 +1,132 @@
+import { Slug } from "../../src/domain/entities/value-objects/slug";
 import { PrismaClient } from "@prisma/client";
 
 export async function seedOpportunity(prisma: PrismaClient) {
-	const serviceType = await prisma.type.findFirst({
-		where: { group: "OPPORTUNITY" },
+	console.log("🌱 Seeding opportunity...");
+
+	const opportunityType = await prisma.type.findUnique({
+		where: {
+			description: "Edital",
+		},
 	});
 
-	if (!serviceType) {
-		throw new Error("Tipo SERVICE não encontrado");
+	if (!opportunityType) {
+		throw new Error("Opportunity type not found");
 	}
 
-	await prisma.opportunity.create({
+	const opportunity = await prisma.opportunity.create({
 		data: {
 			title: "Combate à Violência Contra a Mulher",
-			slug: "combate-violencia-contra-mulher",
-			responsibleAgency: "Secretaria de Segurança Pública",
+			slug: Slug.createFromText("Combate à Violência Contra a Mulher").value,
+			responsibleAgency: "Prefeitura Municipal",
 			description:
-				"Programa de apoio aos municípios para implementação de ações de combate à violência contra a mulher através da aquisição de equipamentos e capacitação de equipes.",
-			availableValue: 500000.0,
-			minValue: 50000.0,
-			maxValue: 200000.0,
-			initialDeadline: new Date("2025-07-01"),
-			finalDeadline: new Date("2025-12-31"),
+				"Este programa visa fortalecer a segurança pública municipal através de investimentos estratégicos em capacitação e equipamentos para a Guarda Municipal. A iniciativa busca modernizar as operações e aumentar a eficiência do patrulhamento preventivo.\n\nO projeto inclui a aquisição de equipamentos de última geração, treinamento especializado para os agentes e implementação de sistemas integrados de gestão. A meta é reduzir índices de criminalidade e melhorar a resposta a incidentes em áreas críticas do município.",
+			typeId: opportunityType.id,
+			availableValue: 1000000,
+			minValue: 800000,
+			maxValue: 1000000,
+			initialDeadline: "2025-05-12T18:00:28.044Z",
+			finalDeadline: "2025-05-12T18:00:28.044Z",
 			requiresCounterpart: true,
-			counterpartPercentage: 15.0,
+			counterpartPercentage: 20,
 			isActive: true,
-			releasedForAll: true,
-			allBaseProducts: false,
-			typeId: serviceType.id,
-			documents: {
+			releasedForAll: false,
+			requiredDocuments: {
 				create: [
 					{
-						name: "Justificativa Completa do Projeto",
-						fields: {
-							createMany: {
-								data: [
-									{
-										name: "Informações Gerais",
-									},
-									{
-										id: "d7436c99-2937-4326-8c84-f648c0782078",
-										name: "Justificativa",
-									},
-									{
-										name: "Caracterização dos interesses recíprocos",
-										parentId: "d7436c99-2937-4326-8c84-f648c0782078",
-									},
-									{
-										name: "Indicação do público alvo",
-										parentId: "d7436c99-2937-4326-8c84-f648c0782078",
-									},
-								],
-							},
-						},
-					},
-					{
-						name: "Sustentabilidade e Localização de Bens do Projeto",
-						fields: {
-							createMany: {
-								data: [
-									{
-										id: "8afd3344-f62d-45b0-be54-4693d6334caa",
-										name: "Sustentabilidade",
-									},
-									{
-										name: "Manutenção própria da sua frota de veículos",
-										parentId: "8afd3344-f62d-45b0-be54-4693d6334caa",
-									},
-									{
-										name: "Condições para o abastecimento das viaturas a serem adquiridas",
-										parentId: "8afd3344-f62d-45b0-be54-4693d6334caa",
-									},
-								],
-							},
-						},
-					},
-					{
-						name: "Declaração de Contrapartida",
-						fields: {
-							createMany: {
-								data: [
-									{
-										name: "Rubrica orçamentária (capital)",
-									},
-									{
-										name: "Valor",
-									},
-								],
-							},
-						},
+						name: "Declaração de Contrapartida Municipal",
+						description:
+							"Documento oficial assinado pelo prefeito municipal declarando o comprometimento em aportar contrapartida financeira ou em bens e serviços equivalente a no mínimo 20% do valor total do projeto, conforme legislação vigente.",
+						model:
+							"https://www.gov.br/esporte/pt-br/noticias-e-conteudos/esporte/ministerio-lanca-edital-para-projetos-relativos-ao-programa-vida-saudavel/AnexoIIIModelodaDeclaraodeContrapartida.pdf",
 					},
 				],
 			},
 		},
 	});
+
+	const doc1 = await prisma.document.create({
+		data: {
+			name: "Justificativa Completa do Projeto",
+			opportunityId: opportunity.id,
+		},
+	});
+
+	const justificativaField = await prisma.field.create({
+		data: {
+			name: "Justificativa",
+			documentId: doc1.id,
+		},
+	});
+
+	await prisma.field.createMany({
+		data: [
+			{
+				name: "Informações Gerais",
+				documentId: doc1.id,
+			},
+			{
+				name: "Caracterização dos interesses recíprocos",
+				documentId: doc1.id,
+				parentId: justificativaField.id,
+			},
+			{
+				name: "Indicação do público alvo",
+				documentId: doc1.id,
+				parentId: justificativaField.id,
+			},
+		],
+	});
+
+	const doc2 = await prisma.document.create({
+		data: {
+			name: "Sustentabilidade e Localização de Bens do Projeto",
+			opportunityId: opportunity.id,
+		},
+	});
+
+	const sustentabilidadeField = await prisma.field.create({
+		data: {
+			name: "Sustentabilidade",
+			documentId: doc2.id,
+		},
+	});
+
+	await prisma.field.createMany({
+		data: [
+			{
+				name: "Manutenção própria da sua frota de veículos",
+				documentId: doc2.id,
+				parentId: sustentabilidadeField.id,
+			},
+			{
+				name: "Condições para o abastecimento das viaturas a serem adquiridas",
+				documentId: doc2.id,
+				parentId: sustentabilidadeField.id,
+			},
+		],
+	});
+
+	await prisma.document.create({
+		data: {
+			name: "Declaração de Contrapartida",
+			opportunityId: opportunity.id,
+			fields: {
+				createMany: {
+					data: [
+						{
+							name: "Rubrica orçamentária (capital)",
+						},
+						{
+							name: "Valor",
+						},
+					],
+				},
+			},
+		},
+	});
+
+	console.log("✅ Opportunity seeded successfully");
+
+	return opportunity;
 }
