@@ -44,15 +44,8 @@ export const baseProductResponseSchema = z.object({
 
 export const baseProductWithMoreInfoResponseSchema = z.object({
 	id: z.string().uuid(),
-	code: z.string(),
 	name: z.string(),
-	technicalDescription: z.string(),
-	unitValue: z.number(),
-	typeId: z.string().uuid(),
 	hasBudgets: z.boolean(),
-	budget: z.number(),
-	createdAt: z.coerce.date(),
-	updatedAt: z.coerce.date().nullable(),
 });
 
 export type BaseProductWithMoreInfoResponse = z.infer<

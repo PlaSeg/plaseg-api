@@ -213,7 +213,8 @@ export class PrismaProjectsRepository implements ProjectsRepository {
 		baseProductId: string,
 		allocationDepartmentId: string,
 		maintenanceContractId: string,
-		quantity: number
+		quantity: number,
+		budget: number,
 	): Promise<void> {
 		await prisma.project.update({
 			where: { id: projectId },
@@ -224,6 +225,7 @@ export class PrismaProjectsRepository implements ProjectsRepository {
 						quantity,
 						allocationDepartmentId,
 						maintenanceContractId,
+						budget
 					},
 				},
 			},

@@ -13,6 +13,7 @@ type PrismaProjectWithMoreInfo = PrismaProject & {
 	requestedItems: {
 		id: string;
 		quantity: Decimal;
+		budget: Decimal;
 		baseProduct: {
 			id: string;
 			name: string;
@@ -81,6 +82,7 @@ export class PrismaProjectWithMoreInfoMapper {
 			requestedItems: raw.requestedItems.map((item) => ({
 				id: new UniqueEntityID(item.id),
 				quantity: item.quantity.toNumber(),
+				budget: item.budget.toNumber(),
 				baseProduct: {
 					id: new UniqueEntityID(item.baseProduct.id),
 					name: item.baseProduct.name,

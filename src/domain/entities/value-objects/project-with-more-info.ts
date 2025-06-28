@@ -39,6 +39,7 @@ export interface ProjectWithMoreInfoProps {
 	requestedItems?: {
 		id: UniqueEntityID;
 		quantity: number;
+		budget: number;
 		baseProduct: {
 			id: UniqueEntityID;
 			name: string;

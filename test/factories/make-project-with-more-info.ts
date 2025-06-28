@@ -40,6 +40,7 @@ export function makeProjectWithMoreInfo(project: Project): ProjectWithMoreInfo {
 		requestedItems: project.requestedItems?.map((item) => ({
 			id: item.id,
 			quantity: item.quantity,
+			budget: item.budget,
 			baseProduct: {
 				id: new UniqueEntityID(item.baseProductId),
 				name: "Test Base Product",

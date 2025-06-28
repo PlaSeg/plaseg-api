@@ -74,12 +74,19 @@ export class CreateProjectRequestedItemUseCase {
 			}
 		}
 
+		console.log("OPA")
+
+		const baseProductWithMoreInfo = await this.baseProductRepository.findBudgetById(baseProductExists.id.toString())
+
+		console.log(baseProductWithMoreInfo);
+
 		const requestedItem = RequestedItem.create({
 			quantity: request.quantity,
 			baseProductId: request.baseProductId,
 			allocationDepartmentId: request.allocationDepartmentId,
 			maintenanceContractId: request.maintenanceContractId,
 			projectId: request.projectId,
+			budget: baseProductWithMoreInfo.budget
 		});
 
 		await this.requestedItemsRepository.create(requestedItem);

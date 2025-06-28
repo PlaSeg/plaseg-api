@@ -101,7 +101,8 @@ export class InMemoryProjectsRepository implements ProjectsRepository {
 		baseProductId: string,
 		allocationDepartmentId: string,
 		maintenanceContractId: string,
-		quantity: number
+		quantity: number,
+		budget: number
 	): Promise<void> {
 		const projectIndex = this.items.findIndex(
 			(project) => project.id.toString() === projectId
@@ -115,6 +116,7 @@ export class InMemoryProjectsRepository implements ProjectsRepository {
 				quantity,
 				allocationDepartmentId,
 				maintenanceContractId,
+				budget,
 			});
 			project.requestedItems?.push(requestedItem);
 		}

@@ -103,7 +103,6 @@ describe("GET /base-products/opportunity/:opportunityId (e2e)", () => {
 
 		const product = response.body.data.baseProducts[0];
 		expect(product.id).toBe(baseProduct.id);
-		expect(product.budget).toBe(200);
 		expect(product.hasBudgets).toBe(true);
 	});
 
@@ -171,7 +170,6 @@ describe("GET /base-products/opportunity/:opportunityId (e2e)", () => {
 		expect(response.body.data.baseProducts).toHaveLength(1);
 
 		const product = response.body.data.baseProducts[0];
-		expect(product.budget).toBe(250);
 		expect(product.hasBudgets).toBe(false);
 	});
 	

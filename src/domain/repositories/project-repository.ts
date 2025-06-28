@@ -27,6 +27,7 @@ export interface ProjectsRepository {
 		baseProductId: string,
 		allocationDepartmentId: string,
 		maintenanceContractId: string,
-		quantity: number
+		quantity: number,
+		budget: number
 	): Promise<void>;
 }
