@@ -7,6 +7,7 @@ export class PrismaRequestedItemMapper {
 		return RequestedItem.create(
 			{
 				quantity: Number(raw.quantity),
+				budget: Number(raw.budget),
 				baseProductId: raw.baseProductId,
 				allocationDepartmentId: raw.allocationDepartmentId ?? "",
 				maintenanceContractId: raw.maintenanceContractId ?? "",
@@ -24,6 +25,7 @@ export class PrismaRequestedItemMapper {
 		return {
 			id: requestedItem.id.toString(),
 			quantity: requestedItem.quantity,
+			budget: requestedItem.budget,
 			baseProductId: requestedItem.baseProductId,
 			allocationDepartmentId: requestedItem.allocationDepartmentId,
 			maintenanceContractId: requestedItem.maintenanceContractId,

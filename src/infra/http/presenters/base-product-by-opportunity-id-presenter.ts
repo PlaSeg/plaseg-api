@@ -8,14 +8,7 @@ export class BaseProductWithMoreInfoPresenter {
 		return {
 			id: baseProduct.id.toString(),
 			name: baseProduct.name,
-			hasBudgets: baseProduct.hasBudgets,
-            budget: baseProduct.budget,
-            code: baseProduct.code,
-            technicalDescription: baseProduct.technicalDescription,
-            typeId: baseProduct.typeId,
-            unitValue: baseProduct.unitValue,
-            createdAt: baseProduct.createdAt,
-            updatedAt:baseProduct.updatedAt ?? null
+			hasBudgets: baseProduct.hasBudgets
 		};
 	}
 }

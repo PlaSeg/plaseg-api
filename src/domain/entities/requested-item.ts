@@ -5,6 +5,7 @@ import { getCurrentDate } from "../../core/utils/get-current-date";
 
 export interface RequestedItemProps {
 	quantity: number;
+	budget: number;
 	baseProductId: string;
 	allocationDepartmentId: string;
 	maintenanceContractId: string;
@@ -16,6 +17,10 @@ export interface RequestedItemProps {
 export class RequestedItem extends Entity<RequestedItemProps> {
 	get quantity() {
 		return this.props.quantity;
+	}
+
+	get budget() {
+		return this.props.budget;
 	}
 
 	get baseProductId() {
