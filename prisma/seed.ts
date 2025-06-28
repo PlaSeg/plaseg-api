@@ -1,9 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import { seedUsers } from "./seed/users";
 import { seedTypes } from "./seed/types";
-import { seedOpportunities } from "./seed/opportunities";
-import { seedBaseProducts } from "./seed/base-products";
-import { seedProjects } from "./seed/projects";
+import { seedOpportunity } from "./seed/opportunities";
+import { seedProjectType } from "./seed/project-types";
+import { seedMunicipality } from "./seed/municipality";
 
 async function clearDatabase() {
 	const tablenames =
@@ -28,16 +28,20 @@ async function seed() {
 
 	await seedUsers(prisma);
 
-	const { editalId, weaponId } = await seedTypes(prisma);
+	await seedMunicipality(prisma);
 
-	await seedBaseProducts(prisma, weaponId);
+	const { editalId } = await seedTypes(prisma);
 
-	const { opportunity, projectType } = await seedOpportunities(
-		prisma,
-		editalId
-	);
+	const opportunity = await seedOpportunity(prisma, editalId);
 
-	await seedProjects(prisma, opportunity.id, projectType.id);
+	const projectType = await seedProjectType(prisma);
+
+	await prisma.opportunityProjectType.create({
+		data: {
+			opportunityId: opportunity.id,
+			projectTypeId: projectType.id,
+		},
+	});
 
 	console.log("🎉 Seed process completed successfully!");
 }
