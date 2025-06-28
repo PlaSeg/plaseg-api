@@ -30,5 +30,5 @@ export async function seedOpportunityProjectType(prisma: PrismaClient) {
 		},
 	});
 
-	console.log("✅ Types seeded successfully");
+	console.log("✅ Opportunity–project-type seeded successfully");
 }
