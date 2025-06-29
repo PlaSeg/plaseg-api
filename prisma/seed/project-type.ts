@@ -31,7 +31,7 @@ export async function seedProjectType(prisma: PrismaClient) {
 									{
 										name: "Indicação do público alvo",
 										value:
-											"O público alvo direto é a população feminina do Município de Teresina, já o indireto é a População da cidade e a guarda Municipal Civil de Teresina",
+											"O público alvo direto é a população feminina do Município de Teresina, já o indireto é a população da cidade e a guarda Municipal Civil de Teresina",
 										parentId: "d7436c99-2937-4326-8c84-f648c0782078",
 									},
 								],
