@@ -74,7 +74,7 @@ export async function seedProjectType(prisma: PrismaClient) {
 									},
 									{
 										name: "Valor",
-										value: "R$ 1.000,00 (MIL REAIS) ",
+										value: "R$1.000,00 (MIL REAIS)",
 									},
 								],
 							},
